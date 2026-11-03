@@ -1,0 +1,127 @@
+{
+  "reference_date": "2026-11-03",
+  "source": "조사 당시 물품식별번호별 공식 API의 prdctImgUrl",
+  "images": [
+    {
+      "candidate_id": "C01",
+      "product_id": "25126005",
+      "specification": "옥외용벤치, 새길산업, NR-H-2, 1650×520×840mm, 3인용",
+      "src": "./assets/products/C01.jpg",
+      "alt": "3인용 공원 벤치 — 옥외용벤치, 새길산업, NR-H-2, 1650×520×840mm, 3인용",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2023/08/31/6055e99a-3d86-44fc-8c36-f709bb06a90d.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:21.885Z",
+      "sha256": "bc559a420e796252891c25cd4cfda39fceaa0861b004a8ff6562c79947b3f506"
+    },
+    {
+      "candidate_id": "C22",
+      "product_id": "24361164",
+      "specification": "보안경, 우성씨텍, WS-MIL-SG-001, 전투용",
+      "src": "./assets/products/C22.jpg",
+      "alt": "전투용 보안경 — 보안경, 우성씨텍, WS-MIL-SG-001, 전투용",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/09/13/33ac3b7f-80f8-43f7-999d-702a4e5ef650.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:21.889Z",
+      "sha256": "08584295bab80608501ca3a0a0115546efe65376ff15266e9c22444ec1cf0243"
+    },
+    {
+      "candidate_id": "C26",
+      "product_id": "24705997",
+      "specification": "감성교감로봇, 매크로액트, CRC-789, 140×280×220mm",
+      "src": "./assets/products/C26.png",
+      "alt": "소형 감성교감로봇 — 감성교감로봇, 매크로액트, CRC-789, 140×280×220mm",
+      "sourceUrl": "https://shop.g2b.go.kr/static/img/gmgb/2025/01/24/6e2cffaa34a64e209e71bc54a307c46b.png",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:22.121Z",
+      "sha256": "2522001bd47abaf7ef59affcf144708165339d926334ffd606f1bdcd4ebd9bc5"
+    },
+    {
+      "candidate_id": "C04",
+      "product_id": "25461682",
+      "specification": "그네, 호진기계, HJP-401A, 5200×8000×3000mm, 2인용",
+      "src": "./assets/products/C04.jpg",
+      "alt": "2인용 대형 그네 — 그네, 호진기계, HJP-401A, 5200×8000×3000mm, 2인용",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2024/07/11/008858f2-2686-497c-bf29-0c72d7b2487f.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "catalog-render",
+      "retrievedAt": "2026-11-03T07:57:22.003Z",
+      "sha256": "9c4cd2569a5237b1a5c1475238eb8eb9333176e21f99a0dbd641c2daacd3edd1"
+    },
+    {
+      "candidate_id": "C13",
+      "product_id": "23472794",
+      "specification": "전시용방독면, 한컴라이프케어, SCA123SC, 일반방독면, 두건형/1안식, 화생방용",
+      "src": "./assets/products/C13.jpg",
+      "alt": "화생방용 두건형 방독면 — 전시용방독면, 한컴라이프케어, SCA123SC, 일반방독면, 두건형/1안식, 화생방용",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/04/11/1554956642359.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:21.954Z",
+      "sha256": "e75dbdda127fbc8905a7b05587c00665fe17bc364156248f057e01bf205ded9c"
+    },
+    {
+      "candidate_id": "C27",
+      "product_id": "24178408",
+      "specification": "경비및감시용로봇, 세오로보틱스, ARVO, 540×732×573mm",
+      "src": "./assets/products/C27.jpg",
+      "alt": "경비·감시용 로봇 — 경비및감시용로봇, 세오로보틱스, ARVO, 540×732×573mm",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/03/09/cf29eecd-c0dd-4a99-9182-8c4d0b81f692.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:21.986Z",
+      "sha256": "8710f216e0e5ab3d8c1333fde91fb5d9c1c8217267e27f9ff9815c176c757f81"
+    },
+    {
+      "candidate_id": "C29",
+      "product_id": "24913247",
+      "specification": "고상제설제, 대성인더스, 눈길제로DS-1000, 환경표지2종, 1000kg/포",
+      "src": "./assets/products/C29.jpg",
+      "alt": "제설제 1톤 한 포대 — 고상제설제, 대성인더스, 눈길제로DS-1000, 환경표지2종, 1000kg/포",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2023/03/04/0ebd9b02-6661-44ce-b87f-e1b7a327508f.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:22.061Z",
+      "sha256": "37939c103c4620cacecde31b3d01bd0cea58d37e15aade3c3dce53cd71ce106e"
+    },
+    {
+      "candidate_id": "C03",
+      "product_id": "26116351",
+      "specification": "조합놀이대, 세인환경디자인, SPL-102P, 11.89×7.12×4.77m, 10종",
+      "src": "./assets/products/C03.png",
+      "alt": "10종 조합놀이대 — 조합놀이대, 세인환경디자인, SPL-102P, 11.89×7.12×4.77m, 10종",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2026/02/03/6289a2e8-1716-42ea-9eba-e58b1aa08ac7.png",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "catalog-render",
+      "retrievedAt": "2026-11-03T07:57:22.108Z",
+      "sha256": "7ad7a73e3a27a9e049be424048620698dc485043fb47f3bc9c57a880161565b6"
+    },
+    {
+      "candidate_id": "C06",
+      "product_id": "23112391",
+      "specification": "기타이동식화장실, 더케이엠, TE-002, 11400×3800×3500mm",
+      "src": "./assets/products/C06.jpg",
+      "alt": "길이 11.4m 이동식화장실 — 기타이동식화장실, 더케이엠, TE-002, 11400×3800×3500mm",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2016/10/24/20161024112903-39.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:22.159Z",
+      "sha256": "3c59124ba9cb8ab22a15e7eac8a913d70588d3ea160dccafc84c92403dce725c"
+    },
+    {
+      "candidate_id": "C28",
+      "product_id": "25339509",
+      "specification": "노면청소차, 리텍, RTRS075FC, 6㎥",
+      "src": "./assets/products/C28.jpg",
+      "alt": "6㎥ 노면청소차 — 노면청소차, 리텍, RTRS075FC, 6㎥",
+      "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2024/03/18/67f090cd-96c2-4574-ad91-4379f346955b.jpg",
+      "sourceLabel": "나라장터 등록 상품 이미지",
+      "kind": "product-photo",
+      "retrievedAt": "2026-11-03T07:57:22.136Z",
+      "sha256": "282ff6abd37cf7f7eac49e74ed20a0371bb60b895d18d7594be9706d2d1bc1cd"
+    }
+  ],
+  "note": "이미지를 수정하지 않고 원본으로 보관. 그네·조합놀이대는 등록된 제품 표현 이미지이며 실사라고 표시하지 않음."
+}

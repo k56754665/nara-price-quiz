@@ -1,0 +1,12 @@
+{
+  "name": "nara-price-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "공식 조달청 API 스냅샷으로 플레이하는 나라장터 가격 퀴즈",
+  "scripts": {
+    "dev": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check dist/app.js && node --check dist/engine.js && node --test tests/*.test.mjs"
+  }
+}
