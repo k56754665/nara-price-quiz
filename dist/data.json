@@ -1,0 +1,554 @@
+{
+  "version": 2,
+  "title": "이게 얼마게?",
+  "referenceDate": "2026-11-03",
+  "sourceNote": "조달청 나라장터쇼핑몰 품목정보 API 실조회",
+  "catalogUrl": "https://www.data.go.kr/data/15129471/openapi.do",
+  "questions": [
+    {
+      "id": "C01",
+      "order": 1,
+      "title": "3인용 공원 벤치",
+      "category": "공원·생활시설",
+      "prompt": "이 3인용 공원 벤치 1개의 현장설치도 등록 계약단가는 얼마일까요?",
+      "specification": "옥외용벤치, 새길산업, NR-H-2, 1650×520×840mm, 3인용",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 425000,
+      "scope": "NR-H-2, 1650×520×840mm, 현장설치도. 같은 물품식별번호의 하차도 가격과 구별한다.",
+      "supplier": "주식회사 새길산업",
+      "productId": "25126005",
+      "contractNumber": "0023D027400",
+      "contractLine": "4",
+      "contractStart": "2023-12-04",
+      "contractEnd": "2026-12-03",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "25126005"
+      },
+      "checkedAt": "2026-11-03T16:01:21.330+09:00",
+      "triviaId": "T01",
+      "image": {
+        "src": "./assets/products/C01.jpg",
+        "alt": "3인용 공원 벤치 — 옥외용벤치, 새길산업, NR-H-2, 1650×520×840mm, 3인용",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2023/08/31/6055e99a-3d86-44fc-8c36-f709bb06a90d.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:21.885Z",
+        "sha256": "bc559a420e796252891c25cd4cfda39fceaa0861b004a8ff6562c79947b3f506"
+      }
+    },
+    {
+      "id": "C22",
+      "order": 2,
+      "title": "전투용 보안경",
+      "category": "군수 보급품",
+      "prompt": "이 전투용 보안경 1개의 등록 계약단가는 얼마일까요?",
+      "specification": "보안경, 우성씨텍, WS-MIL-SG-001, 전투용",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 20000,
+      "scope": "WS-MIL-SG-001, 전투용, 1개. 방탄 등급·방호 성능을 임의로 부여하지 않는다.",
+      "supplier": "주식회사 우성씨텍",
+      "productId": "24361164",
+      "contractNumber": "R25TA0014593101",
+      "contractLine": "1",
+      "contractStart": "2025-02-14",
+      "contractEnd": "2028-02-13",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24361164"
+      },
+      "checkedAt": "2026-11-03T16:01:40.150+09:00",
+      "triviaId": "T02",
+      "image": {
+        "src": "./assets/products/C22.jpg",
+        "alt": "전투용 보안경 — 보안경, 우성씨텍, WS-MIL-SG-001, 전투용",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/09/13/33ac3b7f-80f8-43f7-999d-702a4e5ef650.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:21.889Z",
+        "sha256": "08584295bab80608501ca3a0a0115546efe65376ff15266e9c22444ec1cf0243"
+      }
+    },
+    {
+      "id": "C26",
+      "order": 3,
+      "title": "소형 감성교감로봇",
+      "category": "특수·운영장비",
+      "prompt": "이 감성교감로봇 1대의 등록 계약단가는 얼마일까요?",
+      "specification": "감성교감로봇, 매크로액트, CRC-789, 140×280×220mm",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "납품장소도",
+      "vat": "부가가치세포함",
+      "answer": 1290000,
+      "scope": "CRC-789, 140×280×220mm, 1대. 상품 소개의 의료·교육 용도 서술이 달라 기능을 확정하지 않고 규격만 출제한다.",
+      "supplier": "주식회사 매크로액트",
+      "productId": "24705997",
+      "contractNumber": "0024E013900",
+      "contractLine": "1",
+      "contractStart": "2024-08-01",
+      "contractEnd": "2027-04-01",
+      "endpoint": "getThptyUcntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getThptyUcntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24705997"
+      },
+      "checkedAt": "2026-11-03T16:01:45.033+09:00",
+      "triviaId": "T03",
+      "image": {
+        "src": "./assets/products/C26.png",
+        "alt": "소형 감성교감로봇 — 감성교감로봇, 매크로액트, CRC-789, 140×280×220mm",
+        "sourceUrl": "https://shop.g2b.go.kr/static/img/gmgb/2025/01/24/6e2cffaa34a64e209e71bc54a307c46b.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:22.121Z",
+        "sha256": "2522001bd47abaf7ef59affcf144708165339d926334ffd606f1bdcd4ebd9bc5"
+      }
+    },
+    {
+      "id": "C04",
+      "order": 4,
+      "title": "2인용 대형 그네",
+      "category": "공원·생활시설",
+      "prompt": "이 규격의 2인용 그네 1대의 현장설치도 등록 계약단가는 얼마일까요?",
+      "specification": "그네, 호진기계, HJP-401A, 5200×8000×3000mm, 2인용",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 12900000,
+      "scope": "HJP-401A, 5200×8000×3000mm, 2인용, 1대.",
+      "supplier": "호진기계 주식회사",
+      "productId": "25461682",
+      "contractNumber": "R26TA0181873300",
+      "contractLine": "3",
+      "contractStart": "2026-05-01",
+      "contractEnd": "2029-04-30",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "25461682"
+      },
+      "checkedAt": "2026-11-03T16:01:21.377+09:00",
+      "triviaId": "T04",
+      "image": {
+        "src": "./assets/products/C04.jpg",
+        "alt": "2인용 대형 그네 — 그네, 호진기계, HJP-401A, 5200×8000×3000mm, 2인용",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2024/07/11/008858f2-2686-497c-bf29-0c72d7b2487f.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-render",
+        "retrievedAt": "2026-11-03T07:57:22.003Z",
+        "sha256": "9c4cd2569a5237b1a5c1475238eb8eb9333176e21f99a0dbd641c2daacd3edd1"
+      }
+    },
+    {
+      "id": "C13",
+      "order": 5,
+      "title": "화생방용 두건형 방독면",
+      "category": "안전·구조장비",
+      "prompt": "이 화생방용 두건형 방독면 1개의 등록 계약단가는 얼마일까요?",
+      "specification": "전시용방독면, 한컴라이프케어, SCA123SC, 일반방독면, 두건형/1안식, 화생방용",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "납품장소도",
+      "vat": "부가가치세포함",
+      "answer": 33000,
+      "scope": "SCA123SC, 두건형/1안식, 화생방용, 1개. 공식 품명 전시용방독면의 전시는 戰時이며 전시 모형으로 소개하지 않는다.",
+      "supplier": "주식회사 한컴라이프케어",
+      "productId": "23472794",
+      "contractNumber": "00223018404",
+      "contractLine": "1",
+      "contractStart": "2022-03-03",
+      "contractEnd": "2028-02-28",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23472794"
+      },
+      "checkedAt": "2026-11-03T16:01:31.086+09:00",
+      "triviaId": "T05",
+      "image": {
+        "src": "./assets/products/C13.jpg",
+        "alt": "화생방용 두건형 방독면 — 전시용방독면, 한컴라이프케어, SCA123SC, 일반방독면, 두건형/1안식, 화생방용",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/04/11/1554956642359.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:21.954Z",
+        "sha256": "e75dbdda127fbc8905a7b05587c00665fe17bc364156248f057e01bf205ded9c"
+      }
+    },
+    {
+      "id": "C27",
+      "order": 6,
+      "title": "경비·감시용 로봇",
+      "category": "특수·운영장비",
+      "prompt": "이 경비·감시용 로봇 1대의 현장설치도 등록 계약단가는 얼마일까요?",
+      "specification": "경비및감시용로봇, 세오로보틱스, ARVO, 540×732×573mm",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 48000000,
+      "scope": "ARVO, 540×732×573mm, 1대. 구독·장기임대 가격이 아니다.",
+      "supplier": "주식회사 세오로보틱스",
+      "productId": "24178408",
+      "contractNumber": "00247024204",
+      "contractLine": "1",
+      "contractStart": "2024-09-11",
+      "contractEnd": "2027-04-14",
+      "endpoint": "getThptyUcntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getThptyUcntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24178408"
+      },
+      "checkedAt": "2026-11-03T16:01:45.342+09:00",
+      "triviaId": "T06",
+      "image": {
+        "src": "./assets/products/C27.jpg",
+        "alt": "경비·감시용 로봇 — 경비및감시용로봇, 세오로보틱스, ARVO, 540×732×573mm",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/03/09/cf29eecd-c0dd-4a99-9182-8c4d0b81f692.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:21.986Z",
+        "sha256": "8710f216e0e5ab3d8c1333fde91fb5d9c1c8217267e27f9ff9815c176c757f81"
+      }
+    },
+    {
+      "id": "C29",
+      "order": 7,
+      "title": "제설제 1톤 한 포대",
+      "category": "특수·운영장비",
+      "prompt": "이 제설제 1000kg짜리 1포의 등록 계약단가는 얼마일까요?",
+      "specification": "고상제설제, 대성인더스, 눈길제로DS-1000, 환경표지2종, 1000kg/포",
+      "quantity": "1포",
+      "unit": "포",
+      "delivery": "납품장소차상도",
+      "vat": "부가가치세포함",
+      "answer": 423000,
+      "scope": "눈길제로DS-1000, 환경표지2종, 1000kg/포, 1포. kg당 가격으로 바꾸지 않고 출제한다.",
+      "supplier": "대성인더스",
+      "productId": "24913247",
+      "contractNumber": "R26TA0199281601",
+      "contractLine": "6",
+      "contractStart": "2026-06-23",
+      "contractEnd": "2027-06-22",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24913247"
+      },
+      "checkedAt": "2026-11-03T16:01:47.335+09:00",
+      "triviaId": "T07",
+      "image": {
+        "src": "./assets/products/C29.jpg",
+        "alt": "제설제 1톤 한 포대 — 고상제설제, 대성인더스, 눈길제로DS-1000, 환경표지2종, 1000kg/포",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2023/03/04/0ebd9b02-6661-44ce-b87f-e1b7a327508f.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:22.061Z",
+        "sha256": "37939c103c4620cacecde31b3d01bd0cea58d37e15aade3c3dce53cd71ce106e"
+      }
+    },
+    {
+      "id": "C03",
+      "order": 8,
+      "title": "10종 조합놀이대",
+      "category": "공원·생활시설",
+      "prompt": "이 10종 조합놀이대 1조의 현장설치도 등록 계약단가는 얼마일까요?",
+      "specification": "조합놀이대, 세인환경디자인, SPL-102P, 11.89×7.12×4.77m, 10종",
+      "quantity": "1조",
+      "unit": "조",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 91300000,
+      "scope": "SPL-102P, 11.89×7.12×4.77m, 10종, 1조. 공원 전체 조성비가 아니다.",
+      "supplier": "주식회사 세인환경디자인",
+      "productId": "26116351",
+      "contractNumber": "R26TA0189597000",
+      "contractLine": "4",
+      "contractStart": "2026-05-26",
+      "contractEnd": "2029-05-25",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "26116351"
+      },
+      "checkedAt": "2026-11-03T16:01:21.375+09:00",
+      "triviaId": "T08",
+      "image": {
+        "src": "./assets/products/C03.png",
+        "alt": "10종 조합놀이대 — 조합놀이대, 세인환경디자인, SPL-102P, 11.89×7.12×4.77m, 10종",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2026/02/03/6289a2e8-1716-42ea-9eba-e58b1aa08ac7.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-render",
+        "retrievedAt": "2026-11-03T07:57:22.108Z",
+        "sha256": "7ad7a73e3a27a9e049be424048620698dc485043fb47f3bc9c57a880161565b6"
+      }
+    },
+    {
+      "id": "C06",
+      "order": 9,
+      "title": "길이 11.4m 이동식화장실",
+      "category": "공공 건축·교통시설",
+      "prompt": "이 길이 11.4m 이동식화장실 1조의 현장설치도 등록 계약단가는 얼마일까요?",
+      "specification": "기타이동식화장실, 더케이엠, TE-002, 11400×3800×3500mm",
+      "quantity": "1조",
+      "unit": "조",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 98370000,
+      "scope": "TE-002, 11400×3800×3500mm, 1조. 행사장 임대료나 사업 전체 공사비가 아니다.",
+      "supplier": "주식회사 더케이엠",
+      "productId": "23112391",
+      "contractNumber": "0023C033301",
+      "contractLine": "53",
+      "contractStart": "2023-12-14",
+      "contractEnd": "2026-12-13",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23112391"
+      },
+      "checkedAt": "2026-11-03T16:01:24.249+09:00",
+      "triviaId": "T09",
+      "image": {
+        "src": "./assets/products/C06.jpg",
+        "alt": "길이 11.4m 이동식화장실 — 기타이동식화장실, 더케이엠, TE-002, 11400×3800×3500mm",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2016/10/24/20161024112903-39.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:22.159Z",
+        "sha256": "3c59124ba9cb8ab22a15e7eac8a913d70588d3ea160dccafc84c92403dce725c"
+      }
+    },
+    {
+      "id": "C28",
+      "order": 10,
+      "title": "6㎥ 노면청소차",
+      "category": "특수·운영장비",
+      "prompt": "이 6㎥ 노면청소차 1대의 생산공장 상차도 등록 계약단가는 얼마일까요?",
+      "specification": "노면청소차, 리텍, RTRS075FC, 6㎥",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "생산공장 상차도",
+      "vat": "부가가치세포함",
+      "answer": 951500000,
+      "scope": "RTRS075FC, 6㎥, 1대, 생산공장 상차도. 동력 방식·보조금·자부담금을 추정하지 않는다.",
+      "supplier": "리텍 주식회사",
+      "productId": "25339509",
+      "contractNumber": "00237014802",
+      "contractLine": "3",
+      "contractStart": "2023-05-31",
+      "contractEnd": "2027-03-16",
+      "endpoint": "getThptyUcntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getThptyUcntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "25339509"
+      },
+      "checkedAt": "2026-11-03T16:01:46.444+09:00",
+      "triviaId": null,
+      "image": {
+        "src": "./assets/products/C28.jpg",
+        "alt": "6㎥ 노면청소차 — 노면청소차, 리텍, RTRS075FC, 6㎥",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2024/03/18/67f090cd-96c2-4574-ad91-4379f346955b.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "product-photo",
+        "retrievedAt": "2026-11-03T07:57:22.136Z",
+        "sha256": "282ff6abd37cf7f7eac49e74ed20a0371bb60b895d18d7594be9706d2d1bc1cd"
+      }
+    }
+  ],
+  "trivia": [
+    {
+      "id": "T01",
+      "kind": "API 관찰 잡학",
+      "title": "같은 모델도 인도조건을 확인",
+      "text": "NR-H-2 벤치는 하차도 36만 5천 원, 현장설치도 42만 5천 원으로 따로 등록돼 있습니다.",
+      "followup": "가격을 맞히기 전에 인도조건까지 읽어야겠네요.",
+      "period": "2026-11-03 조회 스냅샷",
+      "caution": "두 가격은 같은 물품식별번호의 다른 계약 행이다. 가격 차이를 일반적인 설치비 또는 예산 낭비로 확대 해석하지 않는다.",
+      "sources": [
+        {
+          "title": "물품식별번호 25126005의 인도조건별 계약 행",
+          "publisher": "조달청 품목정보 API",
+          "url": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+          "publishedOn": null
+        }
+      ]
+    },
+    {
+      "id": "T02",
+      "kind": "제도 잡학",
+      "title": "군 급식과 피복도 조달 업무",
+      "text": "조달청은 2020년 7월 일반 군수품 조달 업무를 이관받아 급식류와 피복류 등을 조달하고 있습니다.",
+      "followup": "보급품은 먹는 것부터 입는 것까지 이어집니다.",
+      "period": "2024-09-30 공식 브리핑에 설명된 이관 이력",
+      "caution": "무기체계 전체를 조달청이 구매한다는 설명으로 바꾸지 않는다.",
+      "sources": [
+        {
+          "title": "고품질 군수품으로 장병들의 군 생활 만족도를 높이다.",
+          "publisher": "조달청 / 대한민국 정책브리핑",
+          "url": "https://www.korea.kr/news/policyNewsView.do?newsId=156653015",
+          "publishedOn": "2024-09-30"
+        }
+      ]
+    },
+    {
+      "id": "T03",
+      "kind": "공식 통계",
+      "title": "한 해 공공조달 계약 규모",
+      "text": "2025년 우리나라 공공조달 계약 규모는 238.5조 원으로 집계됐습니다.",
+      "followup": "지금 맞히는 한 품목의 단가들이 더 큰 조달시장으로 이어집니다.",
+      "period": "2025년 연간",
+      "caution": "나라장터쇼핑몰 매출이나 조달청 단독 구매액, 실제 지급총액이 아니다.",
+      "sources": [
+        {
+          "title": "지난해 공공조달 규모 238.5조원 역대 최고 기록",
+          "publisher": "조달청 조달데이터관리팀",
+          "url": "https://www.pps.go.kr/kor/bbs/view.do?bbsSn=2606260005&key=00634",
+          "publishedOn": "2026-06-26"
+        }
+      ]
+    },
+    {
+      "id": "T04",
+      "kind": "공식 통계",
+      "title": "중소기업이 차지하는 비중",
+      "text": "2025년 공공조달 계약에서 중소기업 실적은 149.5조 원, 전체의 62.7%였습니다.",
+      "followup": "작은 기업에도 공공조달은 큰 판로가 됩니다.",
+      "period": "2025년 연간",
+      "caution": "중소기업 수의 비중이나 쇼핑몰 등록상품 수 비중이 아니다.",
+      "sources": [
+        {
+          "title": "지난해 공공조달 규모 238.5조원 역대 최고 기록",
+          "publisher": "조달청 조달데이터관리팀",
+          "url": "https://www.pps.go.kr/kor/bbs/view.do?bbsSn=2606260005&key=00634",
+          "publishedOn": "2026-06-26"
+        }
+      ]
+    },
+    {
+      "id": "T05",
+      "kind": "역사 잡학",
+      "title": "나라장터는 언제 시작됐을까?",
+      "text": "조달청 연혁에 따르면 나라장터는 2002년에 개통됐습니다.",
+      "followup": "우리 주변 물품의 구매 과정도 오랫동안 전자화돼 왔습니다.",
+      "period": "2002년 개통 이력",
+      "caution": "나라장터와 별도 쇼핑몰의 개통연도를 혼동하지 않는다. 월일은 이 출처에서 확인하지 않았다.",
+      "sources": [
+        {
+          "title": "주요 역사",
+          "publisher": "조달청 어린이 세상",
+          "url": "https://www.pps.go.kr/kid/content.do?key=01107",
+          "publishedOn": null
+        }
+      ]
+    },
+    {
+      "id": "T06",
+      "kind": "공식 통계",
+      "title": "나라장터는 공공조달의 얼마를 처리할까?",
+      "text": "2025년 나라장터 거래실적은 145.8조 원으로 전체 공공조달 계약의 61.1%를 차지했습니다.",
+      "followup": "나라장터 전체 통계와 쇼핑몰 통계는 범위가 다릅니다.",
+      "period": "2025년 연간",
+      "caution": "종합쇼핑몰만의 거래액으로 표기하지 않는다.",
+      "sources": [
+        {
+          "title": "지난해 공공조달 규모 238.5조원 역대 최고 기록",
+          "publisher": "조달청 조달데이터관리팀",
+          "url": "https://www.pps.go.kr/kor/bbs/view.do?bbsSn=2606260005&key=00634",
+          "publishedOn": "2026-06-26"
+        }
+      ]
+    },
+    {
+      "id": "T07",
+      "kind": "단위 잡학",
+      "title": "한 포대의 무게도 읽어야 한다",
+      "text": "선정된 제설제는 계약단위가 ‘포’이고, 규격은 1000kg/포입니다. 한 포대의 가격을 묻는 문제입니다.",
+      "followup": "숫자보다 먼저 단위를 보면 추측이 달라집니다.",
+      "period": "2026-11-03 품목 실조회",
+      "caution": "모든 제설제가 1000kg 포대라고 일반화하지 않는다.",
+      "sources": [
+        {
+          "title": "물품식별번호 24913247의 고상제설제 계약 행",
+          "publisher": "조달청 품목정보 API",
+          "url": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+          "publishedOn": null
+        }
+      ]
+    },
+    {
+      "id": "T08",
+      "kind": "공식 통계",
+      "title": "물품·공사·용역 중 가장 큰 분야는?",
+      "text": "2025년 공공조달 계약은 시설공사 91.6조 원, 물품 89.6조 원, 용역 57.3조 원 순이었습니다.",
+      "followup": "퀴즈에 등장하는 물품 외에도 다양한 계약이 있습니다.",
+      "period": "2025년 연간",
+      "caution": "납품된 수량이나 최종 지급액의 분류가 아니다.",
+      "sources": [
+        {
+          "title": "지난해 공공조달 규모 238.5조원 역대 최고 기록",
+          "publisher": "조달청 조달데이터관리팀",
+          "url": "https://www.pps.go.kr/kor/bbs/view.do?bbsSn=2606260005&key=00634",
+          "publishedOn": "2026-06-26"
+        }
+      ]
+    },
+    {
+      "id": "T09",
+      "kind": "제도 잡학",
+      "title": "여러 공급자를 고르는 계약",
+      "text": "다수공급자계약은 비슷한 종류의 물품을 선택할 수 있도록 2인 이상을 계약상대자로 하는 방식입니다.",
+      "followup": "공공기관도 여러 공급자의 규격과 조건을 비교해 선택합니다.",
+      "period": "조회일에 확인한 공식 서비스 설명",
+      "caution": "개별 문제의 동일 모델에 반드시 두 개 업체가 있다는 뜻은 아니다.",
+      "sources": [
+        {
+          "title": "나라장터쇼핑몰 품목정보 서비스 1.3 명세 및 공식 포털",
+          "publisher": "조달청 / 공공데이터포털",
+          "url": "https://www.data.go.kr/data/15129471/openapi.do",
+          "publishedOn": null
+        }
+      ]
+    }
+  ]
+}
