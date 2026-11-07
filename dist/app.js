@@ -1,8 +1,10 @@
 import { MAX_GUESS, parseGuess, scoreGuess, relativeError, koreanAmount, judge, totalScore, grade, guessHint, isValidSession } from './engine.js';
+import { LEADERBOARD_CONFIG } from './leaderboard-config.js';
+import { NICKNAME_MAX, isConfigured, normalizeNickname, buildSubmission, submitScore, fetchLeaderboard } from './leaderboard.js';
 
 const app = document.querySelector('#app');
 const dialog = document.querySelector('#info-dialog');
-const storageKeys = { session: 'nara-price-session-v2', best: 'nara-price-best-v1', settings: 'nara-price-settings-v2' };
+const storageKeys = { session: 'nara-price-session-v2', best: 'nara-price-best-v1', settings: 'nara-price-settings-v2', ranking: 'nara-price-ranking-v1' };
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const number = value => value.toLocaleString('ko-KR');
 const money = value => `${number(value)}<span class="currency">원</span>`;
@@ -34,6 +36,15 @@ let best = read(storageKeys.best, 0);
 if (!Number.isInteger(best) || best < 0 || best > 10000) best = 0;
 let preferences = read(storageKeys.settings, { timeLimit: 0 });
 if (!preferences || ![0, 45].includes(preferences.timeLimit)) preferences = { timeLimit: 0 };
+const rankingOn = isConfigured(LEADERBOARD_CONFIG);
+let ranking = read(storageKeys.ranking, null);
+if (!ranking || typeof ranking !== 'object') ranking = {};
+if (typeof ranking.clientId !== 'string') ranking.clientId = null;
+if (!ranking.played || typeof ranking.played !== 'object') ranking.played = {};
+if (!ranking.submitted || typeof ranking.submitted !== 'object') ranking.submitted = {};
+if (typeof ranking.nickname !== 'string') ranking.nickname = '';
+let rankingBusy = false;
+const modeLabel = time => time === 45 ? '시도마다 45초' : '여유롭게';
 
 function persist() { if (state) write(storageKeys.session, state); }
 function notify(text) {
@@ -81,6 +92,73 @@ function photo(q, className = '', loading = 'eager') {
   return `<img class="product-photo ${className}" src="${esc(q.image.src)}" alt="${esc(q.image.alt)}" decoding="async" loading="${loading}">`;
 }
 
+function rankingKey(timeLimit) { return `${data.referenceDate}:${timeLimit}`; }
+function saveRanking() { write(storageKeys.ranking, ranking); }
+function clientId() {
+  if (!ranking.clientId) {
+    ranking.clientId = crypto.randomUUID();
+    saveRanking();
+  }
+  return ranking.clientId;
+}
+
+function rankingRows(rows, mine = null) {
+  if (!rows.length) return '<li class="ranking-empty">아직 등록된 기록이 없어요. 첫 번째 주인공이 되어 보세요!</li>';
+  return rows.map(r => `<li class="${mine && r.nickname === mine.nickname && r.totalScore === mine.totalScore ? 'mine' : ''}"><span class="ranking-rank">${r.rank}</span><span class="ranking-name">${esc(r.nickname)}</span><span class="ranking-perfect">정답 ${r.perfectCount}개</span><strong>${number(r.totalScore)}<small>점</small></strong></li>`).join('');
+}
+
+async function loadRankingList(selector, timeLimit, mine = null) {
+  const list = document.querySelector(selector);
+  if (!list) return;
+  list.innerHTML = '<li class="ranking-empty">랭킹을 불러오고 있어요…</li>';
+  try {
+    const rows = await fetchLeaderboard(LEADERBOARD_CONFIG, { questionSet: data.referenceDate, timeLimit, limit: 20 });
+    if (list.isConnected) list.innerHTML = rankingRows(rows, mine);
+  } catch (error) {
+    if (list.isConnected) list.innerHTML = `<li class="ranking-empty">${esc(error.message)}</li>`;
+  }
+}
+
+function rankingPanel() {
+  if (!rankingOn) return '';
+  const mine = ranking.submitted[rankingKey(state.timeLimit)];
+  let top;
+  if (mine) top = `<p class="ranking-status"><strong>${esc(mine.nickname)}</strong> 님의 기록이 등록 당시 <strong>${number(mine.rank)}위</strong>였어요.</p>`;
+  else if (state.rankEligible) top = `<form id="ranking-form" class="ranking-form"><label for="ranking-nickname">닉네임</label><input id="ranking-nickname" name="nickname" maxlength="${NICKNAME_MAX}" autocomplete="nickname" placeholder="최대 ${NICKNAME_MAX}자" value="${esc(ranking.nickname)}" required><button type="submit" class="button button-blue">랭킹에 등록하기</button><p id="ranking-error" class="ranking-error" role="alert"></p></form>`;
+  else top = '<p class="ranking-status">랭킹에는 모드별 <strong>첫 번째 게임</strong> 기록만 올라가요. 정답을 알고 다시 하면 공정하지 않으니까요!</p>';
+  return `<section class="ranking-panel" aria-labelledby="ranking-heading"><div class="ranking-heading"><span class="eyebrow">온라인 랭킹 · ${modeLabel(state.timeLimit)}</span><h2 id="ranking-heading">다른 사람들은 몇 점일까?</h2></div>${top}<ol id="ranking-list" class="ranking-list"></ol></section>`;
+}
+
+async function submitRanking() {
+  if (rankingBusy || !state?.rankEligible || state.phase !== 'results') return;
+  const input = document.querySelector('#ranking-nickname');
+  const error = document.querySelector('#ranking-error');
+  const nickname = normalizeNickname(input?.value);
+  if (!nickname) { error.textContent = `닉네임은 1~${NICKNAME_MAX}자로 입력해 주세요.`; input?.focus(); return; }
+  rankingBusy = true;
+  const button = document.querySelector('#ranking-form button');
+  if (button) { button.disabled = true; button.textContent = '등록하는 중…'; }
+  try {
+    const result = await submitScore(LEADERBOARD_CONFIG, buildSubmission({ questionSet: data.referenceDate, timeLimit: state.timeLimit, clientId: clientId(), nickname, rounds: state.rounds }));
+    ranking.nickname = nickname;
+    ranking.submitted[rankingKey(state.timeLimit)] = { nickname, rank: result.rank, totalScore: result.totalScore };
+    saveRanking();
+    render({ focus: false });
+    notify(`${number(result.rank)}위로 등록했어요!`);
+  } catch (e) {
+    if (e.code === 'already_submitted') { state.rankEligible = false; persist(); render({ focus: false }); notify(e.message); return; }
+    if (button?.isConnected) { button.disabled = false; button.textContent = '랭킹에 등록하기'; }
+    if (error?.isConnected) error.textContent = e.message;
+  } finally {
+    rankingBusy = false;
+  }
+}
+
+function showRanking(timeLimit = preferences.timeLimit) {
+  openDialog('온라인 랭킹', `<div class="time-options ranking-modes" role="group" aria-label="랭킹 모드">${[0, 45].map(t => `<button type="button" data-action="ranking-mode" data-time="${t}" class="${t === timeLimit ? 'selected' : ''}" aria-pressed="${t === timeLimit}">${modeLabel(t)}</button>`).join('')}</div><p class="dialog-small">${esc(data.referenceDate)} 문제 세트 · 모드별 첫 게임 기록만 등록돼요.</p><ol id="dialog-ranking-list" class="ranking-list"></ol>`, true);
+  loadRankingList('#dialog-ranking-list', timeLimit, ranking.submitted[rankingKey(timeLimit)]);
+}
+
 function render({ focus = true } = {}) {
   stopTimer();
   if (dialog.open) dialog.close();
@@ -91,12 +169,13 @@ function render({ focus = true } = {}) {
     startTimer();
     if (focus && !window.matchMedia('(max-width: 720px)').matches) document.querySelector('#guess')?.focus({ preventScroll: true });
   } else if (focus) document.querySelector('#screen-heading')?.focus({ preventScroll: true });
+  if (rankingOn && screen !== 'home' && state.phase === 'results') loadRankingList('#ranking-list', state.timeLimit, ranking.submitted[rankingKey(state.timeLimit)]);
 }
 
 function home() {
   const hasResume = state && state.phase !== 'results';
   const first = data.questions[0];
-  return `<section class="home-hero"><div class="hero-copy"><div class="eyebrow"><span class="live-dot" aria-hidden="true"></span>실제 등록 가격으로 플레이하는 퀴즈</div><h1 id="screen-heading" tabindex="-1">맨날 보던 물건,<br>이게 <span class="highlight">얼마게?</span></h1><p class="hero-description">공원 벤치부터 도로의 청소차까지.<br>진짜 물건을 보고 가격을 추측해 보세요.<br>한 번 틀려도, 힌트와 한 번의 기회가 더!</p><div class="hero-facts"><span><strong>10</strong> 라운드</span><span><strong>2</strong> 번의 기회</span><span><strong>10,000</strong> 최고 점수</span></div><form id="setup-form" class="setup-card"><div class="solo-mode-note"><span>UP ↗ / DOWN ↘</span> 첫 추측이 틀리면 방향과 거리 힌트를 알려드려요.</div><div class="time-setting"><span>추측 시간</span><div class="time-options" role="group" aria-label="추측 제한 시간"><button type="button" data-action="time" data-time="0" class="${preferences.timeLimit === 0 ? 'selected' : ''}" aria-pressed="${preferences.timeLimit === 0}">여유롭게</button><button type="button" data-action="time" data-time="45" class="${preferences.timeLimit === 45 ? 'selected' : ''}" aria-pressed="${preferences.timeLimit === 45}">시도마다 45초</button></div></div><button type="submit" class="button button-blue start-button">${hasResume ? '새 게임 시작하기' : '가격 맞히러 가기'} ${arrow}</button>${hasResume ? `<button type="button" class="resume-button" data-action="resume">${state.index + 1}번째 문제부터 이어하기 <span>→</span></button>` : ''}<p class="setup-note">정답에 가까울수록 높은 점수. 마지막 추측으로 계산해요.</p></form><button class="rules-link" data-action="rules">점수는 어떻게 매기나요? ↗</button></div><div class="hero-visual hero-real-photo"><div class="visual-grid"></div><span class="artifact-stamp">물건은 익숙하게<br><strong>가격은 새롭게.</strong></span><span class="doodle-spark" aria-hidden="true">✳</span><button class="hero-photo" data-action="photo" data-id="${first.id}" aria-label="공원 벤치 사진 크게 보기">${photo(first)}</button><div class="floating-label"><span class="label-dot"></span><div><small>첫 번째 물건</small><strong>3인용 공원 벤치</strong></div><span class="label-arrow">↗</span></div><div class="mystery-price"><span>이 벤치 하나에</span><strong>₩ <span>???</span></strong></div><span class="hero-image-credit">사진 · 나라장터 등록 상품</span><div class="corner-note"><span>PRICE DISCOVERY CLUB</span><span>01—10</span></div></div></section><section class="how-it-works" aria-label="게임 방법"><div class="section-label">아는 만큼 보이고,<br>맞힐수록 놀라워요.</div><div><span class="step-number">01</span><strong>진짜 물건을 살펴보고</strong><p>등록 상품 이미지와<br>크기, 단위, 인도조건을 살펴봐요.</p></div><div><span class="step-number">02</span><strong>힌트를 보고 한 번 더</strong><p>틀리면 UP/DOWN과<br>대략적인 차이를 알려드려요.</p></div><div><span class="step-number">03</span><strong>가격과 잡학을 한눈에</strong><p>정답·점수·틈새 지식을<br>결과 화면에서 함께 확인해요.</p></div></section>${best > 0 ? `<div class="local-best"><span>이 기기 최고 기록</span><strong>${number(best)} <small>/ 10,000점</small></strong></div>` : ''}`;
+  return `<section class="home-hero"><div class="hero-copy"><div class="eyebrow"><span class="live-dot" aria-hidden="true"></span>실제 등록 가격으로 플레이하는 퀴즈</div><h1 id="screen-heading" tabindex="-1">맨날 보던 물건,<br>이게 <span class="highlight">얼마게?</span></h1><p class="hero-description">공원 벤치부터 도로의 청소차까지.<br>진짜 물건을 보고 가격을 추측해 보세요.<br>한 번 틀려도, 힌트와 한 번의 기회가 더!</p><div class="hero-facts"><span><strong>10</strong> 라운드</span><span><strong>2</strong> 번의 기회</span><span><strong>10,000</strong> 최고 점수</span></div><form id="setup-form" class="setup-card"><div class="solo-mode-note"><span>UP ↗ / DOWN ↘</span> 첫 추측이 틀리면 방향과 거리 힌트를 알려드려요.</div><div class="time-setting"><span>추측 시간</span><div class="time-options" role="group" aria-label="추측 제한 시간"><button type="button" data-action="time" data-time="0" class="${preferences.timeLimit === 0 ? 'selected' : ''}" aria-pressed="${preferences.timeLimit === 0}">여유롭게</button><button type="button" data-action="time" data-time="45" class="${preferences.timeLimit === 45 ? 'selected' : ''}" aria-pressed="${preferences.timeLimit === 45}">시도마다 45초</button></div></div><button type="submit" class="button button-blue start-button">${hasResume ? '새 게임 시작하기' : '가격 맞히러 가기'} ${arrow}</button>${hasResume ? `<button type="button" class="resume-button" data-action="resume">${state.index + 1}번째 문제부터 이어하기 <span>→</span></button>` : ''}<p class="setup-note">정답에 가까울수록 높은 점수. 마지막 추측으로 계산해요.</p></form>${rankingOn ? '<button class="rules-link ranking-link" data-action="ranking">온라인 랭킹 보기 ↗</button>' : ''}<button class="rules-link" data-action="rules">점수는 어떻게 매기나요? ↗</button></div><div class="hero-visual hero-real-photo"><div class="visual-grid"></div><span class="artifact-stamp">물건은 익숙하게<br><strong>가격은 새롭게.</strong></span><span class="doodle-spark" aria-hidden="true">✳</span><button class="hero-photo" data-action="photo" data-id="${first.id}" aria-label="공원 벤치 사진 크게 보기">${photo(first)}</button><div class="floating-label"><span class="label-dot"></span><div><small>첫 번째 물건</small><strong>3인용 공원 벤치</strong></div><span class="label-arrow">↗</span></div><div class="mystery-price"><span>이 벤치 하나에</span><strong>₩ <span>???</span></strong></div><span class="hero-image-credit">사진 · 나라장터 등록 상품</span><div class="corner-note"><span>PRICE DISCOVERY CLUB</span><span>01—10</span></div></div></section><section class="how-it-works" aria-label="게임 방법"><div class="section-label">아는 만큼 보이고,<br>맞힐수록 놀라워요.</div><div><span class="step-number">01</span><strong>진짜 물건을 살펴보고</strong><p>등록 상품 이미지와<br>크기, 단위, 인도조건을 살펴봐요.</p></div><div><span class="step-number">02</span><strong>힌트를 보고 한 번 더</strong><p>틀리면 UP/DOWN과<br>대략적인 차이를 알려드려요.</p></div><div><span class="step-number">03</span><strong>가격과 잡학을 한눈에</strong><p>정답·점수·틈새 지식을<br>결과 화면에서 함께 확인해요.</p></div></section>${best > 0 ? `<div class="local-best"><span>이 기기 최고 기록</span><strong>${number(best)} <small>/ 10,000점</small></strong></div>` : ''}`;
 }
 
 function progress() {
@@ -155,14 +234,18 @@ function results() {
   const total = totalScore(state.rounds);
   const verdict = grade(total);
   const perfect = state.rounds.filter(r => r.attempts.at(-1) === data.questions.find(q => q.id === r.candidateId).answer).length;
-  return `<section class="results-shell"><div class="results-banner"><div class="result-sticker" aria-hidden="true">${verdict.symbol}</div><span class="eyebrow">10개의 가격, 10개의 새로운 발견</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><p>${verdict.subtitle}</p><div class="final-score">${number(total)}<span> / 10,000점</span></div><div class="final-metrics"><span>정확히 맞힌 문제 <strong>${perfect}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div><div class="result-actions"><button class="button button-blue" data-action="replay">다시 도전하기 ↗</button><button class="button button-white" data-action="share">결과 복사하기</button></div></div><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${data.questions.map((q, i) => {
+  return `<section class="results-shell"><div class="results-banner"><div class="result-sticker" aria-hidden="true">${verdict.symbol}</div><span class="eyebrow">10개의 가격, 10개의 새로운 발견</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><p>${verdict.subtitle}</p><div class="final-score">${number(total)}<span> / 10,000점</span></div><div class="final-metrics"><span>정확히 맞힌 문제 <strong>${perfect}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div><div class="result-actions"><button class="button button-blue" data-action="replay">다시 도전하기 ↗</button><button class="button button-white" data-action="share">결과 복사하기</button></div></div>${rankingPanel()}<div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${data.questions.map((q, i) => {
     const round = state.rounds[i];
     return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(q.delivery)}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${value === null ? '시간 초과' : `${number(value)}원`}</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(q, true)}</article>`;
   }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(data.referenceDate)} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></section>`;
 }
 
 function startGame() {
-  state = { version: 2, phase: 'question', index: 0, attempts: [], rounds: [], draft: '', deadline: null, timeLimit: preferences.timeLimit };
+  // 정답은 라운드마다 공개되므로, 모드별로 처음 시작한 게임만 랭킹에 등록할 수 있습니다.
+  const key = rankingOn ? rankingKey(preferences.timeLimit) : null;
+  const rankEligible = Boolean(key && !ranking.played[key]);
+  if (key) { ranking.played[key] = true; saveRanking(); }
+  state = { version: 2, phase: 'question', index: 0, attempts: [], rounds: [], draft: '', deadline: null, timeLimit: preferences.timeLimit, rankEligible };
   screen = 'game';
   persist();
   render();
@@ -276,6 +359,7 @@ function downloadResults() {
 document.addEventListener('submit', event => {
   if (event.target.id === 'setup-form') { event.preventDefault(); startGame(); }
   if (event.target.id === 'guess-form') { event.preventDefault(); submitGuess(); }
+  if (event.target.id === 'ranking-form') { event.preventDefault(); submitRanking(); }
 });
 
 document.addEventListener('input', event => {
@@ -313,6 +397,8 @@ document.addEventListener('click', async event => {
   if (action === 'replay') startGame();
   if (action === 'about') showAbout();
   if (action === 'rules') showRules();
+  if (action === 'ranking') showRanking();
+  if (action === 'ranking-mode') showRanking(Number(button.dataset.time));
   if (action === 'source') showSource(button.dataset.id);
   if (action === 'photo') showPhoto(button.dataset.id);
   if (action === 'close-dialog') dialog.close();

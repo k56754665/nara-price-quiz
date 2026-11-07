@@ -38,6 +38,25 @@ npm run check
 
 API 키, 담당자 연락처, 인증이 포함된 요청 URL은 배포 파일에 없습니다. 상품 이미지를 배포에 포함하므로 외부 이미지 서버에 연결하지 않아도 플레이 화면이 표시됩니다.
 
+## 온라인 랭킹 (Supabase)
+
+결과 화면에서 닉네임을 입력해 기록을 등록하고, 처음 화면의 **온라인 랭킹 보기**에서 모드별 TOP 20을 볼 수 있습니다. 설정이 비어 있으면 랭킹 UI가 숨겨지고 게임은 그대로 동작합니다.
+
+### 켜는 방법
+
+1. [supabase.com](https://supabase.com)에서 새 프로젝트를 만듭니다. 무료 요금제로 충분합니다.
+2. 대시보드 **SQL Editor**에 [`supabase/leaderboard.sql`](supabase/leaderboard.sql) 전체를 붙여 넣고 실행합니다. 다시 실행해도 안전합니다.
+3. **Project Settings → API**에서 Project URL과 `anon` `public` 키를 복사해 [`dist/leaderboard-config.js`](dist/leaderboard-config.js)에 넣습니다. `anon` 키는 공개용이라 저장소에 올려도 됩니다. **`service_role` 키는 절대 넣지 마세요.** 테스트가 이를 검사합니다.
+4. `npm run check` 통과 후 `main`에 올리면 GitHub Pages에 반영됩니다.
+
+### 공정성 규칙
+
+- 브라우저는 라운드별 추측값만 보냅니다. 점수는 Supabase 함수가 서버의 정답표로 다시 계산합니다.
+- 테이블은 RLS로 잠겨 있어 브라우저에서 직접 읽거나 쓸 수 없고, `submit_score`·`get_leaderboard` 함수만 호출할 수 있습니다.
+- 정답이 라운드마다 공개되므로, 모드별로 **처음 시작한 게임**만 등록할 수 있습니다. 서버도 기기 ID당 모드별 한 번만 받습니다.
+- 정답이 `data.json`에 포함된 캐주얼 퀴즈이므로 작정한 조작(코드를 고쳐 만점 제출, 저장소를 지워 새 기기로 위장)까지 막지는 못합니다. 이상한 기록은 Supabase **Table Editor**의 `leaderboard_scores`에서 지우면 됩니다.
+- 문제 세트를 바꾸면 SQL의 `quiz_answers`에 새 `question_set`(= `data.json`의 `referenceDate`) 정답을 추가하세요. 랭킹은 문제 세트별로 따로 집계됩니다.
+
 ## 배포
 
 GitHub Pages에서는 `.github/workflows/pages.yml`이 `main`에 대한 푸시 또는 수동 실행을 받아 검사를 수행한 뒤 `dist/`만 배포합니다. 별도 패키지 설치나 API 키 설정이 필요하지 않습니다. GitHub 저장소의 **Settings → Pages → Source → GitHub Actions**를 한 번 선택해야 합니다. 배포 결과 링크는 **Actions → Deploy game to GitHub Pages**에서 확인합니다.
