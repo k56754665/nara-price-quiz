@@ -5,11 +5,13 @@
 -- - 테이블은 RLS를 켜고 정책을 두지 않아 브라우저(anon 키)에서 직접 읽고 쓸 수 없습니다.
 -- - 브라우저는 submit_score / get_leaderboard 두 함수만 호출할 수 있습니다.
 -- - 점수는 브라우저가 보낸 값을 믿지 않고, 추측값으로 서버에서 다시 계산합니다.
--- - 같은 기기(client_id)는 문제 세트·모드별로 한 번만 등록할 수 있습니다.
+-- - 같은 기기(client_id)는 문제 세트마다 한 번만 등록할 수 있습니다.
+-- - 문제 수(3·5·10·15·20·30·40·50)와 상관없이 랭킹은 하나입니다. 문제마다 최대 1,000점이라
+--   많이 풀수록 높은 점수를 노릴 수 있습니다. 시간 제한 모드는 없어져 time_limit은 항상 0입니다.
 
 create table if not exists public.quiz_answers (
   question_set text not null,
-  position int not null check (position between 1 and 10),
+  position int not null check (position between 1 and 50),
   question_id text not null,
   answer bigint not null check (answer > 0),
   primary key (question_set, position)
@@ -36,12 +38,25 @@ create table if not exists public.leaderboard_scores (
   time_limit int not null check (time_limit in (0, 45)),
   client_id uuid not null,
   nickname text not null check (char_length(nickname) between 1 and 12),
-  total_score int not null check (total_score between 0 and 10000),
-  perfect_count int not null check (perfect_count between 0 and 10),
+  total_score int not null check (total_score between 0 and 50000),
+  perfect_count int not null check (perfect_count between 0 and 50),
+  question_count int not null default 10 check (question_count between 1 and 50),
   attempts jsonb not null,
   created_at timestamptz not null default now(),
   unique (question_set, time_limit, client_id)
 );
+
+-- 예전(10문제 고정) 테이블을 새 규칙으로 바꿉니다. 처음 만드는 경우에도 안전합니다.
+-- (예전 45초 모드 기록은 time_limit = 45로 남아 있고, 랭킹에는 함께 집계합니다.)
+alter table public.quiz_answers drop constraint if exists quiz_answers_position_check;
+alter table public.quiz_answers add constraint quiz_answers_position_check check (position between 1 and 50);
+alter table public.leaderboard_scores add column if not exists question_count int not null default 10;
+alter table public.leaderboard_scores drop constraint if exists leaderboard_scores_total_score_check;
+alter table public.leaderboard_scores drop constraint if exists leaderboard_scores_perfect_count_check;
+alter table public.leaderboard_scores drop constraint if exists leaderboard_scores_question_count_check;
+alter table public.leaderboard_scores add constraint leaderboard_scores_total_score_check check (total_score between 0 and 50000);
+alter table public.leaderboard_scores add constraint leaderboard_scores_perfect_count_check check (perfect_count between 0 and 50);
+alter table public.leaderboard_scores add constraint leaderboard_scores_question_count_check check (question_count between 1 and 50);
 
 create index if not exists leaderboard_scores_rank_idx
   on public.leaderboard_scores (question_set, time_limit, total_score desc, perfect_count desc, created_at);
@@ -86,9 +101,10 @@ declare
   v_last bigint;
   v_answer bigint;
   v_count int;
+  v_rounds int;
   v_id bigint;
 begin
-  if p_time_limit is null or p_time_limit not in (0, 45) then
+  if p_time_limit is null or p_time_limit <> 0 then
     raise exception 'invalid_mode';
   end if;
   if p_client_id is null then
@@ -99,15 +115,20 @@ begin
   end if;
 
   select count(*) into v_count from public.quiz_answers where question_set = p_question_set;
-  if v_count <> 10 then
+  if v_count < 3 then
     raise exception 'unknown_question_set';
   end if;
 
-  if jsonb_typeof(p_attempts) <> 'array' or jsonb_array_length(p_attempts) <> 10 then
+  -- 문제 수는 3·5·10·15·20·30·40·50 중 하나이고, 앞에서부터 그만큼 풉니다.
+  if jsonb_typeof(p_attempts) <> 'array' then
+    raise exception 'invalid_attempts';
+  end if;
+  v_rounds := jsonb_array_length(p_attempts);
+  if v_rounds not in (3, 5, 10, 15, 20, 30, 40, 50) or v_rounds > v_count then
     raise exception 'invalid_attempts';
   end if;
 
-  for i in 1..10 loop
+  for i in 1..v_rounds loop
     select a.answer into v_answer from public.quiz_answers a
       where a.question_set = p_question_set and a.position = i;
     v_round := p_attempts -> (i - 1);
@@ -118,11 +139,7 @@ begin
     v_last := null;
     for j in 0..jsonb_array_length(v_round) - 1 loop
       v_guess := v_round -> j;
-      if jsonb_typeof(v_guess) = 'null' then
-        -- 시간초과는 45초 모드에서만 나올 수 있습니다.
-        if p_time_limit = 0 then raise exception 'invalid_attempts'; end if;
-        v_last := null;
-      elsif jsonb_typeof(v_guess) = 'number'
+      if jsonb_typeof(v_guess) = 'number'
         and (v_guess #>> '{}') ~ '^[0-9]{1,12}$'
         and (v_guess #>> '{}')::bigint between 1 and 999999999999 then
         v_last := (v_guess #>> '{}')::bigint;
@@ -141,8 +158,8 @@ begin
     if v_last = v_answer then v_perfect := v_perfect + 1; end if;
   end loop;
 
-  insert into public.leaderboard_scores (question_set, time_limit, client_id, nickname, total_score, perfect_count, attempts)
-  values (p_question_set, p_time_limit, p_client_id, v_nickname, v_total, v_perfect, p_attempts)
+  insert into public.leaderboard_scores (question_set, time_limit, client_id, nickname, total_score, perfect_count, question_count, attempts)
+  values (p_question_set, p_time_limit, p_client_id, v_nickname, v_total, v_perfect, v_rounds, p_attempts)
   on conflict (question_set, time_limit, client_id) do nothing
   returning id into v_id;
 
@@ -150,26 +167,35 @@ begin
     raise exception 'already_submitted';
   end if;
 
+  -- 예전 45초 모드 기록까지 합쳐, 기기마다 가장 좋은 기록 하나만 순위에 셉니다.
   return query
-    select count(*) + 1, v_total, v_perfect
+    select count(distinct s.client_id) + 1, v_total, v_perfect
     from public.leaderboard_scores s
-    where s.question_set = p_question_set and s.time_limit = p_time_limit
+    where s.question_set = p_question_set and s.client_id <> p_client_id
       and (s.total_score > v_total or (s.total_score = v_total and s.perfect_count > v_perfect));
 end;
 $$;
 
-create or replace function public.get_leaderboard(p_question_set text, p_time_limit int, p_limit int default 20)
-returns table (rank bigint, nickname text, total_score int, perfect_count int, created_at timestamptz)
+-- 반환 형식이 바뀌어(question_count 추가) 기존 함수를 지우고 다시 만듭니다.
+-- p_time_limit은 예전 클라이언트와의 호환을 위해 남겨 두었고 무시합니다.
+drop function if exists public.get_leaderboard(text, int, int);
+create function public.get_leaderboard(p_question_set text, p_time_limit int, p_limit int default 20)
+returns table (rank bigint, nickname text, total_score int, perfect_count int, question_count int, created_at timestamptz)
 language sql
 stable
 security definer
 set search_path = ''
 as $$
-  select rank() over (order by s.total_score desc, s.perfect_count desc),
-         s.nickname, s.total_score, s.perfect_count, s.created_at
-  from public.leaderboard_scores s
-  where s.question_set = p_question_set and s.time_limit = p_time_limit
-  order by s.total_score desc, s.perfect_count desc, s.created_at
+  with best as (
+    select distinct on (s.client_id) s.nickname, s.total_score, s.perfect_count, s.question_count, s.created_at
+    from public.leaderboard_scores s
+    where s.question_set = p_question_set
+    order by s.client_id, s.total_score desc, s.perfect_count desc, s.created_at
+  )
+  select rank() over (order by b.total_score desc, b.perfect_count desc),
+         b.nickname, b.total_score, b.perfect_count, b.question_count, b.created_at
+  from best b
+  order by b.total_score desc, b.perfect_count desc, b.created_at
   limit least(greatest(coalesce(p_limit, 20), 1), 50);
 $$;
 

@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { parseGuess, scoreGuess, relativeError, koreanAmount, totalScore, guessHint, isValidSession } from '../dist/engine.js';
+import { QUESTION_COUNTS, parseGuess, scoreGuess, relativeError, koreanAmount, totalScore, grade, guessHint, isValidSession } from '../dist/engine.js';
 
 const data = JSON.parse(await readFile(new URL('../dist/data.json', import.meta.url), 'utf8'));
 const question = data.questions[0];
-const initial = () => ({ version: 2, phase: 'question', index: 0, attempts: [], rounds: [], timeLimit: 0, draft: '', deadline: null });
+const initial = () => ({ version: 3, phase: 'question', index: 0, attempts: [], rounds: [], questionCount: 10, draft: '' });
 
 test('가격 입력은 쉼표·공백을 처리하고 0원·음수·문자·범위 밖 금액을 거부', () => {
   assert.equal(parseGuess(' 425,000 '), 425000);
@@ -58,9 +58,21 @@ test('첫 정답은 1회에 확정하고, 재도전은 마지막 추측으로 �
   assert.equal(isValidSession({ ...retry, rounds: [{ ...retry.rounds[0], attempts: [400000, 850000, 425000] }] }, data.questions), false);
 });
 
-test('첫 시간초과에도 기회가 남고, 두 번째 시간초과는 0점 결과', () => {
-  assert.equal(isValidSession({ ...initial(), attempts: [null], timeLimit: 45 }, data.questions), true);
-  assert.equal(isValidSession({ ...initial(), phase: 'reveal', rounds: [{ candidateId: question.id, attempts: [null, null], score: 0 }] }, data.questions), true);
+test('시간 제한이 없어 빈 추측(시간초과)이나 예전 45초 세션은 받지 않음', () => {
+  assert.equal(isValidSession({ ...initial(), attempts: [null] }, data.questions), false);
+  assert.equal(isValidSession({ ...initial(), phase: 'reveal', rounds: [{ candidateId: question.id, attempts: [null, null], score: 0 }] }, data.questions), false);
+  assert.equal(isValidSession({ ...initial(), version: 2, timeLimit: 45 }, data.questions), false);
+});
+
+test('문제 수는 3~50 중 정해진 값이고, 앞에서부터 그만큼 출제', () => {
+  assert.deepEqual(QUESTION_COUNTS, [3, 5, 10, 15, 20, 30, 40, 50]);
+  const three = data.questions.slice(0, 3);
+  const rounds = three.map(q => ({ candidateId: q.id, attempts: [q.answer], score: 1000 }));
+  const done = { ...initial(), questionCount: 3, phase: 'results', index: 2, rounds };
+  assert.equal(isValidSession(done, three), true);
+  assert.equal(isValidSession(done, data.questions), false);
+  assert.equal(isValidSession({ ...done, questionCount: 4 }, data.questions.slice(0, 4)), false);
+  assert.equal(grade(2700, 3).title, grade(9000, 10).title);
 });
 
 test('검증된 가격·단위·인도조건과 계약기간을 유지', () => {

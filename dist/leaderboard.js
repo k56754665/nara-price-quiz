@@ -13,10 +13,11 @@ export function normalizeNickname(value) {
   return text;
 }
 
-export function buildSubmission({ questionSet, timeLimit, clientId, nickname, rounds }) {
+// 시간 제한 모드는 없어졌지만, 서버 함수 형식을 유지하려고 p_time_limit은 항상 0으로 보냅니다.
+export function buildSubmission({ questionSet, clientId, nickname, rounds }) {
   return {
     p_question_set: questionSet,
-    p_time_limit: timeLimit,
+    p_time_limit: 0,
     p_client_id: clientId,
     p_nickname: nickname,
     p_attempts: rounds.map(r => r.attempts),
@@ -24,7 +25,7 @@ export function buildSubmission({ questionSet, timeLimit, clientId, nickname, ro
 }
 
 const errorMessages = {
-  already_submitted: '이 기기에서는 이 모드의 기록을 이미 등록했어요.',
+  already_submitted: '이 기기에서는 이미 기록을 등록했어요.',
   invalid_nickname: `닉네임은 1~${NICKNAME_MAX}자로 입력해 주세요.`,
   invalid_attempts: '기록을 확인하지 못했어요. 새 게임으로 다시 도전해 주세요.',
   unknown_question_set: '지금 문제 세트는 랭킹을 지원하지 않아요.',
@@ -62,8 +63,9 @@ export async function submitScore(config, submission, fetchImpl) {
   return { rank: Number(row.rank), totalScore: row.total_score, perfectCount: row.perfect_count };
 }
 
-export async function fetchLeaderboard(config, { questionSet, timeLimit, limit = 20 }, fetchImpl) {
-  const rows = await rpc(config, 'get_leaderboard', { p_question_set: questionSet, p_time_limit: timeLimit, p_limit: limit }, fetchImpl);
+export async function fetchLeaderboard(config, { questionSet, limit = 20 }, fetchImpl) {
+  const rows = await rpc(config, 'get_leaderboard', { p_question_set: questionSet, p_time_limit: 0, p_limit: limit }, fetchImpl);
   if (!Array.isArray(rows)) throw new LeaderboardError('server');
-  return rows.map(r => ({ rank: Number(r.rank), nickname: String(r.nickname), totalScore: Number(r.total_score), perfectCount: Number(r.perfect_count) }));
+  // question_count가 없으면 예전 SQL(10문제 고정)에서 온 기록입니다.
+  return rows.map(r => ({ rank: Number(r.rank), nickname: String(r.nickname), totalScore: Number(r.total_score), perfectCount: Number(r.perfect_count), questionCount: Number(r.question_count ?? 10) }));
 }

@@ -44,12 +44,12 @@ export function scoreBlocks(rounds) {
   return rounds.map(({ score }) => score === 1000 ? '🟩' : score >= 850 ? '🟦' : score >= 600 ? '🟨' : score >= 300 ? '🟧' : '🟥').join('');
 }
 
-// { total, title, rounds, best, newBest }
+// { total, maxScore, title, rounds, best, newBest }
 export function buildShareText(result, withUrl = true) {
   const lines = [
     GAME_TITLE,
     scoreBlocks(result.rounds),
-    `${fmt(result.total)} / 10,000점 · ${result.title}`,
+    `${result.rounds.length}문제 · ${fmt(result.total)} / ${fmt(result.maxScore ?? result.rounds.length * 1000)}점 · ${result.title}`,
     result.newBest ? '신기록! 🏆' : `최고 기록 ${fmt(result.best)}점`,
   ];
   if (withUrl) lines.push(`▶ ${shareUrl()}`);

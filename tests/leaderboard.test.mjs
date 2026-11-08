@@ -39,9 +39,9 @@ test('닉네임은 공백을 정리하고 길이·위험 문자를 검사', () =
 
 test('제출 데이터에는 점수 대신 라운드별 추측만 담김', () => {
   const rounds = data.questions.map(q => ({ candidateId: q.id, attempts: [q.answer], score: 1000 }));
-  const body = buildSubmission({ questionSet: data.referenceDate, timeLimit: 45, clientId: 'id', nickname: '닉', rounds });
-  assert.deepEqual(body.p_attempts, data.questions.map(q => [q.answer]));
-  assert.equal(body.p_time_limit, 45);
+  const body = buildSubmission({ questionSet: data.referenceDate, clientId: 'id', nickname: '닉', rounds: rounds.slice(0, 3) });
+  assert.deepEqual(body.p_attempts, data.questions.slice(0, 3).map(q => [q.answer]));
+  assert.equal(body.p_time_limit, 0);
   assert.equal('p_total_score' in body, false);
 });
 
@@ -54,8 +54,9 @@ test('Supabase RPC 호출 형식과 오류 메시지 변환', async () => {
   assert.equal(calls[0].init.headers.apikey, config.anonKey);
   assert.equal(calls[0].init.headers.Authorization, `Bearer ${config.anonKey}`);
 
-  const rows = await fetchLeaderboard(config, { questionSet: '2026-11-03', timeLimit: 0 }, ok([{ rank: 1, nickname: 'A', total_score: 9000, perfect_count: 5 }]));
-  assert.deepEqual(rows, [{ rank: 1, nickname: 'A', totalScore: 9000, perfectCount: 5 }]);
+  const rows = await fetchLeaderboard(config, { questionSet: '2026-11-03' }, ok([{ rank: 1, nickname: 'A', total_score: 9000, perfect_count: 5 }, { rank: 2, nickname: 'B', total_score: 2900, perfect_count: 2, question_count: 3 }]));
+  assert.deepEqual(rows, [{ rank: 1, nickname: 'A', totalScore: 9000, perfectCount: 5, questionCount: 10 }, { rank: 2, nickname: 'B', totalScore: 2900, perfectCount: 2, questionCount: 3 }]);
+  assert.equal(JSON.parse(calls[1].init.body).p_time_limit, 0);
 
   const fail = async () => ({ ok: false, json: async () => ({ code: 'P0001', message: 'already_submitted' }) });
   await assert.rejects(submitScore(config, {}, fail), { code: 'already_submitted', message: errorMessage('already_submitted') });

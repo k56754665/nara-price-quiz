@@ -60,14 +60,17 @@ export function grade(total, roundCount = 10) {
   return { title: "뜻밖의 가격 수집가", subtitle: "오늘의 놀라움이 다음 추측의 힌트가 될 거예요.", symbol: "?" };
 }
 
+export const QUESTION_COUNTS = [3, 5, 10, 15, 20, 30, 40, 50];
+
+// questions는 이번 게임에 나오는 문제들(전체 문제의 앞쪽 questionCount개)입니다.
 export function isValidSession(value, questions) {
-  if (!value || value.version !== 2 || !["question", "reveal", "results"].includes(value.phase)) return false;
+  if (!value || value.version !== 3 || !["question", "reveal", "results"].includes(value.phase)) return false;
+  if (!QUESTION_COUNTS.includes(value.questionCount) || value.questionCount !== questions.length) return false;
   if (!Number.isInteger(value.index) || value.index < 0 || value.index >= questions.length) return false;
-  if (![0, 45].includes(value.timeLimit) || !Array.isArray(value.rounds) || value.rounds.length > questions.length) return false;
-  const validGuess = x => x === null || Number.isSafeInteger(x) && x > 0 && x <= MAX_GUESS;
+  if (!Array.isArray(value.rounds) || value.rounds.length > questions.length) return false;
+  const validGuess = x => Number.isSafeInteger(x) && x > 0 && x <= MAX_GUESS;
   if (!Array.isArray(value.attempts) || value.attempts.length > 1 || value.attempts.some(x => !validGuess(x))) return false;
   if (value.draft != null && (typeof value.draft !== 'string' || !/^[\d,]{0,15}$/.test(value.draft))) return false;
-  if (value.deadline != null && (!Number.isSafeInteger(value.deadline) || value.deadline <= 0)) return false;
   if (value.rounds.some((r, i) => {
     if (!r || r.candidateId !== questions[i].id || !Array.isArray(r.attempts) || r.attempts.length < 1 || r.attempts.length > 2 || r.attempts.some(x => !validGuess(x))) return true;
     const firstIsCorrect = r.attempts[0] === questions[i].answer;
