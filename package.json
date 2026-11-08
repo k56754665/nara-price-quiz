@@ -7,6 +7,6 @@
   "scripts": {
     "dev": "node server.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check dist/app.js && node --check dist/engine.js && node --check dist/leaderboard.js && node --check dist/leaderboard-config.js && node --test tests/*.test.mjs"
+    "check": "node --check dist/app.js && node --check dist/share.js && node --check dist/engine.js && node --check dist/leaderboard.js && node --check dist/leaderboard-config.js && node --test tests/*.test.mjs"
   }
 }

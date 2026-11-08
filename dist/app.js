@@ -1,5 +1,6 @@
 import { MAX_GUESS, parseGuess, scoreGuess, relativeError, koreanAmount, judge, totalScore, grade, guessHint, isValidSession } from './engine.js';
 import { LEADERBOARD_CONFIG } from './leaderboard-config.js';
+import { buildShareText, loadKakao, shareKakao, shareSystem } from './share.js';
 import { NICKNAME_MAX, isConfigured, normalizeNickname, buildSubmission, submitScore, fetchLeaderboard } from './leaderboard.js';
 
 const app = document.querySelector('#app');
@@ -169,6 +170,7 @@ function render({ focus = true } = {}) {
     startTimer();
     if (focus && !window.matchMedia('(max-width: 720px)').matches) document.querySelector('#guess')?.focus({ preventScroll: true });
   } else if (focus) document.querySelector('#screen-heading')?.focus({ preventScroll: true });
+  if (screen !== 'home' && state.phase === 'results') loadKakao();
   if (rankingOn && screen !== 'home' && state.phase === 'results') loadRankingList('#ranking-list', state.timeLimit, ranking.submitted[rankingKey(state.timeLimit)]);
 }
 
@@ -234,7 +236,7 @@ function results() {
   const total = totalScore(state.rounds);
   const verdict = grade(total);
   const perfect = state.rounds.filter(r => r.attempts.at(-1) === data.questions.find(q => q.id === r.candidateId).answer).length;
-  return `<section class="results-shell"><div class="results-banner"><div class="result-sticker" aria-hidden="true">${verdict.symbol}</div><span class="eyebrow">10개의 가격, 10개의 새로운 발견</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><p>${verdict.subtitle}</p><div class="final-score">${number(total)}<span> / 10,000점</span></div><div class="final-metrics"><span>정확히 맞힌 문제 <strong>${perfect}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div><div class="result-actions"><button class="button button-blue" data-action="replay">다시 도전하기 ↗</button><button class="button button-white" data-action="share">결과 복사하기</button></div></div>${rankingPanel()}<div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${data.questions.map((q, i) => {
+  return `<section class="results-shell"><div class="results-banner"><div class="result-sticker" aria-hidden="true">${verdict.symbol}</div><span class="eyebrow">10개의 가격, 10개의 새로운 발견</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><p>${verdict.subtitle}</p><div class="final-score">${number(total)}<span> / 10,000점</span></div><div class="final-metrics"><span>정확히 맞힌 문제 <strong>${perfect}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div><div class="result-actions"><button class="button button-blue" data-action="replay">다시 도전하기 ↗</button></div><div class="share-actions"><button class="share-button share-kakao" data-action="share-kakao"><span class="share-icon" aria-hidden="true">💬</span>카카오톡 공유</button><button class="share-button" data-action="share-system"><span class="share-icon" aria-hidden="true">↗</span>공유하기</button><button class="share-button" data-action="share"><span class="share-icon" aria-hidden="true">⧉</span>결과 복사</button></div></div>${rankingPanel()}<div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${data.questions.map((q, i) => {
     const round = state.rounds[i];
     return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(q.delivery)}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${value === null ? '시간 초과' : `${number(value)}원`}</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(q, true)}</article>`;
   }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(data.referenceDate)} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></section>`;
@@ -286,6 +288,7 @@ function nextQuestion() {
   if (state.phase !== 'reveal') return;
   if (state.index === data.questions.length - 1) {
     state.phase = 'results';
+    state.newBest = totalScore(state.rounds) > best;
     best = Math.max(best, totalScore(state.rounds));
     write(storageKeys.best, best);
   } else {
@@ -341,9 +344,13 @@ function showSource(id) {
   openDialog('이 물건의 계약 정보', `<span class="dialog-badge">공식 API 확인 · ${esc(data.referenceDate)}</span><h3 class="source-title">${esc(q.title)}</h3><div class="source-price">${money(q.answer)} <small>/ ${esc(q.unit)}</small></div><dl class="source-table"><div><dt>규격 원문</dt><dd>${esc(q.specification)}</dd></div><div><dt>물품식별번호</dt><dd>${esc(q.productId)}</dd></div><div><dt>계약번호 / 순번</dt><dd>${esc(q.contractNumber)} / ${esc(q.contractLine)}</dd></div><div><dt>공급업체</dt><dd>${esc(q.supplier)}</dd></div><div><dt>계약기간</dt><dd>${esc(q.contractStart)} ~ ${esc(q.contractEnd)}</dd></div><div><dt>인도조건 / 부가세</dt><dd>${esc(q.delivery)} / ${esc(q.vat)}</dd></div><div><dt>조회 시각</dt><dd>${esc(q.checkedAt)}</dd></div><div><dt>API</dt><dd class="api-operation">${esc(q.endpoint)}</dd></div></dl><p class="dialog-small">${esc(q.scope)}<br>이 금액은 품목 계약단가이며 실제 지급총액은 확인하지 않았습니다.</p><a class="external-link" href="${esc(q.image.sourceUrl)}" target="_blank" rel="noopener noreferrer">${imageLabel(q)} 원본 ↗</a><a class="external-link" href="${esc(data.catalogUrl)}" target="_blank" rel="noopener noreferrer">공공데이터포털에서 API 설명 보기 ↗</a><a class="download-link" href="./data.json" download="나라장터_가격퀴즈_검증데이터.json">출제 데이터 JSON 내려받기 ↓</a>`, true);
 }
 
-async function copyResults() {
+function shareResult() {
   const total = totalScore(state.rounds);
-  const text = `이게 얼마게? · 나라장터 가격 퀴즈\n${number(total)} / 10,000점\n${grade(total).title}\n힌트와 함께 10개 물건의 가격에 도전!\n가격 기준일 ${data.referenceDate}`;
+  return { total, title: grade(total).title, rounds: state.rounds, best: Math.max(best, total), newBest: !!state.newBest };
+}
+
+async function copyResults() {
+  const text = buildShareText(shareResult());
   try { await navigator.clipboard.writeText(text); notify('결과를 복사했어요!'); }
   catch { openDialog('결과 복사', `<p>아래 내용을 선택해 복사해 주세요.</p><textarea class="share-fallback" aria-label="복사할 결과" readonly>${esc(text)}</textarea>`); dialog.querySelector('textarea')?.select(); }
 }
@@ -402,6 +409,9 @@ document.addEventListener('click', async event => {
   if (action === 'source') showSource(button.dataset.id);
   if (action === 'photo') showPhoto(button.dataset.id);
   if (action === 'close-dialog') dialog.close();
+  // 공유는 사용자 제스처 안에서 불려야 하므로 await 없이 바로 부른다.
+  if (action === 'share-kakao') shareKakao(shareResult(), notify);
+  if (action === 'share-system') shareSystem(shareResult(), notify, copyResults);
   if (action === 'share') await copyResults();
   if (action === 'download') downloadResults();
   if (action === 'sound') { soundOn = !soundOn; button.setAttribute('aria-pressed', String(soundOn)); button.setAttribute('aria-label', soundOn ? '효과음 끄기' : '효과음 켜기'); button.innerHTML = `${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span>`; if (soundOn) tone('hint'); }
