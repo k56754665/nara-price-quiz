@@ -22,8 +22,10 @@ test('랭킹 SQL의 정답·문제 순서가 data.json과 같음', () => {
 test('랭킹 설정은 비어 있으면 꺼지고 service_role 키를 담지 않음', () => {
   assert.equal(isConfigured({ url: '', anonKey: '' }), false);
   assert.equal(isConfigured(config), true);
+  assert.equal(isConfigured({ url: config.url, anonKey: 'sb_secret_0123456789abcdefghij' }), false);
   const key = LEADERBOARD_CONFIG.anonKey;
-  if (key) {
+  assert.equal(key.startsWith('sb_secret_'), false);
+  if (key.startsWith('eyJ')) {
     const payload = JSON.parse(Buffer.from(key.split('.')[1] ?? '', 'base64url').toString() || '{}');
     assert.notEqual(payload.role, 'service_role');
   }

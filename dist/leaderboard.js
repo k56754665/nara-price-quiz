@@ -3,7 +3,8 @@
 export const NICKNAME_MAX = 12;
 
 export function isConfigured(config) {
-  return Boolean(config && /^https:\/\/[^\s/]+/.test(config.url ?? '') && typeof config.anonKey === 'string' && config.anonKey.length > 20);
+  // secret 키(sb_secret_...)는 브라우저에 두면 안 되므로 랭킹을 켜지 않습니다.
+  return Boolean(config && /^https:\/\/[^\s/]+/.test(config.url ?? '') && typeof config.anonKey === 'string' && config.anonKey.length > 20 && !config.anonKey.startsWith('sb_secret_'));
 }
 
 export function normalizeNickname(value) {
