@@ -27,6 +27,9 @@ jobs:
           package-manager-cache: false
       - name: Verify game and source data
         run: npm run check
+      - name: Stamp asset URLs with the commit version
+        # 배포마다 파일 주소가 바뀌어, 브라우저가 예전 JS·CSS를 캐시에서 쓰지 않습니다.
+        run: node scripts/stamp-version.mjs dist "${GITHUB_SHA::8}"
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload playable files
