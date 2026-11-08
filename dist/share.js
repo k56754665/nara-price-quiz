@@ -5,10 +5,10 @@
 // - 카카오 SDK 는 결과창을 열 때 미리 불러둔다. 버튼을 누른 뒤에 로드하면 제스처와 시간이 벌어져
 //   카카오 공유창이 팝업 차단에 걸릴 수 있다.
 
-// Project-PHD 와 같은 카카오 앱의 JavaScript 키.
-// 카카오 개발자 콘솔 [앱 설정 > 플랫폼 > Web] 에 이 게임의 origin 이 등록돼 있어야 동작한다.
+// 카카오 앱의 '나라장터' JavaScript 키(이 게임 전용). Project-PHD 의 Default JS Key 와 다르다.
+// 콘솔 [플랫폼 키 > 나라장터 > JS SDK 도메인] 에 이 게임의 origin 이 등록돼 있어야 동작한다.
 //   배포: https://k56754665.github.io   로컬: http://127.0.0.1:4173 / http://localhost:4173
-const KAKAO_JS_KEY = 'a85ba2768dfcf7e1636058cdc9c8c683';
+const KAKAO_JS_KEY = '5e88cdff3a97128cad85d53d6ffceb4a';
 const KAKAO_SDK_URL = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js';
 
 const GAME_TITLE = '이게 얼마게? · 나라장터 가격 퀴즈';
