@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { QUESTION_COUNTS, sampleQuestions, createSession, restoreSession } from '../dist/engine.js';
+import { ROUND_COUNT, sampleQuestions, createSession, restoreSession } from '../dist/engine.js';
 
 const readJSON = async file => JSON.parse(await readFile(new URL(file, import.meta.url), 'utf8'));
 const bank = await readJSON('../dist/data.json');
@@ -32,16 +32,15 @@ test('현재 문제 전체와 이전 이어하기 이미지의 체크섬·출처
   }
 });
 
-test('전체 문제은행에서 선택한 수를 무작위로 중복 없이 출제하고 저장한 순서를 복구', () => {
+test('전체 문제은행에서 10문제를 무작위로 중복 없이 출제하고 저장한 순서를 복구', () => {
   const original = structuredClone(bank.questions);
-  for (const count of QUESTION_COUNTS.filter(count => count <= bank.questions.length)) {
-    const first = sampleQuestions(bank.questions,count,()=>0);
-    const second = sampleQuestions(bank.questions,count,()=>.999);
-    assert.equal(first.length,count);
-    assert.equal(new Set(first.map(q=>q.id)).size,count);
-    assert.notDeepEqual(first.map(q=>q.id),second.map(q=>q.id));
-    const session = createSession(bank,count,true,()=>0);
-    assert.deepEqual(restoreSession(session,legacy),session);
-  }
+  assert.ok(bank.questions.length >= ROUND_COUNT);
+  const first = sampleQuestions(bank.questions,ROUND_COUNT,()=>0);
+  const second = sampleQuestions(bank.questions,ROUND_COUNT,()=>.999);
+  assert.equal(first.length,ROUND_COUNT);
+  assert.equal(new Set(first.map(q=>q.id)).size,ROUND_COUNT);
+  assert.notDeepEqual(first.map(q=>q.id),second.map(q=>q.id));
+  const session = createSession(bank,true,()=>0);
+  assert.deepEqual(restoreSession(structuredClone(session)),session);
   assert.deepEqual(bank.questions,original);
 });

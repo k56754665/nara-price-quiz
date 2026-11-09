@@ -39,9 +39,10 @@ export function loadKakao() {
 
 const fmt = n => Math.round(n || 0).toLocaleString('ko-KR');
 
-// 라운드별 점수를 한 줄 블록으로. 워들처럼 대화창에 붙였을 때 눈에 띈다.
+// 라운드별로 몇 번째에 맞혔는지 한 줄 블록으로. 워들처럼 대화창에 붙였을 때 눈에 띈다.
+// 1번째 🟩 · 2번째 🟦 · 3번째 🟨 · 4번째 🟧 · 실패 🟥
 export function scoreBlocks(rounds) {
-  return rounds.map(({ score }) => score === 1000 ? '🟩' : score >= 850 ? '🟦' : score >= 600 ? '🟨' : score >= 300 ? '🟧' : '🟥').join('');
+  return rounds.map(({ attempts, score }) => score > 0 ? ['🟩', '🟦', '🟨', '🟧'][attempts.length - 1] ?? '🟧' : '🟥').join('');
 }
 
 // { total, maxScore, title, rounds, best, newBest }

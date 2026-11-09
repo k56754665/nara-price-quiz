@@ -42,7 +42,7 @@ test('닉네임은 공백을 정리하고 길이·위험 문자를 검사', () =
 
 test('제출 데이터에는 점수 대신 라운드별 추측만 담김', () => {
   const rounds = data.questions.map(q => ({ candidateId: q.id, attempts: [q.answer], score: 1000 }));
-  const body = buildSubmission({ questionSet: data.referenceDate, clientId: 'id', nickname: '닉', rounds: rounds.slice(0, 3) });
+  const body = buildSubmission({ questionSet: data.referenceDate, clientId: 'id', nickname: '닉', rounds: rounds.slice(0, 3), protocolVersion: 1 });
   assert.deepEqual(body.p_attempts, data.questions.slice(0, 3).map(q => [q.answer]));
   assert.equal(body.p_time_limit, 0);
   assert.equal('p_total_score' in body, false);

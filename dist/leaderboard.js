@@ -15,13 +15,14 @@ export function normalizeNickname(value) {
 }
 
 // 시간 제한 모드는 없어졌지만, 서버 함수 형식을 유지하려고 p_time_limit은 항상 0으로 보냅니다.
-export function buildSubmission({ questionSet, clientId, nickname, rounds, protocolVersion = 1 }) {
+// rules 1: 예전 10개 세트(추측만), 2 이상: 문제은행에서 뽑은 문제 ID와 추측을 함께 보냅니다.
+export function buildSubmission({ questionSet, clientId, nickname, rounds, protocolVersion = 3 }) {
   return {
     p_question_set: questionSet,
     p_time_limit: 0,
     p_client_id: clientId,
     p_nickname: nickname,
-    p_attempts: protocolVersion === 2 ? rounds.map(r => ({ question_id: r.candidateId, attempts: r.attempts })) : rounds.map(r => r.attempts),
+    p_attempts: protocolVersion >= 2 ? rounds.map(r => ({ question_id: r.candidateId, attempts: r.attempts })) : rounds.map(r => r.attempts),
   };
 }
 
@@ -59,13 +60,15 @@ async function rpc(config, name, body, fetchImpl = fetch) {
 }
 
 export async function submitScore(config, submission, fetchImpl) {
-  const name = submission.p_attempts?.[0]?.question_id ? 'submit_score_v2' : 'submit_score';
+  // 현재 규칙(±10% · 4번 추측)은 submit_score_v3가 채점합니다.
+  const name = submission.p_attempts?.[0]?.question_id ? 'submit_score_v3' : 'submit_score';
   const rows = await rpc(config, name, submission, fetchImpl);
   const row = Array.isArray(rows) ? rows[0] : rows;
   if (!row || !Number.isInteger(Number(row.rank))) throw new LeaderboardError('server');
   return { rank: Number(row.rank), totalScore: row.total_score, perfectCount: row.perfect_count };
 }
 
+// questionSet은 랭킹 집계 단위입니다. 현재 규칙은 engine.js의 rankingSet(문제은행 버전)을 넘깁니다.
 export async function fetchLeaderboard(config, { questionSet, limit = 20 }, fetchImpl) {
   const rows = await rpc(config, 'get_leaderboard', { p_question_set: questionSet, p_time_limit: 0, p_limit: limit }, fetchImpl);
   if (!Array.isArray(rows)) throw new LeaderboardError('server');
