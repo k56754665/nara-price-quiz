@@ -16,7 +16,7 @@ export function normalizeNickname(value) {
 
 // 시간 제한 모드는 없어졌지만, 서버 함수 형식을 유지하려고 p_time_limit은 항상 0으로 보냅니다.
 // rules 1: 예전 10개 세트(추측만), 2 이상: 문제은행에서 뽑은 문제 ID와 추측을 함께 보냅니다.
-export function buildSubmission({ questionSet, clientId, nickname, rounds, protocolVersion = 3 }) {
+export function buildSubmission({ questionSet, clientId, nickname, rounds, protocolVersion = 4 }) {
   return {
     p_question_set: questionSet,
     p_time_limit: 0,
@@ -60,8 +60,8 @@ async function rpc(config, name, body, fetchImpl = fetch) {
 }
 
 export async function submitScore(config, submission, fetchImpl) {
-  // 현재 규칙(±10% · 4번 추측)은 submit_score_v3가 채점합니다.
-  const name = submission.p_attempts?.[0]?.question_id ? 'submit_score_v3' : 'submit_score';
+  // 현재 규칙(±10% · 3번 추측)은 submit_score_v4가 채점합니다.
+  const name = submission.p_attempts?.[0]?.question_id ? 'submit_score_v4' : 'submit_score';
   const rows = await rpc(config, name, submission, fetchImpl);
   const row = Array.isArray(rows) ? rows[0] : rows;
   if (!row || !Number.isInteger(Number(row.rank))) throw new LeaderboardError('server');

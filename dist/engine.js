@@ -7,14 +7,14 @@ export function parseGuess(value) {
   return Number.isSafeInteger(number) && number > 0 && number <= MAX_GUESS ? number : null;
 }
 
-// 게임 규칙: 매 게임 문제은행에서 10문제를 무작위로 뽑고, 물건마다 최대 4번 추측합니다.
+// 게임 규칙: 매 게임 문제은행에서 10문제를 무작위로 뽑고, 물건마다 최대 3번 추측합니다.
 // 정답의 ±10% 안이면 성공이며, 몇 번째에 맞혔는지에 따라 점수를 줍니다. 실패하면 0점입니다.
-// 점수를 바꾸면 supabase/rules-v3.sql의 submit_score_v3도 같이 바꿔야 합니다.
+// 점수를 바꾸면 supabase/rules-v4.sql의 submit_score_v4도 같이 바꿔야 합니다.
 export const ROUND_COUNT = 10;
-export const MAX_ATTEMPTS = 4;
+export const MAX_ATTEMPTS = 3;
 export const TOLERANCE_PERCENT = 10;
-export const ATTEMPT_SCORES = [1000, 800, 600, 500];
-export const RULES_VERSION = 3;
+export const ATTEMPT_SCORES = [1000, 800, 500];
+export const RULES_VERSION = 4;
 
 // 정수로만 비교해 서버(PostgreSQL)와 결과가 같도록 합니다.
 export function isCorrect(guess, answer) {
@@ -44,8 +44,7 @@ export function koreanAmount(value) {
 export function judge(score) {
   if (score === ATTEMPT_SCORES[0]) return { title: "한 번에 맞혔어요!", tag: "단번에 정답", tone: "excellent" };
   if (score === ATTEMPT_SCORES[1]) return { title: "두 번 만에 맞혔어요!", tag: "날카로운 감각", tone: "excellent" };
-  if (score === ATTEMPT_SCORES[2]) return { title: "세 번 만에 찾아냈어요!", tag: "힌트 활용 성공", tone: "good" };
-  if (score === ATTEMPT_SCORES[3]) return { title: "마지막 기회에 성공!", tag: "아슬아슬 정답", tone: "okay" };
+  if (score === ATTEMPT_SCORES[2]) return { title: "마지막 기회에 성공!", tag: "아슬아슬 정답", tone: "okay" };
   return { title: "이 가격, 예상하셨나요?", tag: "아쉽게 놓쳤어요", tone: "surprise" };
 }
 

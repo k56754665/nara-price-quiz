@@ -26,17 +26,17 @@ test('정답 ±10% 안이면 성공이고 경계값도 포함', () => {
   assert.equal(relativeError(850000, 425000), 100);
 });
 
-test('점수는 몇 번째에 맞혔는지로만 정하고, 4번 모두 틀리면 0점', () => {
-  assert.deepEqual(ATTEMPT_SCORES, [1000, 800, 600, 500]);
-  assert.equal(MAX_ATTEMPTS, 4);
+test('점수는 몇 번째에 맞혔는지로만 정하고, 3번 모두 틀리면 0점', () => {
+  assert.deepEqual(ATTEMPT_SCORES, [1000, 800, 500]);
+  assert.equal(MAX_ATTEMPTS, 3);
   assert.equal(scoreRound([100000], 100000), 1000);
   assert.equal(scoreRound([105000], 100000), 1000);
   assert.equal(scoreRound([1, 91000], 100000), 800);
-  assert.equal(scoreRound([1, 2, 109000], 100000), 600);
-  assert.equal(scoreRound([1, 2, 3, 100000], 100000), 500);
-  assert.equal(scoreRound([1, 2, 3, 4], 100000), 0);
+  assert.equal(scoreRound([1, 2, 109000], 100000), 500);
+  assert.equal(scoreRound([1, 2, 3], 100000), 0);
+  assert.equal(judge(500).tag, '아슬아슬 정답');
   assert.equal(judge(0).tag, '아쉽게 놓쳤어요');
-  assert.equal(scoreBlocks([{ attempts: [1], score: 1000 }, { attempts: [1, 2, 3], score: 400 }, { attempts: [1, 2, 3, 4], score: 0 }]), '🟩🟨🟥');
+  assert.equal(scoreBlocks([{ attempts: [1], score: 1000 }, { attempts: [1, 2, 3], score: 500 }, { attempts: [1, 2, 3], score: 0 }]), '🟩🟨🟥');
 });
 
 test('힌트는 오답에만 UP/DOWN과 거리를 주고, 숫자 정답·오차율을 노출하지 않음', () => {
@@ -69,8 +69,8 @@ test('매 게임 문제은행에서 10문제를 중복 없이 뽑고 저장·복
 
 test('오답이면 기회가 남은 동안 같은 문제를 이어가고, 정답이 섞인 진행 기록은 거부', () => {
   const s = fresh(); const answer = s.questions[0].answer;
-  assert.equal(isValidSession({ ...s, attempts: [1, 2, 3], draft: '400,000' }, s.questions), true);
-  assert.equal(isValidSession({ ...s, attempts: [1, 2, 3, 4] }, s.questions), false);
+  assert.equal(isValidSession({ ...s, attempts: [1, 2], draft: '400,000' }, s.questions), true);
+  assert.equal(isValidSession({ ...s, attempts: [1, 2, 3] }, s.questions), false);
   assert.equal(isValidSession({ ...s, attempts: [answer] }, s.questions), false);
   assert.equal(isValidSession({ ...s, attempts: [null] }, s.questions), false);
 });
@@ -80,17 +80,17 @@ test('라운드 결과는 규칙대로 끝났을 때만 인정', () => {
   const round = attempts => ({ ...s, phase: 'reveal', rounds: [{ candidateId: q.id, attempts, score: scoreRound(attempts, q.answer) }] });
   assert.equal(isValidSession(round([q.answer]), s.questions), true);
   assert.equal(isValidSession(round([1, q.answer]), s.questions), true);
-  assert.equal(isValidSession(round([1, 2, 3, 4]), s.questions), true);
+  assert.equal(isValidSession(round([1, 2, 3]), s.questions), true);
   assert.equal(isValidSession(round([1, 2]), s.questions), false);
   assert.equal(isValidSession(round([q.answer, q.answer]), s.questions), false);
-  assert.equal(isValidSession(round([1, 2, 3, 4, q.answer]), s.questions), false);
+  assert.equal(isValidSession(round([1, 2, 3, q.answer]), s.questions), false);
   const tampered = round([1, q.answer]); tampered.rounds[0].score = 1000;
   assert.equal(isValidSession(tampered, s.questions), false);
 });
 
 test('예전 규칙(두 번 추측)의 진행 기록은 이어가지 않음', () => {
   assert.equal(restoreSession({ version: 4, phase: 'question', questions: [] }), null);
-  assert.equal(restoreSession({ ...fresh(), rulesVersion: 2 }), null);
+  assert.equal(restoreSession({ ...fresh(), rulesVersion: 3 }), null);
   assert.equal(restoreSession({ ...fresh(), questionCount: 5 }), null);
 });
 

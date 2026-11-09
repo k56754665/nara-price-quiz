@@ -5,8 +5,8 @@ import { NICKNAME_MAX, isConfigured, normalizeNickname, buildSubmission, submitS
 
 const app = document.querySelector('#app');
 const dialog = document.querySelector('#info-dialog');
-// 규칙이 바뀌어(±10% · 4번 추측) 진행 기록과 최고 기록은 새 키에 저장합니다.
-const storageKeys = { session: 'nara-price-session-v3', best: 'nara-price-best-v2', ranking: 'nara-price-ranking-v1' };
+// 규칙이 바뀌어(±10% · 3번 추측) 최고 기록은 새 키에 저장합니다. 진행 기록은 규칙 버전이 다르면 버립니다.
+const storageKeys = { session: 'nara-price-session-v3', best: 'nara-price-best-v3', ranking: 'nara-price-ranking-v1' };
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const number = value => value.toLocaleString('ko-KR');
 const money = value => `${number(value)}<span class="currency">원</span>`;
@@ -199,7 +199,7 @@ function question() {
   const attempt = state.attempts.length + 1;
   const retry = attempt > 1;
   const last = attempt === MAX_ATTEMPTS;
-  return `<section class="game-shell">${progress()}<div class="question-grid">${productFigure(q)}<div class="question-panel"><div class="eyebrow">${esc(q.category)}</div><h1 id="screen-heading" tabindex="-1">${esc(q.title)}<br><span>얼마일까요?</span></h1>${conditions(q)}<div class="guess-zone">${retryFeedback(q)}<form id="guess-form" novalidate><div class="guess-label"><label for="guess">${last ? '마지막 예상 등록 계약단가' : '예상 등록 계약단가'}</label><div class="attempt-tools"><span class="attempt-count ${last ? 'last' : ''}">${last ? '마지막 기회' : `${attempt}번째 추측`} · ${attempt} / ${MAX_ATTEMPTS}</span></div></div><div class="amount-input"><span class="won-symbol" aria-hidden="true">₩</span><input id="guess" name="guess" type="text" inputmode="numeric" autocomplete="off" maxlength="15" value="${esc(state.draft || '')}" placeholder="${retry ? '힌트 보고 다시 입력' : '얼마일까요?'}" aria-describedby="amount-hint guess-error"><span>원</span></div><p id="amount-hint" class="amount-hint">${koreanAmount(parseGuess(state.draft || ''))}</p><div class="quick-amounts" aria-label="예상 가격 더하기"><button type="button" data-action="add" data-amount="10000">+ 1만</button><button type="button" data-action="add" data-amount="100000">+ 10만</button><button type="button" data-action="add" data-amount="1000000">+ 100만</button><button type="button" data-action="add" data-amount="10000000">+ 1,000만</button><button type="button" data-action="clear" class="clear-amount" aria-label="예상 가격 지우기">↺</button></div><p class="form-error" id="guess-error" role="alert"></p><button class="button button-blue guess-submit" type="submit">${last ? '마지막 추측! 정답 확인하기' : `${attempt}번째 추측 제출하기`} <span aria-hidden="true">→</span></button></form><p class="basis-note">${esc(q.quantity)}의 계약단가 · ${esc(referenceDate())} 기준 · 정답 ±${TOLERANCE_PERCENT}% 안이면 성공 · 지금 맞히면 ${number(ATTEMPT_SCORES[attempt - 1])}점</p></div></div></div><div class="game-bottom"><button class="text-button" data-action="home">← 처음 화면</button><span>물건의 규격과 인도조건까지 살펴보세요.</span><button class="text-button" data-action="rules">점수 안내 ↗</button></div></section>`;
+  return `<section class="game-shell">${progress()}<div class="question-grid">${productFigure(q)}<div class="question-panel"><div class="eyebrow">${esc(q.category)}</div><h1 id="screen-heading" tabindex="-1">${esc(q.title)}<br><span>얼마일까요?</span></h1>${conditions(q)}<div class="guess-zone">${retryFeedback(q)}<form id="guess-form" novalidate><div class="guess-label"><label for="guess">${last ? '마지막 예상 등록 계약단가' : '예상 등록 계약단가'}</label><div class="attempt-tools"><span class="attempt-count ${last ? 'last' : ''}">${last ? '마지막 기회' : `${attempt}번째 추측`} · ${attempt} / ${MAX_ATTEMPTS}</span></div></div><div class="amount-input"><span class="won-symbol" aria-hidden="true">₩</span><input id="guess" name="guess" type="text" inputmode="numeric" autocomplete="off" maxlength="15" value="${esc(state.draft || '')}" placeholder="${retry ? '힌트 보고 다시 입력' : '얼마일까요?'}" aria-describedby="amount-hint guess-error"><span>원</span></div><p id="amount-hint" class="amount-hint">${koreanAmount(parseGuess(state.draft || ''))}</p><div class="quick-amounts" role="group" aria-label="예상 가격 조절">${quickAmountButtons()}<button type="button" data-action="clear" class="clear-amount" aria-label="예상 가격 지우기">↺</button></div><p class="form-error" id="guess-error" role="alert"></p><button class="button button-blue guess-submit" type="submit">${last ? '마지막 추측! 정답 확인하기' : `${attempt}번째 추측 제출하기`} <span aria-hidden="true">→</span></button></form><p class="basis-note">${esc(q.quantity)}의 계약단가 · ${esc(referenceDate())} 기준 · 정답 ±${TOLERANCE_PERCENT}% 안이면 성공 · 지금 맞히면 ${number(ATTEMPT_SCORES[attempt - 1])}점</p></div></div></div><div class="game-bottom"><button class="text-button" data-action="home">← 처음 화면</button><span>물건의 규격과 인도조건까지 살펴보세요.</span><button class="text-button" data-action="rules">점수 안내 ↗</button></div></section>`;
 }
 
 function formatError(guess, answer) {
@@ -219,12 +219,23 @@ function knowledge(q, compact = false) {
   return `<aside class="inline-knowledge ${compact ? 'compact-knowledge' : ''}" aria-label="${esc(q.title)} 틈새 지식"><div class="knowledge-mark" aria-hidden="true">✦</div><div class="knowledge-copy"><span class="eyebrow">알아두면 쓸모있는 틈새 지식</span><h${compact ? '4' : '2'}>${esc(card.title)}</h${compact ? '4' : '2'}><p class="knowledge-text">${esc(card.text)}</p><div class="knowledge-source"><span>기준 · ${esc(card.period)}</span>${sourceControl}</div></div></aside>`;
 }
 
+// 맞힌 라운드: 실제 가격과 맞힌 추측을 같은 크기로 나란히 보여 주고 오차율을 붙인다.
+function priceCompare(q, round) {
+  const guess = round.attempts.at(-1);
+  // 두 금액 중 긴 쪽 자릿수에 맞춰 글자 크기를 정해 둘이 항상 같은 크기로 한 줄에 들어가게 한다.
+  const length = Math.max(number(q.answer).length, number(guess).length) + 1;
+  const error = Math.abs(relativeError(guess, q.answer));
+  const label = error < .00001 ? '오차 0% · 정확히 맞혔어요' : `오차 ${error.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}%로 맞혔어요`;
+  const cell = (title, value, cls) => `<div class="compare-cell ${cls}"><span>${title}</span><strong>${money(value)}</strong><small>${koreanAmount(value)}</small></div>`;
+  return `<div class="price-compare" style="--digits:${length}">${cell('실제 가격', q.answer, 'actual')}${cell(`내 추측 · ${round.attempts.length}번째`, guess, 'mine')}</div><p class="error-badge">✓ ${label}</p>`;
+}
+
 function reveal() {
   const q = gameQuestions()[state.index];
   const round = state.rounds[state.index];
   const verdict = judge(round.score);
   const attempts = round.attempts.map((value, i) => `<div class="guess-result"><div class="attempt-result-label">${i + 1}차 추측${isCorrect(value, q.answer) ? '<small>정답 범위 ✓</small>' : ''}</div><div class="result-guess"><span>${number(value)}원</span><small>${formatError(value, q.answer)}</small></div>${i === round.attempts.length - 1 ? `<strong class="earned-score">+${number(round.score)}<small>점</small></strong>` : ''}</div>`).join('');
-  return `<section class="game-shell">${progress()}<div class="reveal-heading"><span class="reveal-label ${verdict.tone}">✦ ${verdict.tag}</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1></div><div class="reveal-grid"><div>${productFigure(q, true)}<div class="revealed-product"><h2>${esc(q.title)}</h2>${conditions(q)}</div></div><div class="answer-panel"><span class="eyebrow">실제 등록 계약단가 · ${esc(q.quantity)}</span><div class="answer-price">${money(q.answer)}</div><p class="answer-korean">${koreanAmount(q.answer)}</p><div class="answer-condition"><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span><span>${esc(referenceDate())} 기준</span></div><div class="guess-results">${attempts}</div><p class="scope-note">${esc(q.revealNote || q.scope)}</p><button class="source-link" data-action="source" data-id="${q.id}">계약 정보와 출처 확인하기 ↗</button></div></div>${knowledge(q)}<div class="reveal-navigation"><button class="button button-blue next-button" data-action="next">${state.index === state.questionCount - 1 ? '최종 결과 확인하기' : '다음 물건 만나러 가기'} <span aria-hidden="true">→</span></button></div></section>`;
+  return `<section class="game-shell">${progress()}<div class="reveal-heading"><span class="reveal-label ${verdict.tone}">✦ ${verdict.tag}</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1></div><div class="reveal-grid"><div>${productFigure(q, true)}<div class="revealed-product"><h2>${esc(q.title)}</h2>${conditions(q)}</div></div><div class="answer-panel"><span class="eyebrow">실제 등록 계약단가 · ${esc(q.quantity)}</span>${round.score > 0 ? priceCompare(q, round) : `<div class="answer-price">${money(q.answer)}</div><p class="answer-korean">${koreanAmount(q.answer)}</p>`}<div class="answer-condition"><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span><span>${esc(referenceDate())} 기준</span></div><div class="guess-results">${attempts}</div><p class="scope-note">${esc(q.revealNote || q.scope)}</p><button class="source-link" data-action="source" data-id="${q.id}">계약 정보와 출처 확인하기 ↗</button></div></div>${knowledge(q)}<div class="reveal-navigation"><button class="button button-blue next-button" data-action="next">${state.index === state.questionCount - 1 ? '최종 결과 확인하기' : '다음 물건 만나러 가기'} <span aria-hidden="true">→</span></button></div></section>`;
 }
 
 function results() {
@@ -367,6 +378,10 @@ document.addEventListener('error', event => {
   event.target.alt = '상품 이미지를 불러오지 못했어요. 이미지 크게 보기에서 원본 링크를 확인해 주세요.';
 }, true);
 
+// 예상 가격 버튼: 윗줄은 더하기, 아랫줄은 빼기
+const QUICK_STEPS = [[10000, '1만'], [100000, '10만'], [1000000, '100만'], [10000000, '1,000만'], [100000000, '1억']];
+const quickAmountButtons = () => [1, -1].map(sign => QUICK_STEPS.map(([amount, label]) => `<button type="button" data-action="add" data-amount="${sign * amount}" class="${sign > 0 ? 'plus' : 'minus'}" aria-label="${label}원 ${sign > 0 ? '더하기' : '빼기'}">${sign > 0 ? '+' : '−'} ${label}</button>`).join('')).join('');
+
 document.addEventListener('click', async event => {
   const button = event.target.closest('[data-action]');
   if (!button) return;
@@ -375,7 +390,8 @@ document.addEventListener('click', async event => {
   if (action === 'resume' && state) { screen = 'game'; render(); }
   if (action === 'add') {
     const input = document.querySelector('#guess'); if (!input) return;
-    input.value = number(Math.min(MAX_GUESS, (parseGuess(input.value) ?? 0) + Number(button.dataset.amount)));
+    const next = Math.min(MAX_GUESS, (parseGuess(input.value) ?? 0) + Number(button.dataset.amount));
+    input.value = next > 0 ? number(next) : '';
     input.dispatchEvent(new Event('input', { bubbles: true })); input.focus({ preventScroll: true });
   }
   if (action === 'clear') { const input = document.querySelector('#guess'); if (input) { input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus({ preventScroll: true }); } }

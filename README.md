@@ -6,11 +6,11 @@
 
 1. 나라장터에 등록된 실제 상품 사진·제품 이미지와 규격을 살펴봅니다.
 2. 가격을 추측합니다. **정답의 ±10% 안이면 성공**입니다.
-3. 틀리면 정답을 숨기고 UP/DOWN과 거리 힌트(조금·꽤·많이·아주 많이)를 표시합니다. 물건마다 **최대 4번** 추측합니다.
+3. 틀리면 정답을 숨기고 UP/DOWN과 거리 힌트(조금·꽤·많이·아주 많이)를 표시합니다. 물건마다 **최대 3번** 추측합니다.
 4. 정답·점수·틈새 지식을 확인하고 다음 물건으로 이동합니다.
 5. 최종 결과표에서 추측, 점수, 사진과 해설을 돌아봅니다.
 
-점수는 몇 번째에 맞혔는지로만 정합니다: **1번째 1,000 · 2번째 800 · 3번째 600 · 4번째 500 · 실패 0**. 범위 안이면 정답과의 거리는 점수에 영향이 없습니다. 10문제 최고 10,000점이며 시간 제한은 없습니다. 규칙 값은 `dist/engine.js`의 `TOLERANCE_PERCENT`·`MAX_ATTEMPTS`·`ATTEMPT_SCORES`와 `supabase/rules-v3.sql`에 함께 있으며, 바꿀 때는 두 곳을 같이 고칩니다.
+점수는 몇 번째에 맞혔는지로만 정합니다: **1번째 1,000 · 2번째 800 · 3번째 500 · 실패 0**. 범위 안이면 정답과의 거리는 점수에 영향이 없습니다. 10문제 최고 10,000점이며 시간 제한은 없습니다. 규칙 값은 `dist/engine.js`의 `TOLERANCE_PERCENT`·`MAX_ATTEMPTS`·`ATTEMPT_SCORES`와 `supabase/rules-v3.sql`에 함께 있으며, 바꿀 때는 두 곳을 같이 고칩니다.
 
 진행 중인 게임은 출제 순서·문제 스냅샷·가격·추측을 브라우저에 저장합니다. 문제은행이 바뀌어도 저장한 내용으로 이어갑니다. 예전 규칙(두 번 추측)으로 하던 게임은 새 규칙으로 이어갈 수 없어 새로 시작합니다. 결과 복사, JSON 저장, 카카오·시스템 공유, 선택형 효과음, 전체 화면, 모바일 레이아웃을 지원합니다.
 
@@ -40,7 +40,8 @@ npm run check:release
 - `supabase/leaderboard.sql`: 원래 랭킹 테이블·정답·채점 함수입니다.
 - `supabase/curation-v2.sql`: 문제 ID로 무작위 출제를 채점하는 함수와 정답표 구조입니다.
 - `supabase/curated-release.sql`: 새 채점 구조와 현재 문제은행 정답 104개를 함께 적용하는 SQL입니다.
-- `supabase/rules-v3.sql`: 현재 게임 규칙(±10% · 4번 추측 · 회차별 점수) 채점 함수 `submit_score_v3`입니다. 새 규칙 기록은 `<문제은행 버전>:r3` 랭킹에 따로 쌓입니다.
+- `supabase/rules-v3.sql`: 이전 규칙(±10% · 4번 추측) 채점 함수 `submit_score_v3`입니다. 기록은 `<문제은행 버전>:r3` 랭킹에 남아 있습니다.
+- `supabase/rules-v4.sql`: 현재 게임 규칙(±10% · 3번 추측 · 회차별 점수) 채점 함수 `submit_score_v4`입니다. 기록은 `<문제은행 버전>:r4` 랭킹에 따로 쌓입니다.
 
 계약번호·순번·규격·단위·인도조건·조회일을 보존합니다. 정답은 해당 조건의 **등록 계약단가**이며 실제 구매·지급총액이 아닙니다. 할인 정보는 정답 계산에 반영하지 않으며 해당 문제에 가격 기준을 표시합니다.
 
@@ -60,7 +61,7 @@ API 비밀키, DB 비밀번호, 담당자 연락처, 인증이 포함된 요청 
 
 1. **기존 Supabase 프로젝트**의 SQL Editor를 엽니다.
 2. [`supabase/curated-release.sql`](supabase/curated-release.sql) 전체를 붙여 넣고 실행합니다. 기존 정답·함수·랭킹은 보존하고 새 문제은행의 정답과 채점 함수를 추가합니다. 한 트랜잭션으로 적용하며 재실행할 수 있습니다.
-3. 이어서 [`supabase/rules-v3.sql`](supabase/rules-v3.sql)을 실행해 현재 게임 규칙의 채점 함수를 추가합니다. 재실행할 수 있습니다.
+3. 이어서 [`supabase/rules-v4.sql`](supabase/rules-v4.sql)을 실행해 현재 게임 규칙의 채점 함수를 추가합니다. 재실행할 수 있습니다.
 4. `npm run check:release`로 운영 DB의 정답 104개·게임 규칙과 로컬 문제은행이 일치하는지 확인합니다.
 5. 실패했던 GitHub Pages 배포를 다시 실행하거나 검증한 변경을 `main`에 푸시합니다.
 
@@ -72,7 +73,7 @@ DB를 다른 개발자가 관리한다면 2번의 SQL 실행을 그 개발자에
 
 1. Supabase에서 프로젝트를 만듭니다.
 2. SQL Editor에서 [`supabase/leaderboard.sql`](supabase/leaderboard.sql)을 먼저 실행합니다.
-3. 이어서 [`supabase/curated-release.sql`](supabase/curated-release.sql), [`supabase/rules-v3.sql`](supabase/rules-v3.sql)을 차례로 실행합니다.
+3. 이어서 [`supabase/curated-release.sql`](supabase/curated-release.sql), [`supabase/rules-v3.sql`](supabase/rules-v3.sql), [`supabase/rules-v4.sql`](supabase/rules-v4.sql)을 차례로 실행합니다.
 4. 프로젝트의 Project URL과 publishable 또는 legacy anon/public 키를 `dist/leaderboard-config.js`에 넣습니다. 브라우저 공개용 키만 사용하고 `service_role`·secret 키는 넣지 않습니다.
 5. `npm run check`와 `npm run check:release`를 통과한 뒤 배포합니다.
 
