@@ -83,7 +83,18 @@ test('새 규칙(v4): ±10% 안 정답, 3번 추측 회차별 점수, 10문제 �
   assert.equal(expected, 2*(1000+800+500+0+1000));
   const result = await call(input);
   assert.equal(result.total_score, expected); assert.equal(result.perfect_count, 8); assert.equal(Number(result.rank), 1);
-  await assert.rejects(call(input), /already_submitted/);
+  // 같은 기기는 다시 등록할 수 있고, 최고 점수 하나만 남습니다.
+  const again = await call(input);
+  assert.equal(again.total_score, expected);
+  const worse = structuredClone(input); worse.p_nickname = '낮은점수';
+  worse.p_attempts = session.questions.map(q => ({ question_id:q.id, attempts:[1,2,3] }));
+  assert.equal((await call(worse)).total_score, expected);
+  const better = structuredClone(input); better.p_nickname = '갱신';
+  better.p_attempts = session.questions.map((q,i) => ({ question_id:q.id, attempts: i ? [q.answer] : [1,q.answer] }));
+  const improved = await call(better);
+  assert.equal(improved.total_score, 9800); assert.equal(improved.perfect_count, 10); assert.equal(Number(improved.rank), 1);
+  const stored = (await db.query("select nickname, total_score from public.leaderboard_scores where client_id = $1", [input.p_client_id])).rows;
+  assert.deepEqual(stored, [{ nickname:'갱신', total_score:9800 }]);
   for (const corrupt of [
     a=>{a.p_attempts.pop();},
     a=>{a.p_attempts[1].question_id=a.p_attempts[0].question_id;},
@@ -103,7 +114,7 @@ test('새 규칙(v4): ±10% 안 정답, 3번 추측 회차별 점수, 10문제 �
   const perfect = buildSubmission({ questionSet:bank.bankVersion, clientId:randomUUID(), nickname:'만점', rounds:session.questions.map(q=>({candidateId:q.id,attempts:[q.answer]})) });
   assert.equal((await call(perfect)).total_score, 10000);
   const rows = (await db.query('select * from public.get_leaderboard($1,0,20)', [rankingSet(bank.bankVersion)])).rows;
-  assert.deepEqual(rows.map(r=>[r.nickname,r.total_score]), [['만점',10000],['새규칙',expected]]);
+  assert.deepEqual(rows.map(r=>[r.nickname,r.total_score]), [['만점',10000],['갱신',9800]]);
   // 새 규칙 기록은 예전 규칙 랭킹과 섞이지 않습니다.
   assert.equal((await db.query('select * from public.get_leaderboard($1,0,20)', [bank.bankVersion])).rows.length, 0);
   await db.exec('set role anon;');

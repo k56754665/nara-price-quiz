@@ -7,6 +7,7 @@ begin;
 --
 -- leaderboard.sql과 curated-release.sql을 먼저 적용해야 합니다(정답표 quiz_answers_v2 사용).
 -- 기존 함수·정답·기록은 그대로 둡니다. 새 규칙 기록은 '<문제은행 버전>:r4' 랭킹에 따로 쌓입니다.
+-- 같은 기기(client_id)는 여러 번 등록할 수 있고, 기기마다 최고 점수 하나만 남습니다.
 -- 다시 실행해도 안전합니다.
 
 -- 배포 검사(scripts/verify-ranking.mjs)가 운영 DB에 이 규칙이 적용됐는지 확인할 때 씁니다.
@@ -32,8 +33,9 @@ declare
   v_nickname text := btrim(coalesce(p_nickname, ''));
   v_total int := 0; v_correct_count int := 0;
   v_round jsonb; v_guesses jsonb; v_guess jsonb; v_value bigint; v_answer bigint;
-  v_len int; v_index int; v_correct boolean; v_id bigint;
+  v_len int; v_index int; v_correct boolean;
   v_seen text[] := array[]::text[]; v_question text;
+  v_best_total int; v_best_correct int;
 begin
   if p_time_limit is null or p_time_limit <> 0 then raise exception 'invalid_mode'; end if;
   if p_client_id is null then raise exception 'invalid_client'; end if;
@@ -76,12 +78,19 @@ begin
 
   insert into public.leaderboard_scores (question_set, time_limit, client_id, nickname, total_score, perfect_count, question_count, attempts)
   values (v_set, 0, p_client_id, v_nickname, v_total, v_correct_count, c_rounds, p_attempts)
-  on conflict (question_set, time_limit, client_id) do nothing returning id into v_id;
-  if v_id is null then raise exception 'already_submitted'; end if;
+  -- 이미 기록이 있으면 점수가 더 높을 때(같으면 정답 수가 더 많을 때)만 바꿉니다.
+  on conflict (question_set, time_limit, client_id) do update set
+    nickname = excluded.nickname, total_score = excluded.total_score, perfect_count = excluded.perfect_count,
+    question_count = excluded.question_count, attempts = excluded.attempts, created_at = now()
+  where (excluded.total_score, excluded.perfect_count) > (leaderboard_scores.total_score, leaderboard_scores.perfect_count);
 
-  return query select count(distinct s.client_id) + 1, v_total, v_correct_count from public.leaderboard_scores s
+  -- 돌려주는 값은 이 기기의 최고 기록과 그 순위입니다. 이번 점수보다 높으면 예전 기록이 유지된 것입니다.
+  select s.total_score, s.perfect_count into v_best_total, v_best_correct from public.leaderboard_scores s
+    where s.question_set = v_set and s.time_limit = 0 and s.client_id = p_client_id;
+
+  return query select count(distinct s.client_id) + 1, v_best_total, v_best_correct from public.leaderboard_scores s
     where s.question_set = v_set and s.client_id <> p_client_id
-    and (s.total_score > v_total or (s.total_score = v_total and s.perfect_count > v_correct_count));
+    and (s.total_score > v_best_total or (s.total_score = v_best_total and s.perfect_count > v_best_correct));
 end; $$;
 revoke all on function public.submit_score_v4(text, int, uuid, text, jsonb) from public;
 grant execute on function public.submit_score_v4(text, int, uuid, text, jsonb) to anon, authenticated;

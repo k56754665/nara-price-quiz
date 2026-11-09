@@ -117,15 +117,17 @@ async function loadRankingList(selector, mine = null) {
 function rankingPanel() {
   if (!rankingOn) return '';
   const mine = mySubmission();
+  // 기기마다 최고 점수 하나만 남습니다. 게임마다 한 번 등록할 수 있고, 더 높을 때만 기록이 바뀝니다.
+  const best = mine ? `<p class="ranking-status">내 최고 기록 <strong>${number(mine.totalScore)}점</strong> · 등록 당시 <strong>${number(mine.rank)}위</strong>${state.rankSubmitted ? '' : ' · 이번 점수가 더 높으면 바뀌어요'}</p>` : '';
   let top;
-  if (mine) top = `<p class="ranking-status"><strong>${esc(mine.nickname)}</strong> 님의 기록이 등록 당시 <strong>${number(mine.rank)}위</strong>였어요.</p>`;
-  else if (state.rankEligible) top = `<form id="ranking-form" class="ranking-form"><label for="ranking-nickname">닉네임</label><input id="ranking-nickname" name="nickname" maxlength="${NICKNAME_MAX}" autocomplete="nickname" placeholder="최대 ${NICKNAME_MAX}자" value="${esc(ranking.nickname)}" required><button type="submit" class="button button-blue">랭킹에 등록하기</button><p id="ranking-error" class="ranking-error" role="alert"></p></form>`;
-  else top = '<p class="ranking-status">랭킹에는 <strong>첫 번째 게임</strong> 기록만 올라가요. 정답을 알고 다시 하면 공정하지 않으니까요!</p>';
+  if (state.rankSubmitted) top = best;
+  else if (state.rankEligible) top = best + `<form id="ranking-form" class="ranking-form"><label for="ranking-nickname">닉네임</label><input id="ranking-nickname" name="nickname" maxlength="${NICKNAME_MAX}" autocomplete="nickname" placeholder="최대 ${NICKNAME_MAX}자" value="${esc(ranking.nickname)}" required><button type="submit" class="button button-blue">랭킹에 등록하기</button><p id="ranking-error" class="ranking-error" role="alert"></p></form>`;
+  else top = best;
   return `<section class="ranking-panel" aria-labelledby="ranking-heading"><div class="ranking-heading"><span class="eyebrow">온라인 랭킹 · 10문제 합산</span><h2 id="ranking-heading">다른 사람들은 몇 점일까?</h2></div>${top}<ol id="ranking-list" class="ranking-list"></ol></section>`;
 }
 
 async function submitRanking() {
-  if (rankingBusy || !state?.rankEligible || state.phase !== 'results') return;
+  if (rankingBusy || !state?.rankEligible || state.rankSubmitted || state.phase !== 'results') return;
   const input = document.querySelector('#ranking-nickname');
   const error = document.querySelector('#ranking-error');
   const nickname = normalizeNickname(input?.value);
@@ -135,13 +137,18 @@ async function submitRanking() {
   if (button) { button.disabled = true; button.textContent = '등록하는 중…'; }
   try {
     const result = await submitScore(LEADERBOARD_CONFIG, buildSubmission({ questionSet: state.questionSet, clientId: clientId(), nickname, rounds: state.rounds }));
+    const previous = mySubmission();
+    const total = totalScore(state.rounds);
     ranking.nickname = nickname;
-    ranking.submitted[rankingKey()] = { nickname, rank: result.rank, totalScore: result.totalScore };
-    saveRanking();
+    // 서버는 이 기기의 최고 기록을 돌려줍니다. 이번 점수가 더 낮으면 예전 기록(닉네임 포함)이 그대로입니다.
+    const kept = result.totalScore > total;
+    ranking.submitted[rankingKey()] = { nickname: kept ? previous?.nickname ?? nickname : nickname, rank: result.rank, totalScore: result.totalScore };
+    state.rankSubmitted = true;
+    saveRanking(); persist();
     render({ focus: false });
-    notify(`${number(result.rank)}위로 등록했어요!`);
+    notify(kept ? `최고 기록 ${number(result.totalScore)}점(${number(result.rank)}위)이 그대로 유지돼요.` : previous ? `최고 기록 갱신! ${number(result.rank)}위예요.` : `${number(result.rank)}위로 등록했어요!`);
   } catch (e) {
-    if (e.code === 'already_submitted') { state.rankEligible = false; persist(); render({ focus: false }); notify(e.message); return; }
+    if (e.code === 'already_submitted') { state.rankSubmitted = true; persist(); render({ focus: false }); notify(e.message); return; }
     if (button?.isConnected) { button.disabled = false; button.textContent = '랭킹에 등록하기'; }
     if (error?.isConnected) error.textContent = e.message;
   } finally {
@@ -150,7 +157,7 @@ async function submitRanking() {
 }
 
 function showRanking() {
-  openDialog('온라인 랭킹', `<p class="dialog-small">${esc(referenceDate())} 문제은행 · 10문제 합산 점수 순위예요. 기기마다 첫 게임 기록만 등록돼요.</p><ol id="dialog-ranking-list" class="ranking-list"></ol>`, true);
+  openDialog('온라인 랭킹', `<p class="dialog-small">${esc(referenceDate())} 문제은행 · 10문제 합산 점수 순위예요. 기기마다 최고 점수 하나만 남아요.</p><ol id="dialog-ranking-list" class="ranking-list"></ol>`, true);
   loadRankingList('#dialog-ranking-list', mySubmission());
 }
 
@@ -251,11 +258,8 @@ function results() {
 }
 
 function startGame() {
-  // 정답은 라운드마다 공개되므로, 처음 시작한 게임만 랭킹에 등록할 수 있습니다.
-  const key = rankingSet(data.bankVersion);
-  const rankEligible = rankingOn && !ranking.played[key];
-  if (rankingOn) { ranking.played[key] = true; saveRanking(); }
-  state = createSession(data, rankEligible);
+  // 매 게임 랭킹에 등록할 수 있습니다. 기기마다 최고 점수만 남습니다.
+  state = createSession(data, rankingOn);
   screen = 'game';
   persist();
   render();
