@@ -42,15 +42,23 @@ const fmt = n => Math.round(n || 0).toLocaleString('ko-KR');
 // 라운드별로 몇 번째에 맞혔는지 한 줄 블록으로. 워들처럼 대화창에 붙였을 때 눈에 띈다.
 // 1번째 🟩 · 2번째 🟦 · 3번째 🟨 · 4번째 🟧 · 실패 🟥
 export function scoreBlocks(rounds) {
-  return rounds.map(({ attempts, score }) => score > 0 ? ['🟩', '🟦', '🟨', '🟧'][attempts.length - 1] ?? '🟧' : '🟥').join('');
+  if (!Array.isArray(rounds)) return '';
+  return rounds.map(r => {
+    if (!r) return '🟥';
+    const { attempts, score } = r;
+    const len = Array.isArray(attempts) ? attempts.length : 1;
+    return score > 0 ? ['🟩', '🟦', '🟨', '🟧'][len - 1] ?? '🟧' : '🟥';
+  }).join('');
 }
 
 // { total, maxScore, title, rounds, best, newBest }
 export function buildShareText(result, withUrl = true) {
+  if (!result) return '';
+  const rounds = Array.isArray(result.rounds) ? result.rounds : [];
   const lines = [
     GAME_TITLE,
-    scoreBlocks(result.rounds),
-    `${result.rounds.length}문제 · ${fmt(result.total)} / ${fmt(result.maxScore ?? result.rounds.length * 1000)}점 · ${result.title}`,
+    scoreBlocks(rounds),
+    `${rounds.length}문제 · ${fmt(result.total)} / ${fmt(result.maxScore ?? rounds.length * 1000)}점 · ${result.title ?? ''}`,
     result.newBest ? '신기록! 🏆' : `최고 기록 ${fmt(result.best)}점`,
   ];
   if (withUrl) lines.push(`▶ ${shareUrl()}`);
