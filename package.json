@@ -6,7 +6,13 @@
   "description": "공식 조달청 API 스냅샷으로 플레이하는 나라장터 가격 퀴즈",
   "scripts": {
     "dev": "node server.mjs",
+    "curate": "node server.mjs --curate",
+    "content:apply": "node scripts/apply-content.mjs",
+    "check:release": "node scripts/verify-ranking.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check dist/app.js && node --check dist/share.js && node --check dist/engine.js && node --check dist/leaderboard.js && node --check dist/leaderboard-config.js && node --test tests/*.test.mjs"
+    "check": "node --check dist/app.js && node --check dist/share.js && node --check dist/engine.js && node --check dist/leaderboard.js && node --check dist/leaderboard-config.js && node --check tools/curator/app.js && node --check scripts/verify-ranking.mjs && node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15"
   }
 }

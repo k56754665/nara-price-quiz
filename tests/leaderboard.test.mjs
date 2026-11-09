@@ -4,11 +4,11 @@ import { readFile } from 'node:fs/promises';
 import { isConfigured, normalizeNickname, buildSubmission, submitScore, fetchLeaderboard, errorMessage } from '../dist/leaderboard.js';
 import { LEADERBOARD_CONFIG } from '../dist/leaderboard-config.js';
 
-const data = JSON.parse(await readFile(new URL('../dist/data.json', import.meta.url), 'utf8'));
+const data = JSON.parse(await readFile(new URL('../dist/legacy-data.json', import.meta.url), 'utf8'));
 const sql = await readFile(new URL('../supabase/leaderboard.sql', import.meta.url), 'utf8');
 const config = { url: 'https://example.supabase.co/', anonKey: 'anon-key-0123456789abcdef' };
 
-test('랭킹 SQL의 정답·문제 순서가 data.json과 같음', () => {
+test('기존 랭킹 SQL의 정답·순서는 legacy-data.json과 일치', () => {
   const rows = [...sql.matchAll(/\('([\d-]+)', (\d+), '(C\d+)', (\d+)\)/g)].map(m => ({ set: m[1], position: Number(m[2]), id: m[3], answer: Number(m[4]) }));
   assert.equal(rows.length, data.questions.length);
   rows.forEach((row, i) => {
@@ -22,6 +22,9 @@ test('랭킹 SQL의 정답·문제 순서가 data.json과 같음', () => {
 test('랭킹 설정은 비어 있으면 꺼지고 service_role 키를 담지 않음', () => {
   assert.equal(isConfigured({ url: '', anonKey: '' }), false);
   assert.equal(isConfigured(config), true);
+  assert.equal(isConfigured({ ...config, url:'http://127.0.0.1:4174', preview:true }), true);
+  assert.equal(isConfigured({ ...config, url:'http://example.com', preview:true }), false);
+  assert.equal(isConfigured({ ...config, url:'http://127.0.0.1:4174' }), false);
   assert.equal(isConfigured({ url: config.url, anonKey: 'sb_secret_0123456789abcdefghij' }), false);
   const key = LEADERBOARD_CONFIG.anonKey;
   assert.equal(key.startsWith('sb_secret_'), false);

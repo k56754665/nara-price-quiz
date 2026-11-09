@@ -4,7 +4,8 @@ export const NICKNAME_MAX = 12;
 
 export function isConfigured(config) {
   // secret 키(sb_secret_...)는 브라우저에 두면 안 되므로 랭킹을 켜지 않습니다.
-  return Boolean(config && /^https:\/\/[^\s/]+/.test(config.url ?? '') && typeof config.anonKey === 'string' && config.anonKey.length > 20 && !config.anonKey.startsWith('sb_secret_'));
+  const validUrl = /^https:\/\/[^\s/]+/.test(config?.url ?? '') || config?.preview === true && /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/.test(config.url);
+  return Boolean(validUrl && typeof config.anonKey === 'string' && config.anonKey.length > 20 && !config.anonKey.startsWith('sb_secret_'));
 }
 
 export function normalizeNickname(value) {
@@ -14,13 +15,13 @@ export function normalizeNickname(value) {
 }
 
 // 시간 제한 모드는 없어졌지만, 서버 함수 형식을 유지하려고 p_time_limit은 항상 0으로 보냅니다.
-export function buildSubmission({ questionSet, clientId, nickname, rounds }) {
+export function buildSubmission({ questionSet, clientId, nickname, rounds, protocolVersion = 1 }) {
   return {
     p_question_set: questionSet,
     p_time_limit: 0,
     p_client_id: clientId,
     p_nickname: nickname,
-    p_attempts: rounds.map(r => r.attempts),
+    p_attempts: protocolVersion === 2 ? rounds.map(r => ({ question_id: r.candidateId, attempts: r.attempts })) : rounds.map(r => r.attempts),
   };
 }
 
@@ -29,6 +30,7 @@ const errorMessages = {
   invalid_nickname: `닉네임은 1~${NICKNAME_MAX}자로 입력해 주세요.`,
   invalid_attempts: '기록을 확인하지 못했어요. 새 게임으로 다시 도전해 주세요.',
   unknown_question_set: '지금 문제 세트는 랭킹을 지원하지 않아요.',
+  ranking_not_ready: '새 문제의 랭킹 연결을 준비하고 있어요. 잠시 후 다시 시도해 주세요.',
 };
 
 export function errorMessage(code) {
@@ -50,14 +52,15 @@ async function rpc(config, name, body, fetchImpl = fetch) {
   } catch { throw new LeaderboardError('network'); }
   const payload = await response.json().catch(() => null);
   if (!response.ok) {
-    const code = Object.keys(errorMessages).find(key => payload?.message === key) ?? 'server';
+    const code = payload?.code === 'PGRST202' ? 'ranking_not_ready' : Object.keys(errorMessages).find(key => payload?.message === key) ?? 'server';
     throw new LeaderboardError(code);
   }
   return payload;
 }
 
 export async function submitScore(config, submission, fetchImpl) {
-  const rows = await rpc(config, 'submit_score', submission, fetchImpl);
+  const name = submission.p_attempts?.[0]?.question_id ? 'submit_score_v2' : 'submit_score';
+  const rows = await rpc(config, name, submission, fetchImpl);
   const row = Array.isArray(rows) ? rows[0] : rows;
   if (!row || !Number.isInteger(Number(row.rank))) throw new LeaderboardError('server');
   return { rank: Number(row.rank), totalScore: row.total_score, perfectCount: row.perfect_count };

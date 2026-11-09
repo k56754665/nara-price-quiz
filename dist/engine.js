@@ -62,9 +62,48 @@ export function grade(total, roundCount = 10) {
 
 export const QUESTION_COUNTS = [3, 5, 10, 15, 20, 30, 40, 50];
 
-// questions는 이번 게임에 나오는 문제들(전체 문제의 앞쪽 questionCount개)입니다.
+export function sampleQuestions(questions, count, random = Math.random) {
+  if (!QUESTION_COUNTS.includes(count) || count > questions.length || new Set(questions.map(q => q.id)).size !== questions.length) throw Error('invalid question pool');
+  const pool = [...questions];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const value = random();
+    if (!(value >= 0 && value < 1)) throw Error('invalid random value');
+    const j = Math.floor(value * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, count);
+}
+
+export function createSession(bank, count, rankEligible = false, random = Math.random) {
+  const questions = structuredClone(sampleQuestions(bank.questions, count, random));
+  return { version: 4, phase: 'question', index: 0, attempts: [], rounds: [], draft: '', questionCount: count, rankEligible,
+    questionSet: bank.bankVersion, protocolVersion: 2, referenceDate: bank.referenceDate,
+    questionIds: questions.map(q => q.id), questions, trivia: structuredClone(bank.trivia) };
+}
+
+export function restoreSession(saved, legacyBank) {
+  if (!saved) return null;
+  if (saved.version === 4) return isValidSession(saved, saved.questions) ? saved : null;
+  if (saved.version === 2) {
+    if (saved.timeLimit !== 0) return null;
+    const { timeLimit, deadline, ...rest } = saved;
+    saved = { ...rest, version: 3, questionCount: 10 };
+  }
+  if (saved.version !== 3 || !legacyBank) return null;
+  const questions = legacyBank.questions.slice(0, saved.questionCount);
+  if (!isValidSession(saved, questions)) return null;
+  return { ...saved, version: 4, questionSet: legacyBank.referenceDate, protocolVersion: 1, referenceDate: legacyBank.referenceDate,
+    questionIds: questions.map(q => q.id), questions: structuredClone(questions), trivia: structuredClone(legacyBank.trivia) };
+}
+
+// questions is the saved, ordered selection, not the current published pool.
 export function isValidSession(value, questions) {
-  if (!value || value.version !== 3 || !["question", "reveal", "results"].includes(value.phase)) return false;
+  if (!value || ![3, 4].includes(value.version) || !["question", "reveal", "results"].includes(value.phase) || !Array.isArray(questions)) return false;
+  if (value.version === 4) {
+    if (![1, 2].includes(value.protocolVersion) || typeof value.questionSet !== 'string' || !value.questionSet || typeof value.referenceDate !== 'string') return false;
+    if (!Array.isArray(value.questionIds) || value.questionIds.length !== questions.length || new Set(value.questionIds).size !== questions.length) return false;
+    if (!Array.isArray(value.trivia) || questions.some((q, i) => !q || q.id !== value.questionIds[i] || !Number.isSafeInteger(q.answer) || q.answer <= 0 || !q.image?.src || typeof q.title !== 'string' || typeof q.specification !== 'string')) return false;
+  }
   if (!QUESTION_COUNTS.includes(value.questionCount) || value.questionCount !== questions.length) return false;
   if (!Number.isInteger(value.index) || value.index < 0 || value.index >= questions.length) return false;
   if (!Array.isArray(value.rounds) || value.rounds.length > questions.length) return false;

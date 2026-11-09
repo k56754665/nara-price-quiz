@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { QUESTION_COUNTS, parseGuess, scoreGuess, relativeError, koreanAmount, totalScore, grade, guessHint, isValidSession } from '../dist/engine.js';
 
-const data = JSON.parse(await readFile(new URL('../dist/data.json', import.meta.url), 'utf8'));
+const data = JSON.parse(await readFile(new URL('../dist/legacy-data.json', import.meta.url), 'utf8'));
 const question = data.questions[0];
 const initial = () => ({ version: 3, phase: 'question', index: 0, attempts: [], rounds: [], questionCount: 10, draft: '' });
 
@@ -64,7 +64,7 @@ test('시간 제한이 없어 빈 추측(시간초과)이나 예전 45초 세션
   assert.equal(isValidSession({ ...initial(), version: 2, timeLimit: 45 }, data.questions), false);
 });
 
-test('문제 수는 3~50 중 정해진 값이고, 앞에서부터 그만큼 출제', () => {
+test('이전 세트는 선택한 문제 수와 원래 출제 순서를 유지해 복구', () => {
   assert.deepEqual(QUESTION_COUNTS, [3, 5, 10, 15, 20, 30, 40, 50]);
   const three = data.questions.slice(0, 3);
   const rounds = three.map(q => ({ candidateId: q.id, attempts: [q.answer], score: 1000 }));

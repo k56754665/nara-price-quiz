@@ -1,0 +1,2832 @@
+{
+  "batchId": "manual-30-20261109",
+  "completedAt": "2026-11-09T08:18:12.814Z",
+  "added": 30,
+  "allUnreviewed": true,
+  "existingDecisionsPreserved": true,
+  "gameUnchanged": true,
+  "groupCounts": {
+    "도서관·학교": 9,
+    "군 생활": 6,
+    "길거리·교통": 5,
+    "생활·공공시설": 4,
+    "수영장·체육": 4,
+    "구조·소방": 2
+  },
+  "deferred": [
+    {
+      "name": "판초우의",
+      "reason": "판초형 본체의 현재 계약·등록 사진을 확인하지 못함. 전투우의나 판초우의 파우치로 대체하지 않음."
+    },
+    {
+      "name": "침낭·야전침대",
+      "reason": "저장된 계약에 등록 실물사진이 없어 이번 확정 후보에서 제외."
+    },
+    {
+      "name": "기숙사 이층침대",
+      "reason": "등록 단가는 확인했으나 매트리스 포함 여부가 명시되지 않아 프레임 가격으로 추정하지 않고 이번 30종에서 제외."
+    }
+  ],
+  "items": [
+    {
+      "id": "P23600510",
+      "title": "도서관 이동식 서가",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 이동식 서가의 등록 계약단가는 얼마일까요? (1개)",
+      "specification": "이동식서가, 대원모빌랙, EUROHM-DM01E, 1060×500×2245mm, 이동기본형/복식",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 2420000,
+      "scope": "이동기본형·복식 서가 1개(1060×500×2245mm). 전체 서가 열이나 도서관 전체 설치 총액이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주)대원모빌랙",
+      "productId": "23600510",
+      "contractNumber": "33173099115",
+      "contractLine": "384",
+      "contractStart": "2017-12-01",
+      "contractEnd": "2026-12-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23600510"
+      },
+      "checkedAt": "2026-11-09T08:10:00.413Z",
+      "triviaId": null,
+      "revealNote": "이동기본형·복식 서가 1개(1060×500×2245mm). 전체 서가 열이나 도서관 전체 설치 총액이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P23600510-32fc1de6eb5f.jpg",
+        "alt": "도서관 이동식 서가 — 이동식서가, 대원모빌랙, EUROHM-DM01E, 1060×500×2245mm, 이동기본형/복식",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/04/24/1556111947257.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.289Z",
+        "sha256": "32fc1de6eb5fa1d419a6e47990335b4ef08a1a870a3a115161f0ce09060b8bc7"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "책이 빼곡한 도서관 서가 한 개는 얼마일까?",
+      "sourceChangedAt": "2026-06-09 08:42:29",
+      "evidence": {
+        "recordSha256": "eed0572498e02897409763ccaf54e582810d15bae5b804c61b8650057f3ddddb",
+        "checkedAt": "2026-11-09T08:10:00.413Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M01",
+          "visualCheckedAt": "2026-11-09T08:14:33.291Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "이동기본형·복식 서가 1개(1060×500×2245mm). 전체 서가 열이나 도서관 전체 설치 총액이 아님."
+        }
+      },
+      "classification": {
+        "name": "이동식서가",
+        "code": "56121015",
+        "detailedCode": "5612101501"
+      },
+      "discoveryFamily": {
+        "key": "kind:이동식서가",
+        "label": "이동식서가"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:00.413Z",
+        "lastVerifiedAt": "2026-11-09T08:10:00.413Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)대원모빌랙",
+      "discoveryTopicId": "F116",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "23600510",
+          "prdctSpecNm": "이동식서가, 대원모빌랙, EUROHM-DM01E, 1060×500×2245mm, 이동기본형/복식",
+          "prdctClsfcNoNm": "이동식서가",
+          "prdctUnit": "개",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "2420000",
+          "cntrctCorpNm": "(주)대원모빌랙",
+          "prdctMakrNm": "(주)대원모빌랙",
+          "shopngCntrctNo": "33173099115",
+          "shopngCntrctSno": "384",
+          "cntrctBgnDate": "2017-12-01",
+          "cntrctEndDate": "2026-12-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/04/24/1556111947257.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:00.413Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P25051221",
+      "title": "도서관 도난방지 게이트",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 도난방지 게이트의 등록 계약단가는 얼마일까요? (1조)",
+      "specification": "도서관리시스템, 파라곤웍스, FineRFID GX, 도서분실방지시스템",
+      "quantity": "1조",
+      "unit": "조",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 7700000,
+      "scope": "등록된 도서분실방지시스템 1조. 사진의 게이트 구성과 계약단위를 기준으로 하며 안테나 낱개 가격으로 표시하지 않음. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 파라곤웍스",
+      "productId": "25051221",
+      "contractNumber": "R26TA0221139000",
+      "contractLine": "2",
+      "contractStart": "2026-09-08",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "25051221"
+      },
+      "checkedAt": "2026-11-09T08:10:00.040Z",
+      "triviaId": null,
+      "revealNote": "등록된 도서분실방지시스템 1조. 사진의 게이트 구성과 계약단위를 기준으로 하며 안테나 낱개 가격으로 표시하지 않음. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P25051221-0ac2761f4fbc.jpg",
+        "alt": "도서관 도난방지 게이트 — 도서관리시스템, 파라곤웍스, FineRFID GX, 도서분실방지시스템",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2026/06/16/9986506b-2f27-4917-bab5-e4585c76eab1.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.292Z",
+        "sha256": "0ac2761f4fbc5d19fb6db0354d790a9c372c04bb3e540d6e58765a2cbecc9387"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "도서관 출구에서 지나가는 도난방지 게이트는 얼마일까?",
+      "sourceChangedAt": "2026-09-08 11:01:54",
+      "evidence": {
+        "recordSha256": "6293cac5607f9107f22144f3b946d3d40affca3ae01123753fb5a46c855a27b2",
+        "checkedAt": "2026-11-09T08:10:00.040Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M02",
+          "visualCheckedAt": "2026-11-09T08:14:33.292Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "등록된 도서분실방지시스템 1조. 사진의 게이트 구성과 계약단위를 기준으로 하며 안테나 낱개 가격으로 표시하지 않음."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:00.040Z",
+        "lastVerifiedAt": "2026-11-09T08:10:00.040Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 파라곤웍스",
+      "discoveryTopicId": "F040",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "25051221",
+          "prdctSpecNm": "도서관리시스템, 파라곤웍스, FineRFID GX, 도서분실방지시스템",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "조",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "7700000",
+          "cntrctCorpNm": "주식회사 파라곤웍스",
+          "prdctMakrNm": "주식회사 파라곤웍스",
+          "shopngCntrctNo": "R26TA0221139000",
+          "shopngCntrctSno": "2",
+          "cntrctBgnDate": "2026-09-08",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2026/06/16/9986506b-2f27-4917-bab5-e4585c76eab1.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:00.040Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P25051223",
+      "title": "도서관 탁상형 자가대출기",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 탁상형 자가대출기의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "도서관리시스템, 파라곤웍스, FineRFID DTR Self Compact, 자가대출반납기",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 7700000,
+      "scope": "사진의 탁상형 자가대출·반납 겸용 단말기 1대. Compact 모델의 등록 계약단가. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 파라곤웍스",
+      "productId": "25051223",
+      "contractNumber": "R26TA0221139000",
+      "contractLine": "3",
+      "contractStart": "2026-09-08",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "25051223"
+      },
+      "checkedAt": "2026-11-09T08:10:00.114Z",
+      "triviaId": null,
+      "revealNote": "사진의 탁상형 자가대출·반납 겸용 단말기 1대. Compact 모델의 등록 계약단가. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P25051223-249e5fe2d84c.jpg",
+        "alt": "도서관 탁상형 자가대출기 — 도서관리시스템, 파라곤웍스, FineRFID DTR Self Compact, 자가대출반납기",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2026/06/16/dfdf4743-2ca9-4409-9928-5c763bdda2b7.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.293Z",
+        "sha256": "249e5fe2d84c86066404a70bb81bf77b9c734ecaf87203e9ef9f11103bdedebe"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "책을 올려놓고 직접 빌리는 기계 한 대는 얼마일까?",
+      "sourceChangedAt": "2026-09-08 11:01:54",
+      "evidence": {
+        "recordSha256": "072aa5ec8cd7d93a62b34dbc65ae688fb99a91b8d98afeb70ab186d1e096afac",
+        "checkedAt": "2026-11-09T08:10:00.114Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M03",
+          "visualCheckedAt": "2026-11-09T08:14:33.293Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 탁상형 자가대출·반납 겸용 단말기 1대. Compact 모델의 등록 계약단가."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:00.114Z",
+        "lastVerifiedAt": "2026-11-09T08:10:00.114Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 파라곤웍스",
+      "discoveryTopicId": "F180",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "25051223",
+          "prdctSpecNm": "도서관리시스템, 파라곤웍스, FineRFID DTR Self Compact, 자가대출반납기",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "7700000",
+          "cntrctCorpNm": "주식회사 파라곤웍스",
+          "prdctMakrNm": "주식회사 파라곤웍스",
+          "shopngCntrctNo": "R26TA0221139000",
+          "shopngCntrctSno": "3",
+          "cntrctBgnDate": "2026-09-08",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2026/06/16/dfdf4743-2ca9-4409-9928-5c763bdda2b7.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:00.114Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P23588488",
+      "title": "도서관 무인반납기",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 무인반납기의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "도서관리시스템, 와이즈네스코, WN-R900, 종류: 무인반납기",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 26040000,
+      "scope": "사진의 고정형 무인반납기 1대. 자가대출기와 별도 용도의 반납 장비. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 와이즈네스코",
+      "productId": "23588488",
+      "contractNumber": "00236143006",
+      "contractLine": "8",
+      "contractStart": "2023-06-13",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23588488"
+      },
+      "checkedAt": "2026-11-09T08:10:00.239Z",
+      "triviaId": null,
+      "revealNote": "사진의 고정형 무인반납기 1대. 자가대출기와 별도 용도의 반납 장비. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P23588488-350b1611df4e.jpg",
+        "alt": "도서관 무인반납기 — 도서관리시스템, 와이즈네스코, WN-R900, 종류: 무인반납기",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/04/05/1554438782468.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.293Z",
+        "sha256": "350b1611df4e8f68b44dbccf51a38eadb0ac3805fbf5e4b422898deb57225cb3"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "문 닫은 도서관에 책을 돌려주는 반납기는 얼마일까?",
+      "sourceChangedAt": "2026-06-08 10:24:34",
+      "evidence": {
+        "recordSha256": "2c2fc91bc41c3cb13261769bfb0ed61aa46e4f0ce8706dcb2dd4a2f777122695",
+        "checkedAt": "2026-11-09T08:10:00.239Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M04",
+          "visualCheckedAt": "2026-11-09T08:14:33.293Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 고정형 무인반납기 1대. 자가대출기와 별도 용도의 반납 장비."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:00.239Z",
+        "lastVerifiedAt": "2026-11-09T08:10:00.239Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 와이즈네스코",
+      "discoveryTopicId": "F041",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "23588488",
+          "prdctSpecNm": "도서관리시스템, 와이즈네스코, WN-R900, 종류: 무인반납기",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "26040000",
+          "cntrctCorpNm": "주식회사 와이즈네스코",
+          "prdctMakrNm": "주식회사 와이즈네스코",
+          "shopngCntrctNo": "00236143006",
+          "shopngCntrctSno": "8",
+          "cntrctBgnDate": "2023-06-13",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/04/05/1554438782468.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:00.239Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P26007475",
+      "title": "열람실 좌석발급기",
+      "category": "도서관·학교",
+      "prompt": "이 열람실 좌석발급기의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "도서관리시스템, 앤로보틱스, EZ-1520ASM, 열람실좌석관리시스템",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 12000000,
+      "scope": "사진의 열람실 좌석관리 단말기 1대. 좌석이나 열람실 전체의 공사 가격이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 앤로보틱스",
+      "productId": "26007475",
+      "contractNumber": "00206082732",
+      "contractLine": "68",
+      "contractStart": "2020-05-07",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "26007475"
+      },
+      "checkedAt": "2026-11-09T08:10:05.523Z",
+      "triviaId": null,
+      "revealNote": "사진의 열람실 좌석관리 단말기 1대. 좌석이나 열람실 전체의 공사 가격이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P26007475-48bf1c77ebe1.png",
+        "alt": "열람실 좌석발급기 — 도서관리시스템, 앤로보틱스, EZ-1520ASM, 열람실좌석관리시스템",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2025/10/16/3efcc257-79bb-45e5-85c2-c7de2e199419.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.293Z",
+        "sha256": "48bf1c77ebe14d9f28f3782f048fd9a75b11db1c784d186b03568295c5a2180b"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "도서관 열람실 자리를 배정받는 기계는 얼마일까?",
+      "sourceChangedAt": "2026-09-08 13:01:07",
+      "evidence": {
+        "recordSha256": "369a207f73ec2c8db9c8a70f1bf456dd3e4fe8b7c92d8e0219d6caea1bd9fc2b",
+        "checkedAt": "2026-11-09T08:10:05.523Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M05",
+          "visualCheckedAt": "2026-11-09T08:14:33.293Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 열람실 좌석관리 단말기 1대. 좌석이나 열람실 전체의 공사 가격이 아님."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:05.523Z",
+        "lastVerifiedAt": "2026-11-09T08:10:05.523Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 앤로보틱스",
+      "discoveryTopicId": "F265",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "26007475",
+          "prdctSpecNm": "도서관리시스템, 앤로보틱스, EZ-1520ASM, 열람실좌석관리시스템",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "12000000",
+          "cntrctCorpNm": "주식회사 앤로보틱스",
+          "prdctMakrNm": "주식회사 앤로보틱스",
+          "shopngCntrctNo": "00206082732",
+          "shopngCntrctSno": "68",
+          "cntrctBgnDate": "2020-05-07",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2025/10/16/3efcc257-79bb-45e5-85c2-c7de2e199419.png"
+        },
+        "checkedAt": "2026-11-09T08:10:05.523Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P23208590",
+      "title": "도서관 RFID 회원증",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 RFID 회원증의 등록 계약단가는 얼마일까요? (1개)",
+      "specification": "도서관리시스템, 에이스카드넷, A1G, RFID회원증",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "납품장소도",
+      "vat": "부가가치세포함",
+      "answer": 790,
+      "scope": "RFID 회원증 카드 1개(1장)의 등록 계약단가. 회원 가입비·발급 수수료가 아님. 납품장소도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 세경테크",
+      "productId": "23208590",
+      "contractNumber": "R26TA0209685400",
+      "contractLine": "1",
+      "contractStart": "2026-07-28",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23208590"
+      },
+      "checkedAt": "2026-11-09T08:10:03.057Z",
+      "triviaId": null,
+      "revealNote": "RFID 회원증 카드 1개(1장)의 등록 계약단가. 회원 가입비·발급 수수료가 아님. 납품장소도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P23208590-469ce9baf115.jpg",
+        "alt": "도서관 RFID 회원증 — 도서관리시스템, 에이스카드넷, A1G, RFID회원증",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2017/04/14/20170414140044-38.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.294Z",
+        "sha256": "469ce9baf1157ef17de8069288e6bda6c36bce3a1a96b18eb4a78a1e8fd195bd"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "지갑 속 도서관 회원증 카드 한 장의 가격은 얼마일까?",
+      "sourceChangedAt": "2026-07-28 13:07:17",
+      "evidence": {
+        "recordSha256": "8cb6abcee1d39e9b25af4cd017e22c9c419de6542b471f04f928111cfb4cf905",
+        "checkedAt": "2026-11-09T08:10:03.057Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M06",
+          "visualCheckedAt": "2026-11-09T08:14:33.294Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "RFID 회원증 카드 1개(1장)의 등록 계약단가. 회원 가입비·발급 수수료가 아님."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:03.057Z",
+        "lastVerifiedAt": "2026-11-09T08:10:03.057Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 에이스카드넷",
+      "discoveryTopicId": "F266",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "23208590",
+          "prdctSpecNm": "도서관리시스템, 에이스카드넷, A1G, RFID회원증",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "개",
+          "prdctDlvryCndtnNm": "납품장소도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "790",
+          "cntrctCorpNm": "주식회사 세경테크",
+          "prdctMakrNm": "주식회사 에이스카드넷",
+          "shopngCntrctNo": "R26TA0209685400",
+          "shopngCntrctSno": "1",
+          "cntrctBgnDate": "2026-07-28",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2017/04/14/20170414140044-38.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:03.057Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P21143727",
+      "title": "도서관 독서통장 정리기",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 독서통장 정리기의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "도서관리시스템, 이씨오, LVM-RT100A, 독서통장정리기",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 9210000,
+      "scope": "독서통장 정리기 1대. 통장 한 권의 가격이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 이씨오",
+      "productId": "21143727",
+      "contractNumber": "00236131311",
+      "contractLine": "6",
+      "contractStart": "2023-06-01",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "21143727"
+      },
+      "checkedAt": "2026-11-09T08:10:03.468Z",
+      "triviaId": null,
+      "revealNote": "독서통장 정리기 1대. 통장 한 권의 가격이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P21143727-848553fe469d.jpg",
+        "alt": "도서관 독서통장 정리기 — 도서관리시스템, 이씨오, LVM-RT100A, 독서통장정리기",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2007/12/03/20071203175829-86.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.294Z",
+        "sha256": "848553fe469deb21b29ccfb1819091b3d968030cd9f4525fd0a738fbbd42cc1f"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "읽은 책을 통장에 찍어 주는 기계는 얼마일까?",
+      "sourceChangedAt": "2026-09-16 13:30:29",
+      "evidence": {
+        "recordSha256": "d49f64b3e639940778dabf3cbaa83097ec9f0e58e2615d4de78b3abe7289a0a5",
+        "checkedAt": "2026-11-09T08:10:03.468Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M07",
+          "visualCheckedAt": "2026-11-09T08:14:33.294Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "독서통장 정리기 1대. 통장 한 권의 가격이 아님."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:03.468Z",
+        "lastVerifiedAt": "2026-11-09T08:10:03.468Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)이씨오",
+      "discoveryTopicId": "F267",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "21143727",
+          "prdctSpecNm": "도서관리시스템, 이씨오, LVM-RT100A, 독서통장정리기",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "9210000",
+          "cntrctCorpNm": "주식회사 이씨오",
+          "prdctMakrNm": "(주)이씨오",
+          "shopngCntrctNo": "00236131311",
+          "shopngCntrctSno": "6",
+          "cntrctBgnDate": "2023-06-01",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2007/12/03/20071203175829-86.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:03.468Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P23478879",
+      "title": "도서관 예약도서 대출보관함",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 예약도서 대출보관함의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "도서관리시스템, Bibliotheca, (CH)remoteLocker, 예약대출반납기",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 25000000,
+      "scope": "예약대출반납기 remoteLocker 본체 1대. 별도 확장 보관함이나 접근성 부품을 고른 것이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "비블리오티카 주식회사",
+      "productId": "23478879",
+      "contractNumber": "00206100118",
+      "contractLine": "16",
+      "contractStart": "2020-05-29",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23478879"
+      },
+      "checkedAt": "2026-11-09T08:10:03.575Z",
+      "triviaId": null,
+      "revealNote": "예약대출반납기 remoteLocker 본체 1대. 별도 확장 보관함이나 접근성 부품을 고른 것이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P23478879-fa56cafc7b37.jpg",
+        "alt": "도서관 예약도서 대출보관함 — 도서관리시스템, Bibliotheca, (CH)remoteLocker, 예약대출반납기",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/12/09/45acaa2e-1eaf-48e8-9414-184575767746.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.294Z",
+        "sha256": "fa56cafc7b37ddb995962af38cbc76d968d37aeae6c5f85c9c11272034720d0d"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "예약한 책을 찾아가는 도서관 무인 보관함은 얼마일까?",
+      "sourceChangedAt": "2026-09-29 17:23:34",
+      "evidence": {
+        "recordSha256": "6b93e5c14cdc340e33b6b0341e43596970e22b0964f1d2f7cabf350b64b4dc62",
+        "checkedAt": "2026-11-09T08:10:03.575Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M08",
+          "visualCheckedAt": "2026-11-09T08:14:33.295Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "예약대출반납기 remoteLocker 본체 1대. 별도 확장 보관함이나 접근성 부품을 고른 것이 아님."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:03.575Z",
+        "lastVerifiedAt": "2026-11-09T08:10:03.575Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "Bibliotheca",
+      "discoveryTopicId": "F268",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "23478879",
+          "prdctSpecNm": "도서관리시스템, Bibliotheca, (CH)remoteLocker, 예약대출반납기",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "25000000",
+          "cntrctCorpNm": "비블리오티카 주식회사",
+          "prdctMakrNm": "Bibliotheca",
+          "shopngCntrctNo": "00206100118",
+          "shopngCntrctSno": "16",
+          "cntrctBgnDate": "2020-05-29",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/12/09/45acaa2e-1eaf-48e8-9414-184575767746.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:03.575Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P25666130",
+      "title": "도서관 무인회원증 발급기",
+      "category": "도서관·학교",
+      "prompt": "이 도서관 무인회원증 발급기의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "도서관리시스템, 호디, SelfIDMaker200BF, 무인회원증발급시스템",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 19500000,
+      "scope": "사진의 무인회원증 발급장비 1대. 플라스틱 회원증 한 장과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주) 호디",
+      "productId": "25666130",
+      "contractNumber": "R26TA0207865901",
+      "contractLine": "3",
+      "contractStart": "2026-07-24",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "25666130"
+      },
+      "checkedAt": "2026-11-09T08:10:08.160Z",
+      "triviaId": null,
+      "revealNote": "사진의 무인회원증 발급장비 1대. 플라스틱 회원증 한 장과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P25666130-de17e1cc895e.jpg",
+        "alt": "도서관 무인회원증 발급기 — 도서관리시스템, 호디, SelfIDMaker200BF, 무인회원증발급시스템",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2025/01/23/6f83e20a-5160-4b03-8482-2eb23c580186.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.295Z",
+        "sha256": "de17e1cc895e1cda7c0fd78b21b94c2e04366d796df29685e0408af27b922e6d"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "도서관 회원증을 바로 만들어 주는 기계는 얼마일까?",
+      "sourceChangedAt": "2026-10-16 17:30:06",
+      "evidence": {
+        "recordSha256": "15e42525a6cec5b6c74800ca140f9bb5283af1b15107b17f843a60a19d5b2020",
+        "checkedAt": "2026-11-09T08:10:08.160Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M09",
+          "visualCheckedAt": "2026-11-09T08:14:33.295Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 무인회원증 발급장비 1대. 플라스틱 회원증 한 장과 구분."
+        }
+      },
+      "classification": {
+        "name": "도서관리시스템",
+        "code": "43211797",
+        "detailedCode": "4321179701"
+      },
+      "discoveryFamily": {
+        "key": "kind:도서관리시스템",
+        "label": "도서관리시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:08.160Z",
+        "lastVerifiedAt": "2026-11-09T08:10:08.160Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주) 호디",
+      "discoveryTopicId": "F269",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "25666130",
+          "prdctSpecNm": "도서관리시스템, 호디, SelfIDMaker200BF, 무인회원증발급시스템",
+          "prdctClsfcNoNm": "도서관리시스템",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "19500000",
+          "cntrctCorpNm": "(주) 호디",
+          "prdctMakrNm": "(주) 호디",
+          "shopngCntrctNo": "R26TA0207865901",
+          "shopngCntrctSno": "3",
+          "cntrctBgnDate": "2026-07-24",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2025/01/23/6f83e20a-5160-4b03-8482-2eb23c580186.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:08.160Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24522374",
+      "title": "군용 전투조끼",
+      "category": "군 생활",
+      "prompt": "이 군용 전투조끼의 등록 계약단가는 얼마일까요? (1매)",
+      "specification": "군용전투조끼, 제이엘티, JL22-81, 전술조끼(육군/A타입/기본형), 봄/여름/가을/겨울",
+      "quantity": "1매",
+      "unit": "매",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 91800,
+      "scope": "전술조끼 기본형 1매. 조끼조립체·탄창파우치 등 개별 부품과 구분하며 방탄판 포함 방탄복으로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "제일피복공업 주식회사",
+      "productId": "24522374",
+      "contractNumber": "R25TA0093667201",
+      "contractLine": "2",
+      "contractStart": "2025-10-13",
+      "contractEnd": "2028-10-12",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24522374"
+      },
+      "checkedAt": "2026-11-09T08:10:07.905Z",
+      "triviaId": null,
+      "revealNote": "전술조끼 기본형 1매. 조끼조립체·탄창파우치 등 개별 부품과 구분하며 방탄판 포함 방탄복으로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24522374-b690bd5bd525.jpg",
+        "alt": "군용 전투조끼 — 군용전투조끼, 제이엘티, JL22-81, 전술조끼(육군/A타입/기본형), 봄/여름/가을/겨울",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/16/2e252a78-e9d4-4dfd-ba3c-691bad9b5b32.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.295Z",
+        "sha256": "b690bd5bd52591dc887f5d5f540233ad5c029f116b86b5758e2d6651a32e1fe9"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "탄창과 장비를 달고 훈련하는 전투조끼는 얼마일까?",
+      "sourceChangedAt": "2025-12-30 17:41:31",
+      "evidence": {
+        "recordSha256": "a9010e2c0723240632a1b025236d3cfb690f00309944046841a6667835d08069",
+        "checkedAt": "2026-11-09T08:10:07.905Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M11",
+          "visualCheckedAt": "2026-11-09T08:14:33.295Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "전술조끼 기본형 1매. 조끼조립체·탄창파우치 등 개별 부품과 구분하며 방탄판 포함 방탄복으로 표시하지 않음."
+        }
+      },
+      "classification": {
+        "name": "군복",
+        "code": "53102701",
+        "detailedCode": "5310270108"
+      },
+      "discoveryFamily": {
+        "key": "kind:군용전투조끼",
+        "label": "군용전투조끼"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:07.905Z",
+        "lastVerifiedAt": "2026-11-09T08:10:07.905Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)제이엘티",
+      "discoveryTopicId": "F238",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24522374",
+          "prdctSpecNm": "군용전투조끼, 제이엘티, JL22-81, 전술조끼(육군/A타입/기본형), 봄/여름/가을/겨울",
+          "prdctClsfcNoNm": "군복",
+          "prdctUnit": "매",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "91800",
+          "cntrctCorpNm": "제일피복공업 주식회사",
+          "prdctMakrNm": "(주)제이엘티",
+          "shopngCntrctNo": "R25TA0093667201",
+          "shopngCntrctSno": "2",
+          "cntrctBgnDate": "2025-10-13",
+          "cntrctEndDate": "2028-10-12",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/16/2e252a78-e9d4-4dfd-ba3c-691bad9b5b32.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:07.905Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24507084",
+      "title": "육군 야전배낭",
+      "category": "군 생활",
+      "prompt": "이 육군 야전배낭의 등록 계약단가는 얼마일까요? (1개)",
+      "specification": "배낭, 희림상사, HL-22-34, 45L, 야전배낭(육군용, I형)",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 293000,
+      "scope": "45L 육군용 I형 야전배낭 완제품 1개. 주배낭조립체·덮개·보조낭만의 가격과 구분. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "희림상사",
+      "productId": "24507084",
+      "contractNumber": "R25TA0093790301",
+      "contractLine": "1",
+      "contractStart": "2025-10-01",
+      "contractEnd": "2028-09-30",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24507084"
+      },
+      "checkedAt": "2026-11-09T08:10:08.135Z",
+      "triviaId": null,
+      "revealNote": "45L 육군용 I형 야전배낭 완제품 1개. 주배낭조립체·덮개·보조낭만의 가격과 구분. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24507084-bc4afb9a2004.png",
+        "alt": "육군 야전배낭 — 배낭, 희림상사, HL-22-34, 45L, 야전배낭(육군용, I형)",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/02/34be6114-8c30-46d7-a70c-9d05d231cc51.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.296Z",
+        "sha256": "bc4afb9a200488d529114968ddcc363411656dcf02172f257ffdf4fc95f1b07b"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "행군할 때 메는 커다란 군장 배낭은 얼마일까?",
+      "sourceChangedAt": "2025-12-31 09:50:22",
+      "evidence": {
+        "recordSha256": "37bbf8f3508532a7eb5356fc97e618a73f224b5247234dfcca03d943e9f32aad",
+        "checkedAt": "2026-11-09T08:10:08.135Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M12",
+          "visualCheckedAt": "2026-11-09T08:14:33.296Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "45L 육군용 I형 야전배낭 완제품 1개. 주배낭조립체·덮개·보조낭만의 가격과 구분."
+        }
+      },
+      "classification": {
+        "name": "배낭",
+        "code": "53121603",
+        "detailedCode": "5312160301"
+      },
+      "discoveryFamily": {
+        "key": "kind:배낭",
+        "label": "배낭"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:08.135Z",
+        "lastVerifiedAt": "2026-11-09T08:10:08.135Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "희림상사",
+      "discoveryTopicId": "F088",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24507084",
+          "prdctSpecNm": "배낭, 희림상사, HL-22-34, 45L, 야전배낭(육군용, I형)",
+          "prdctClsfcNoNm": "배낭",
+          "prdctUnit": "개",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "293000",
+          "cntrctCorpNm": "희림상사",
+          "prdctMakrNm": "희림상사",
+          "shopngCntrctNo": "R25TA0093790301",
+          "shopngCntrctSno": "1",
+          "cntrctBgnDate": "2025-10-01",
+          "cntrctEndDate": "2028-09-30",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/02/34be6114-8c30-46d7-a70c-9d05d231cc51.png"
+        },
+        "checkedAt": "2026-11-09T08:10:08.135Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24519347",
+      "title": "육군 방한화",
+      "category": "군 생활",
+      "prompt": "이 육군 방한화의 등록 계약단가는 얼마일까요? (1켤레)",
+      "specification": "방한화, 트렉스타, ECB-01, 225~330mm, 육군",
+      "quantity": "1켤레",
+      "unit": "켤레",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 107000,
+      "scope": "육군용 방한화 1켤레. 225~330mm 규격 범위의 해당 등록상품. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주)트렉스타",
+      "productId": "24519347",
+      "contractNumber": "0021B012312",
+      "contractLine": "5",
+      "contractStart": "2021-06-01",
+      "contractEnd": "2027-05-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24519347"
+      },
+      "checkedAt": "2026-11-09T08:10:08.424Z",
+      "triviaId": null,
+      "revealNote": "육군용 방한화 1켤레. 225~330mm 규격 범위의 해당 등록상품. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24519347-146637afe2ab.jpg",
+        "alt": "육군 방한화 — 방한화, 트렉스타, ECB-01, 225~330mm, 육군",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/15/b8e470eb-fa3f-4e94-b065-0f29fb5aaa0e.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.296Z",
+        "sha256": "146637afe2aba8a746137296192fb23139dcdb1fee7042c48bbb5bd802171cd2"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "한겨울 군인이 신는 방한화 한 켤레는 얼마일까?",
+      "sourceChangedAt": "2026-06-30 03:00:15",
+      "evidence": {
+        "recordSha256": "28282cc71a2bd703b9e6c53314cd9c17077c70612dfc9a62ee2605943b739c45",
+        "checkedAt": "2026-11-09T08:10:08.424Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M13",
+          "visualCheckedAt": "2026-11-09T08:14:33.296Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "육군용 방한화 1켤레. 225~330mm 규격 범위의 해당 등록상품."
+        }
+      },
+      "classification": {
+        "name": "방한화",
+        "code": "46181698",
+        "detailedCode": "4618169801"
+      },
+      "discoveryFamily": {
+        "key": "kind:방한화",
+        "label": "방한화"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:08.424Z",
+        "lastVerifiedAt": "2026-11-09T08:10:08.424Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)트렉스타",
+      "discoveryTopicId": "F270",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24519347",
+          "prdctSpecNm": "방한화, 트렉스타, ECB-01, 225~330mm, 육군",
+          "prdctClsfcNoNm": "방한화",
+          "prdctUnit": "켤레",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "107000",
+          "cntrctCorpNm": "(주)트렉스타",
+          "prdctMakrNm": "(주)트렉스타",
+          "shopngCntrctNo": "0021B012312",
+          "shopngCntrctSno": "5",
+          "cntrctBgnDate": "2021-06-01",
+          "cntrctEndDate": "2027-05-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/15/b8e470eb-fa3f-4e94-b065-0f29fb5aaa0e.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:08.424Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24508762",
+      "title": "군용 전투우의 상하의",
+      "category": "군 생활",
+      "prompt": "이 군용 전투우의 상하의의 등록 계약단가는 얼마일까요? (1벌)",
+      "specification": "우의, 희림상사, HL-22-17, 전투우의, 육/해/공군",
+      "quantity": "1벌",
+      "unit": "벌",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 71500,
+      "scope": "사진의 육·해·공군 전투우의 1벌. 상의와 하의가 보이는 등록상품이며 판초형 우의로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "희림상사",
+      "productId": "24508762",
+      "contractNumber": "R25TA0083830202",
+      "contractLine": "3",
+      "contractStart": "2025-08-25",
+      "contractEnd": "2028-08-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24508762"
+      },
+      "checkedAt": "2026-11-09T08:10:10.857Z",
+      "triviaId": null,
+      "revealNote": "사진의 육·해·공군 전투우의 1벌. 상의와 하의가 보이는 등록상품이며 판초형 우의로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24508762-ba9a6865e5ea.png",
+        "alt": "군용 전투우의 상하의 — 우의, 희림상사, HL-22-17, 전투우의, 육/해/공군",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/03/4bab0607-b9cc-4822-8cc4-bf54d7e8f502.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.297Z",
+        "sha256": "ba9a6865e5ea6ff722a8abc7911f7e12a2992dc38005afb8b3e46c8109d30bcd"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "비 오는 훈련장에서 입는 군용 우의 한 벌은 얼마일까?",
+      "sourceChangedAt": "2026-04-30 17:43:50",
+      "evidence": {
+        "recordSha256": "41310671230bff43021853e595de7185611e99dd46dd4eedceaffea2eb438551",
+        "checkedAt": "2026-11-09T08:10:10.857Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M14",
+          "visualCheckedAt": "2026-11-09T08:14:33.297Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 육·해·공군 전투우의 1벌. 상의와 하의가 보이는 등록상품이며 판초형 우의로 표시하지 않음."
+        }
+      },
+      "classification": {
+        "name": "방수재킷또는우비",
+        "code": "46181543",
+        "detailedCode": "4618154301"
+      },
+      "discoveryFamily": {
+        "key": "kind:우의",
+        "label": "우의"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:10.857Z",
+        "lastVerifiedAt": "2026-11-09T08:10:10.857Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "희림상사",
+      "discoveryTopicId": "F271",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24508762",
+          "prdctSpecNm": "우의, 희림상사, HL-22-17, 전투우의, 육/해/공군",
+          "prdctClsfcNoNm": "방수재킷또는우비",
+          "prdctUnit": "벌",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "71500",
+          "cntrctCorpNm": "희림상사",
+          "prdctMakrNm": "희림상사",
+          "shopngCntrctNo": "R25TA0083830202",
+          "shopngCntrctSno": "3",
+          "cntrctBgnDate": "2025-08-25",
+          "cntrctEndDate": "2028-08-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/03/4bab0607-b9cc-4822-8cc4-bf54d7e8f502.png"
+        },
+        "checkedAt": "2026-11-09T08:10:10.857Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24823615",
+      "title": "육군 보급 플리스",
+      "category": "군 생활",
+      "prompt": "이 육군 보급 플리스의 등록 계약단가는 얼마일까요? (1매)",
+      "specification": "군용스웨터, 코데아, codea-2303, 플리스형스웨터(육군용), 겨울",
+      "quantity": "1매",
+      "unit": "매",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 39000,
+      "scope": "육군용 플리스형 스웨터 1매의 군용 등록상품 가격. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "코데아",
+      "productId": "24823615",
+      "contractNumber": "R25TA0108335600",
+      "contractLine": "3",
+      "contractStart": "2025-11-17",
+      "contractEnd": "2028-11-30",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24823615"
+      },
+      "checkedAt": "2026-11-09T08:10:11.155Z",
+      "triviaId": null,
+      "revealNote": "육군용 플리스형 스웨터 1매의 군용 등록상품 가격. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24823615-a05e2d484f9b.jpg",
+        "alt": "육군 보급 플리스 — 군용스웨터, 코데아, codea-2303, 플리스형스웨터(육군용), 겨울",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/12/12/1782201f-d939-44bf-886a-6cd13c07fbbd.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.297Z",
+        "sha256": "a05e2d484f9b56e837882c236fc608e4b3dd0745669be0569501ec6c2bf9785d"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "군 생활에서 입던 보급 후리스 한 벌은 얼마일까?",
+      "sourceChangedAt": "2026-07-09 03:00:19",
+      "evidence": {
+        "recordSha256": "b8d50583ad3b2af0deba76037bbb567198576d7f2814c1bf7229bb146d04fd6e",
+        "checkedAt": "2026-11-09T08:10:11.155Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M15",
+          "visualCheckedAt": "2026-11-09T08:14:33.297Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "육군용 플리스형 스웨터 1매의 군용 등록상품 가격."
+        }
+      },
+      "classification": {
+        "name": "군복",
+        "code": "53102701",
+        "detailedCode": "5310270107"
+      },
+      "discoveryFamily": {
+        "key": "kind:군용스웨터",
+        "label": "군용스웨터"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:11.155Z",
+        "lastVerifiedAt": "2026-11-09T08:10:11.155Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "코데아",
+      "discoveryTopicId": "F272",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24823615",
+          "prdctSpecNm": "군용스웨터, 코데아, codea-2303, 플리스형스웨터(육군용), 겨울",
+          "prdctClsfcNoNm": "군복",
+          "prdctUnit": "매",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "39000",
+          "cntrctCorpNm": "코데아",
+          "prdctMakrNm": "코데아",
+          "shopngCntrctNo": "R25TA0108335600",
+          "shopngCntrctSno": "3",
+          "cntrctBgnDate": "2025-11-17",
+          "cntrctEndDate": "2028-11-30",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/12/12/1782201f-d939-44bf-886a-6cd13c07fbbd.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:11.155Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24507094",
+      "title": "해군용 다목적 외투",
+      "category": "군 생활",
+      "prompt": "이 해군용 다목적 외투 1매의 등록 계약단가는 얼마일까요?",
+      "specification": "군용외투, 희림상사, HL-22-10, 다목적외투(해군용), 봄/가을/겨울",
+      "quantity": "1매",
+      "unit": "매",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 214000,
+      "scope": "사진의 해군용 다목적 외투 1매. 육·해·공군별 다른 외투나 가죽점퍼와 구분한 해당 등록상품. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "희림상사",
+      "productId": "24507094",
+      "contractNumber": "R25TA0083830202",
+      "contractLine": "8",
+      "contractStart": "2025-08-25",
+      "contractEnd": "2028-08-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24507094"
+      },
+      "checkedAt": "2026-11-09T08:18:12.762Z",
+      "triviaId": null,
+      "revealNote": "사진의 해군용 다목적 외투 1매. 육·해·공군별 다른 외투나 가죽점퍼와 구분한 해당 등록상품. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24507094-61b40afc3252.png",
+        "alt": "해군용 다목적 외투 — 군용외투, 희림상사, HL-22-10, 다목적외투(해군용), 봄/가을/겨울",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/03/02/8f0759d0-1660-46c5-a91c-bb03c93ca0ce.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:18:12.806Z",
+        "sha256": "61b40afc3252cdd3d73db2805ff681aa9efef0e88326d77d6df5aa9ded4787ac"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "해군이 근무할 때 입는 보급 외투 한 벌은 얼마일까?",
+      "sourceChangedAt": "2026-04-30 17:43:50",
+      "evidence": {
+        "recordSha256": "b2ba3b0d6924e92e7fe03de2da22ef8641e3d85dc55ac489cf0eec89e4c2422a",
+        "checkedAt": "2026-11-09T08:18:12.762Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M16",
+          "visualCheckedAt": "2026-11-09T08:18:12.809Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "해군용 다목적 외투 완제품 1매. 원 API 단위와 등록 사진을 대조."
+        }
+      },
+      "classification": {
+        "name": "군복",
+        "code": "53102701",
+        "detailedCode": "5310270105"
+      },
+      "discoveryFamily": {
+        "key": "kind:군용외투",
+        "label": "군용외투"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:18:12.762Z",
+        "lastVerifiedAt": "2026-11-09T08:18:12.762Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "희림상사",
+      "discoveryTopicId": "F282",
+      "discoverySource": "manual-reviewed-official-contract"
+    },
+    {
+      "id": "P20691913",
+      "title": "도로 맨홀뚜껑",
+      "category": "길거리·교통",
+      "prompt": "이 도로 맨홀뚜껑의 등록 계약단가는 얼마일까요? (1조)",
+      "specification": "주철맨홀뚜껑, 정원주철, JW-Z2, 구상흑연주철, 자동잠금, 하수도용, 원형, Φ648×110mm",
+      "quantity": "1조",
+      "unit": "조",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 345100,
+      "scope": "원형 주철맨홀뚜껑 Φ648×110mm, 등록단위 1조. 사진의 뚜껑·틀 구성과 원래 계약단위를 함께 표시. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주)정원주철",
+      "productId": "20691913",
+      "contractNumber": "00175006829",
+      "contractLine": "141",
+      "contractStart": "2017-02-13",
+      "contractEnd": "2026-12-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "20691913"
+      },
+      "checkedAt": "2026-11-09T08:10:11.346Z",
+      "triviaId": null,
+      "revealNote": "원형 주철맨홀뚜껑 Φ648×110mm, 등록단위 1조. 사진의 뚜껑·틀 구성과 원래 계약단위를 함께 표시. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P20691913-deddc21f3c6e.jpg",
+        "alt": "도로 맨홀뚜껑 — 주철맨홀뚜껑, 정원주철, JW-Z2, 구상흑연주철, 자동잠금, 하수도용, 원형, Φ648×110mm",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2005/11/멀티지그형(648)하수도.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.298Z",
+        "sha256": "deddc21f3c6e3a1c5d41d65f5f582cc9890566db755494375d1139afd82077f9"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "매일 밟고 지나가는 원형 맨홀뚜껑 한 조는 얼마일까?",
+      "sourceChangedAt": "2025-12-23 17:57:18",
+      "evidence": {
+        "recordSha256": "c7e7ed7ea9ab2ec34067b3e83549362af65d0a17a2990875d5ce98d02df0c707",
+        "checkedAt": "2026-11-09T08:10:11.346Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M18",
+          "visualCheckedAt": "2026-11-09T08:14:33.298Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "원형 주철맨홀뚜껑 Φ648×110mm, 등록단위 1조. 사진의 뚜껑·틀 구성과 원래 계약단위를 함께 표시."
+        }
+      },
+      "classification": {
+        "name": "맨홀뚜껑",
+        "code": "30121713",
+        "detailedCode": "3012171301"
+      },
+      "discoveryFamily": {
+        "key": "kind:주철맨홀뚜껑",
+        "label": "주철맨홀뚜껑"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:11.346Z",
+        "lastVerifiedAt": "2026-11-09T08:10:11.346Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)정원주철",
+      "discoveryTopicId": "F102",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "20691913",
+          "prdctSpecNm": "주철맨홀뚜껑, 정원주철, JW-Z2, 구상흑연주철, 자동잠금, 하수도용, 원형, Φ648×110mm",
+          "prdctClsfcNoNm": "맨홀뚜껑",
+          "prdctUnit": "조",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "345100",
+          "cntrctCorpNm": "(주)정원주철",
+          "prdctMakrNm": "(주)정원주철",
+          "shopngCntrctNo": "00175006829",
+          "shopngCntrctSno": "141",
+          "cntrctBgnDate": "2017-02-13",
+          "cntrctEndDate": "2026-12-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2005/11/멀티지그형(648)하수도.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:11.346Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P23263940",
+      "title": "도로 가드레일 4m 한 칸",
+      "category": "길거리·교통",
+      "prompt": "이 도로 가드레일 4m 한 칸의 등록 계약단가는 얼마일까요? (1경간 (4m 한 칸))",
+      "specification": "철제가드레일, 대성철강, DS-RS-09, W4000×H700mm, 2W노측용/성토부, SB2등급, 도금",
+      "quantity": "1경간 (4m 한 칸)",
+      "unit": "경간",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 242000,
+      "scope": "폭 4000mm·높이 700mm 가드레일 1경간(4m 한 칸). 전체 도로 구간의 설치 총액과 구분. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "대성철강주식회사",
+      "productId": "23263940",
+      "contractNumber": "0024B035100",
+      "contractLine": "1",
+      "contractStart": "2024-03-26",
+      "contractEnd": "2027-03-25",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23263940"
+      },
+      "checkedAt": "2026-11-09T08:10:13.707Z",
+      "triviaId": null,
+      "revealNote": "폭 4000mm·높이 700mm 가드레일 1경간(4m 한 칸). 전체 도로 구간의 설치 총액과 구분. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P23263940-0f78adf2c0a4.jpg",
+        "alt": "도로 가드레일 4m 한 칸 — 철제가드레일, 대성철강, DS-RS-09, W4000×H700mm, 2W노측용/성토부, SB2등급, 도금",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2017/08/17/20170817130726-17.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.298Z",
+        "sha256": "0f78adf2c0a46dd80b0e8c7d1b91855dd68576111117435aef37ffd18f7b1f51"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "도로 옆 가드레일 4m 한 칸의 가격은 얼마일까?",
+      "sourceChangedAt": "2024-04-03 06:06:39",
+      "evidence": {
+        "recordSha256": "0b6e545213aa8ce635e832df29a32a2ce10022afc9aa26a624c9d8091dd24ce4",
+        "checkedAt": "2026-11-09T08:10:13.707Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M19",
+          "visualCheckedAt": "2026-11-09T08:14:33.298Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "폭 4000mm·높이 700mm 가드레일 1경간(4m 한 칸). 전체 도로 구간의 설치 총액과 구분."
+        }
+      },
+      "classification": {
+        "name": "가드레일",
+        "code": "30121793",
+        "detailedCode": "3012179301"
+      },
+      "discoveryFamily": {
+        "key": "kind:철제가드레일",
+        "label": "철제가드레일"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:13.707Z",
+        "lastVerifiedAt": "2026-11-09T08:10:13.707Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "대성철강주식회사",
+      "discoveryTopicId": "F152",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "23263940",
+          "prdctSpecNm": "철제가드레일, 대성철강, DS-RS-09, W4000×H700mm, 2W노측용/성토부, SB2등급, 도금",
+          "prdctClsfcNoNm": "가드레일",
+          "prdctUnit": "경간",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "242000",
+          "cntrctCorpNm": "대성철강주식회사",
+          "prdctMakrNm": "대성철강주식회사",
+          "shopngCntrctNo": "0024B035100",
+          "shopngCntrctSno": "1",
+          "cntrctBgnDate": "2024-03-26",
+          "cntrctEndDate": "2027-03-25",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2017/08/17/20170817130726-17.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:13.707Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P22421175",
+      "title": "보행자 안전울타리 1.5m 한 칸",
+      "category": "길거리·교통",
+      "prompt": "이 보행자 안전울타리 1.5m 한 칸의 등록 계약단가는 얼마일까요? (1경간 (1.5m 한 칸))",
+      "specification": "디자인형울타리, 대성우드, DSF-3, W1500×H1200mm, 보행자방호/도심구간",
+      "quantity": "1경간 (1.5m 한 칸)",
+      "unit": "경간",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 214940,
+      "scope": "폭 1500mm·높이 1200mm 보행자방호 울타리 1경간(1.5m 한 칸). 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "대성우드주식회사",
+      "productId": "22421175",
+      "contractNumber": "23243012700",
+      "contractLine": "1",
+      "contractStart": "2024-04-01",
+      "contractEnd": "2027-03-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "22421175"
+      },
+      "checkedAt": "2026-11-09T08:10:13.797Z",
+      "triviaId": null,
+      "revealNote": "폭 1500mm·높이 1200mm 보행자방호 울타리 1경간(1.5m 한 칸). 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P22421175-3ec268e02a19.jpg",
+        "alt": "보행자 안전울타리 1.5m 한 칸 — 디자인형울타리, 대성우드, DSF-3, W1500×H1200mm, 보행자방호/도심구간",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/01/06/9295cc66-7122-4654-978a-9edd84cf8c03.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.298Z",
+        "sha256": "3ec268e02a19e4098da1dba79ae49c4ebe88c4b93d98de3441fffb2393ef2929"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "인도를 따라 설치된 안전울타리 한 칸은 얼마일까?",
+      "sourceChangedAt": "2024-07-27 06:04:47",
+      "evidence": {
+        "recordSha256": "b89b9e8ddaf2019a60090bd422068e70c605800b4acaa34554afc667a8e12c4a",
+        "checkedAt": "2026-11-09T08:10:13.797Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M20",
+          "visualCheckedAt": "2026-11-09T08:14:33.298Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "폭 1500mm·높이 1200mm 보행자방호 울타리 1경간(1.5m 한 칸)."
+        }
+      },
+      "classification": {
+        "name": "금속제울타리",
+        "code": "30152001",
+        "detailedCode": "3015200101"
+      },
+      "discoveryFamily": {
+        "key": "kind:디자인형울타리",
+        "label": "디자인형울타리"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:13.797Z",
+        "lastVerifiedAt": "2026-11-09T08:10:13.797Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "대성우드주식회사",
+      "discoveryTopicId": "F012",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "22421175",
+          "prdctSpecNm": "디자인형울타리, 대성우드, DSF-3, W1500×H1200mm, 보행자방호/도심구간",
+          "prdctClsfcNoNm": "금속제울타리",
+          "prdctUnit": "경간",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "214940",
+          "cntrctCorpNm": "대성우드주식회사",
+          "prdctMakrNm": "대성우드주식회사",
+          "shopngCntrctNo": "23243012700",
+          "shopngCntrctSno": "1",
+          "cntrctBgnDate": "2024-04-01",
+          "cntrctEndDate": "2027-03-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/01/06/9295cc66-7122-4654-978a-9edd84cf8c03.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:13.797Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P25086077",
+      "title": "주차금지 표지판",
+      "category": "길거리·교통",
+      "prompt": "이 주차금지 표지판의 등록 계약단가는 얼마일까요? (1개)",
+      "specification": "교통안전표지, 거봉산업, GB-M-219, Ф600×2mm, 주차금지표시",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 84000,
+      "scope": "지름 600mm·두께 2mm 주차금지 표지판 1개. 사진과 규격에 없는 지주를 포함한 가격으로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "거봉산업",
+      "productId": "25086077",
+      "contractNumber": "0023D036800",
+      "contractLine": "28",
+      "contractStart": "2023-12-08",
+      "contractEnd": "2026-12-07",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "25086077"
+      },
+      "checkedAt": "2026-11-09T08:10:13.834Z",
+      "triviaId": null,
+      "revealNote": "지름 600mm·두께 2mm 주차금지 표지판 1개. 사진과 규격에 없는 지주를 포함한 가격으로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P25086077-e33ef8eabe22.jpg",
+        "alt": "주차금지 표지판 — 교통안전표지, 거봉산업, GB-M-219, Ф600×2mm, 주차금지표시",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2023/07/21/5e3c2380-c669-44cb-b92d-4c354cba8ad7.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.299Z",
+        "sha256": "e33ef8eabe226e675a90022af756a129b553b620720544789ba6504f7eb5ebc9"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "길가의 주차금지 표지판 한 장은 얼마일까?",
+      "sourceChangedAt": "2024-12-17 06:09:05",
+      "evidence": {
+        "recordSha256": "35f0825091b41dfdf905e11f29e4dbf870ce8e0eeb8cca70cd9c104fb07f4b74",
+        "checkedAt": "2026-11-09T08:10:13.834Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M21",
+          "visualCheckedAt": "2026-11-09T08:14:33.299Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "지름 600mm·두께 2mm 주차금지 표지판 1개. 사진과 규격에 없는 지주를 포함한 가격으로 표시하지 않음."
+        }
+      },
+      "classification": {
+        "name": "교통표지",
+        "code": "55121710",
+        "detailedCode": "5512171001"
+      },
+      "discoveryFamily": {
+        "key": "kind:교통안전표지",
+        "label": "교통안전표지"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:13.834Z",
+        "lastVerifiedAt": "2026-11-09T08:10:13.834Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "거봉산업",
+      "discoveryTopicId": "F157",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "25086077",
+          "prdctSpecNm": "교통안전표지, 거봉산업, GB-M-219, Ф600×2mm, 주차금지표시",
+          "prdctClsfcNoNm": "교통표지",
+          "prdctUnit": "개",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "84000",
+          "cntrctCorpNm": "거봉산업",
+          "prdctMakrNm": "거봉산업",
+          "shopngCntrctNo": "0023D036800",
+          "shopngCntrctSno": "28",
+          "cntrctBgnDate": "2023-12-08",
+          "cntrctEndDate": "2026-12-07",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2023/07/21/5e3c2380-c669-44cb-b92d-4c354cba8ad7.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:13.834Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P23387716",
+      "title": "가로용 국기 깃대",
+      "category": "길거리·교통",
+      "prompt": "이 가로용 국기 깃대의 등록 계약단가는 얼마일까요? (1개)",
+      "specification": "깃대또는부속품, 동영산업, NFSTREETPOLE-AL1500, 가로용국기깃대",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "납품장소 입고도",
+      "vat": "부가가치세포함",
+      "answer": 2200,
+      "scope": "가로용 국기깃대 1개. 사진의 깃대 본체 가격이며 태극기·국기꽂이·보관함과 구분. 납품장소 입고도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "애플기획",
+      "productId": "23387716",
+      "contractNumber": "00223010502",
+      "contractLine": "24",
+      "contractStart": "2022-02-09",
+      "contractEnd": "2028-01-16",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23387716"
+      },
+      "checkedAt": "2026-11-09T08:10:14.427Z",
+      "triviaId": null,
+      "revealNote": "가로용 국기깃대 1개. 사진의 깃대 본체 가격이며 태극기·국기꽂이·보관함과 구분. 납품장소 입고도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P23387716-2a203d2045d6.jpg",
+        "alt": "가로용 국기 깃대 — 깃대또는부속품, 동영산업, NFSTREETPOLE-AL1500, 가로용국기깃대",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/10/18/175b0028-69cb-4160-ae6d-5d22a95de1f5.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.299Z",
+        "sha256": "2a203d2045d69816efc8bf30e43a1b9568bca6755c75750b8db02ed248c29034"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "국경일에 길가에 꽂는 국기 깃대 하나는 얼마일까?",
+      "sourceChangedAt": "2025-02-03 13:58:05",
+      "evidence": {
+        "recordSha256": "a985004775704b13cd01b42736eb1ca42577138b7f87c7ff2cc39b8dd3adf407",
+        "checkedAt": "2026-11-09T08:10:14.427Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M22",
+          "visualCheckedAt": "2026-11-09T08:14:33.299Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "가로용 국기깃대 1개. 사진의 깃대 본체 가격이며 태극기·국기꽂이·보관함과 구분."
+        }
+      },
+      "classification": {
+        "name": "깃대또는부속품",
+        "code": "55121905",
+        "detailedCode": "5512190501"
+      },
+      "discoveryFamily": {
+        "key": "kind:깃대또는부속품",
+        "label": "깃대또는부속품"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:14.427Z",
+        "lastVerifiedAt": "2026-11-09T08:10:14.427Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "동영산업",
+      "discoveryTopicId": "F273",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "23387716",
+          "prdctSpecNm": "깃대또는부속품, 동영산업, NFSTREETPOLE-AL1500, 가로용국기깃대",
+          "prdctClsfcNoNm": "깃대또는부속품",
+          "prdctUnit": "개",
+          "prdctDlvryCndtnNm": "납품장소 입고도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "2200",
+          "cntrctCorpNm": "애플기획",
+          "prdctMakrNm": "동영산업",
+          "shopngCntrctNo": "00223010502",
+          "shopngCntrctSno": "24",
+          "cntrctBgnDate": "2022-02-09",
+          "cntrctEndDate": "2028-01-16",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2019/10/18/175b0028-69cb-4160-ae6d-5d22a95de1f5.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:14.427Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24775200",
+      "title": "주차장 출차주의 경보등",
+      "category": "생활·공공시설",
+      "prompt": "이 주차장 출차주의 경보등의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "주차경보등, 비티컴퍼스, BTC1000-AIL, 출차주의등",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 350000,
+      "scope": "출차주의등 1대. 주차면 빈자리 표시등이나 주차장 전체 관제시스템과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 비티컴퍼스",
+      "productId": "24775200",
+      "contractNumber": "0024H032900",
+      "contractLine": "5",
+      "contractStart": "2024-05-13",
+      "contractEnd": "2027-05-12",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24775200"
+      },
+      "checkedAt": "2026-11-09T08:10:17.387Z",
+      "triviaId": null,
+      "revealNote": "출차주의등 1대. 주차면 빈자리 표시등이나 주차장 전체 관제시스템과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24775200-af146a9f8edb.jpg",
+        "alt": "주차장 출차주의 경보등 — 주차경보등, 비티컴퍼스, BTC1000-AIL, 출차주의등",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/10/26/70b6c660-76aa-43e6-bce9-532977b56c15.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.299Z",
+        "sha256": "af146a9f8edbb9c7410205751c0ce58d1341a03392351555d87a776ea23ebf5d"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "차가 나올 때 번쩍이는 출차주의등은 얼마일까?",
+      "sourceChangedAt": "2024-05-13 11:21:59",
+      "evidence": {
+        "recordSha256": "63eabfd815eb1a21307458b789aae8741a430bf8f2b94ce928e39d16a5a33640",
+        "checkedAt": "2026-11-09T08:10:17.387Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M23",
+          "visualCheckedAt": "2026-11-09T08:14:33.299Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "출차주의등 1대. 주차면 빈자리 표시등이나 주차장 전체 관제시스템과 구분."
+        }
+      },
+      "classification": {
+        "name": "주차관제장치",
+        "code": "24101689",
+        "detailedCode": "2410168905"
+      },
+      "discoveryFamily": {
+        "key": "kind:주차경보등",
+        "label": "주차경보등"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:17.387Z",
+        "lastVerifiedAt": "2026-11-09T08:10:17.387Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 비티컴퍼스",
+      "discoveryTopicId": "F274",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24775200",
+          "prdctSpecNm": "주차경보등, 비티컴퍼스, BTC1000-AIL, 출차주의등",
+          "prdctClsfcNoNm": "주차관제장치",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "350000",
+          "cntrctCorpNm": "주식회사 비티컴퍼스",
+          "prdctMakrNm": "주식회사 비티컴퍼스",
+          "shopngCntrctNo": "0024H032900",
+          "shopngCntrctSno": "5",
+          "cntrctBgnDate": "2024-05-13",
+          "cntrctEndDate": "2027-05-12",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/10/26/70b6c660-76aa-43e6-bce9-532977b56c15.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:17.387Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P21900594",
+      "title": "주차장 빈자리 표시등",
+      "category": "생활·공공시설",
+      "prompt": "이 주차장 빈자리 표시등의 등록 계약단가는 얼마일까요? (1개)",
+      "specification": "주차경보등, 동양산전, DY-PSS100, 주차공간표시등",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 140000,
+      "scope": "주차공간표시등 1개. 빨강·초록 빈자리 표시 기능의 해당 장비이며 출차주의등과 용도가 다름. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주)동양산전",
+      "productId": "21900594",
+      "contractNumber": "0024H003600",
+      "contractLine": "4",
+      "contractStart": "2024-01-15",
+      "contractEnd": "2027-01-14",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "21900594"
+      },
+      "checkedAt": "2026-11-09T08:10:17.135Z",
+      "triviaId": null,
+      "revealNote": "주차공간표시등 1개. 빨강·초록 빈자리 표시 기능의 해당 장비이며 출차주의등과 용도가 다름. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P21900594-ea4e43fa20c3.jpg",
+        "alt": "주차장 빈자리 표시등 — 주차경보등, 동양산전, DY-PSS100, 주차공간표시등",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2010/07/05/20100705145555-1.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.299Z",
+        "sha256": "ea4e43fa20c3c5f8fb2983a046d017af39821cec888b422b91ecc8e9ea5476c6"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "주차장 천장의 빨강·초록 빈자리 표시등은 얼마일까?",
+      "sourceChangedAt": "2024-04-01 06:08:00",
+      "evidence": {
+        "recordSha256": "44b2c9b155b883803cf99ba74f3ac321eb10643c9a066197847c5b1b483c4539",
+        "checkedAt": "2026-11-09T08:10:17.135Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M24",
+          "visualCheckedAt": "2026-11-09T08:14:33.299Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "주차공간표시등 1개. 빨강·초록 빈자리 표시 기능의 해당 장비이며 출차주의등과 용도가 다름."
+        }
+      },
+      "classification": {
+        "name": "주차관제장치",
+        "code": "24101689",
+        "detailedCode": "2410168905"
+      },
+      "discoveryFamily": {
+        "key": "kind:주차경보등",
+        "label": "주차경보등"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:17.135Z",
+        "lastVerifiedAt": "2026-11-09T08:10:17.135Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)동양산전",
+      "discoveryTopicId": "F275",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "21900594",
+          "prdctSpecNm": "주차경보등, 동양산전, DY-PSS100, 주차공간표시등",
+          "prdctClsfcNoNm": "주차관제장치",
+          "prdctUnit": "개",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "140000",
+          "cntrctCorpNm": "(주)동양산전",
+          "prdctMakrNm": "(주)동양산전",
+          "shopngCntrctNo": "0024H003600",
+          "shopngCntrctSno": "4",
+          "cntrctBgnDate": "2024-01-15",
+          "cntrctEndDate": "2027-01-14",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2010/07/05/20100705145555-1.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:17.135Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24766076",
+      "title": "공공시설 출입통제 게이트",
+      "category": "생활·공공시설",
+      "prompt": "이 공공시설 출입통제 게이트의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "출입통제시스템, 지엘앤티, GLT-1100M, 출입통제게이트",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 6000000,
+      "scope": "사진의 삼발이형 출입통제 게이트 1대. 도서 도난방지 안테나와 용도가 다름. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 지엘앤티",
+      "productId": "24766076",
+      "contractNumber": "0023H054100",
+      "contractLine": "3",
+      "contractStart": "2023-12-12",
+      "contractEnd": "2026-12-11",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24766076"
+      },
+      "checkedAt": "2026-11-09T08:10:17.159Z",
+      "triviaId": null,
+      "revealNote": "사진의 삼발이형 출입통제 게이트 1대. 도서 도난방지 안테나와 용도가 다름. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24766076-b6981083083a.jpg",
+        "alt": "공공시설 출입통제 게이트 — 출입통제시스템, 지엘앤티, GLT-1100M, 출입통제게이트",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/10/21/239af0ee-b701-4e13-b80a-a3e71a8266c7.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.299Z",
+        "sha256": "b6981083083a7083bf7874f3b228d8382bb8616182c92802a7583c5d0acd3d4f"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "카드를 찍고 통과하는 출입 게이트는 얼마일까?",
+      "sourceChangedAt": "2025-01-10 16:38:55",
+      "evidence": {
+        "recordSha256": "364b6f24ef50c527b0bf90d6716805c1b6adae9ec2c9470135d8a0d0399aaff1",
+        "checkedAt": "2026-11-09T08:10:17.159Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M26",
+          "visualCheckedAt": "2026-11-09T08:14:33.299Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 삼발이형 출입통제 게이트 1대. 도서 도난방지 안테나와 용도가 다름."
+        }
+      },
+      "classification": {
+        "name": "출입통제시스템",
+        "code": "46171619",
+        "detailedCode": "4617161901"
+      },
+      "discoveryFamily": {
+        "key": "kind:출입통제시스템",
+        "label": "출입통제시스템"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:17.159Z",
+        "lastVerifiedAt": "2026-11-09T08:10:17.159Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 지엘앤티",
+      "discoveryTopicId": "F276",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24766076",
+          "prdctSpecNm": "출입통제시스템, 지엘앤티, GLT-1100M, 출입통제게이트",
+          "prdctClsfcNoNm": "출입통제시스템",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "6000000",
+          "cntrctCorpNm": "주식회사 지엘앤티",
+          "prdctMakrNm": "주식회사 지엘앤티",
+          "shopngCntrctNo": "0023H054100",
+          "shopngCntrctSno": "3",
+          "cntrctBgnDate": "2023-12-12",
+          "cntrctEndDate": "2026-12-11",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/10/21/239af0ee-b701-4e13-b80a-a3e71a8266c7.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:17.159Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24193283",
+      "title": "수도계량기",
+      "category": "생활·공공시설",
+      "prompt": "이 수도계량기의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "수도미터, 와이엔이천텍, YNMWNR-15, 15mm, 복갑습식/무연황동/투명렌즈뚜껑, 100배율/1.6배수",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 35000,
+      "scope": "구경 15mm 복갑습식 수도계량기 1대. 디지털 원격검침 시스템 전체 가격과 구분. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 와이엔 이천텍",
+      "productId": "24193283",
+      "contractNumber": "00188018912",
+      "contractLine": "81",
+      "contractStart": "2018-02-01",
+      "contractEnd": "2027-01-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24193283"
+      },
+      "checkedAt": "2026-11-09T08:10:17.035Z",
+      "triviaId": null,
+      "revealNote": "구경 15mm 복갑습식 수도계량기 1대. 디지털 원격검침 시스템 전체 가격과 구분. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24193283-aae978a1a9a4.jpg",
+        "alt": "수도계량기 — 수도미터, 와이엔이천텍, YNMWNR-15, 15mm, 복갑습식/무연황동/투명렌즈뚜껑, 100배율/1.6배수",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/03/25/c552e6e3-815b-44c2-a666-6cfb6da6c579.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.300Z",
+        "sha256": "aae978a1a9a4a212a9eeb55b31b9f124f4ef0c63a4204dfc212b9d5f99f743b7"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "검침할 때 들여다보는 수도계량기 하나는 얼마일까?",
+      "sourceChangedAt": "2024-04-19 14:19:48",
+      "evidence": {
+        "recordSha256": "f1719460fa1f1df7d2c627308c646aec4e64804e6dbcf5d7ed0542b1b471bb1f",
+        "checkedAt": "2026-11-09T08:10:17.035Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M27",
+          "visualCheckedAt": "2026-11-09T08:14:33.300Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "구경 15mm 복갑습식 수도계량기 1대. 디지털 원격검침 시스템 전체 가격과 구분."
+        }
+      },
+      "classification": {
+        "name": "수량계",
+        "code": "41112504",
+        "detailedCode": "4111250401"
+      },
+      "discoveryFamily": {
+        "key": "kind:수도미터",
+        "label": "수도미터"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:17.035Z",
+        "lastVerifiedAt": "2026-11-09T08:10:17.035Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 와이엔이천텍",
+      "discoveryTopicId": "F277",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24193283",
+          "prdctSpecNm": "수도미터, 와이엔이천텍, YNMWNR-15, 15mm, 복갑습식/무연황동/투명렌즈뚜껑, 100배율/1.6배수",
+          "prdctClsfcNoNm": "수량계",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "35000",
+          "cntrctCorpNm": "주식회사 와이엔 이천텍",
+          "prdctMakrNm": "주식회사 와이엔이천텍",
+          "shopngCntrctNo": "00188018912",
+          "shopngCntrctSno": "81",
+          "cntrctBgnDate": "2018-02-01",
+          "cntrctEndDate": "2027-01-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/03/25/c552e6e3-815b-44c2-a666-6cfb6da6c579.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:17.035Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P22217900",
+      "title": "수영장 출발대",
+      "category": "수영장·체육",
+      "prompt": "이 수영장 출발대의 등록 계약단가는 얼마일까요? (1대)",
+      "specification": "수영시설기구, 이다에스엔티, ES-401, 스타트대",
+      "quantity": "1대",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 462000,
+      "scope": "사진의 수영장 스타트대 완제품 1대. 스타트대 고정금구나 받침대만의 가격과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주)이다에스엔티",
+      "productId": "22217900",
+      "contractNumber": "0023D038300",
+      "contractLine": "17",
+      "contractStart": "2024-01-02",
+      "contractEnd": "2027-01-01",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "22217900"
+      },
+      "checkedAt": "2026-11-09T08:10:19.704Z",
+      "triviaId": null,
+      "revealNote": "사진의 수영장 스타트대 완제품 1대. 스타트대 고정금구나 받침대만의 가격과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P22217900-72dd42b24b3c.jpg",
+        "alt": "수영장 출발대 — 수영시설기구, 이다에스엔티, ES-401, 스타트대",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2011/10/05/20111005085215-93.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.300Z",
+        "sha256": "72dd42b24b3c34d697f58d74c0a33d4077f584dd326b49330c0b44314b2c0124"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "수영선수가 뛰어드는 출발대 한 대는 얼마일까?",
+      "sourceChangedAt": "2025-04-25 02:40:19",
+      "evidence": {
+        "recordSha256": "079a6a5c26d8814b1912b9bcd1ff684ff26f3afcb2c15f6908a7a2f1411f9ae3",
+        "checkedAt": "2026-11-09T08:10:19.704Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M28",
+          "visualCheckedAt": "2026-11-09T08:14:33.300Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 수영장 스타트대 완제품 1대. 스타트대 고정금구나 받침대만의 가격과 구분."
+        }
+      },
+      "classification": {
+        "name": "수영시설기구",
+        "code": "49141698",
+        "detailedCode": "4914169801"
+      },
+      "discoveryFamily": {
+        "key": "kind:수영시설기구",
+        "label": "수영시설기구"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:19.704Z",
+        "lastVerifiedAt": "2026-11-09T08:10:19.704Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)이다에스엔티",
+      "discoveryTopicId": "F097",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "22217900",
+          "prdctSpecNm": "수영시설기구, 이다에스엔티, ES-401, 스타트대",
+          "prdctClsfcNoNm": "수영시설기구",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "462000",
+          "cntrctCorpNm": "(주)이다에스엔티",
+          "prdctMakrNm": "(주)이다에스엔티",
+          "shopngCntrctNo": "0023D038300",
+          "shopngCntrctSno": "17",
+          "cntrctBgnDate": "2024-01-02",
+          "cntrctEndDate": "2027-01-01",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2011/10/05/20111005085215-93.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:19.704Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24663762",
+      "title": "수영장 레인줄",
+      "category": "수영장·체육",
+      "prompt": "이 수영장 레인줄 1m의 등록 계약단가는 얼마일까요?",
+      "specification": "수영시설기구, 아리스포츠, AS-101S , 1000×105×105mm, 코스로프",
+      "quantity": "1m",
+      "unit": "m",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 26000,
+      "scope": "1000×105×105mm 코스로프의 등록단위 1m 가격. 25m·50m 레인 전체 가격으로 표시하지 않음. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "아리스포츠 주식회사",
+      "productId": "24663762",
+      "contractNumber": "R26TA0216405400",
+      "contractLine": "27",
+      "contractStart": "2026-09-01",
+      "contractEnd": "2029-08-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24663762"
+      },
+      "checkedAt": "2026-11-09T08:10:20.222Z",
+      "triviaId": null,
+      "revealNote": "1000×105×105mm 코스로프의 등록단위 1m 가격. 25m·50m 레인 전체 가격으로 표시하지 않음. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24663762-965a3e10e10b.jpg",
+        "alt": "수영장 레인줄 — 수영시설기구, 아리스포츠, AS-101S , 1000×105×105mm, 코스로프",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/07/19/ab52750b-33c1-4469-91f8-4263a95d6be1.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.300Z",
+        "sha256": "965a3e10e10ba86e91054a09ab095824609e5211ebd650a2ea77ff8d7313443c"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "수영장 레인을 가르는 둥근 줄은 1m에 얼마일까?",
+      "sourceChangedAt": "2026-09-01 00:43:48",
+      "evidence": {
+        "recordSha256": "197f35b46974ef1a7d8e61cb04dfec08a67218744ed2fd4ec0fec0de22e40c02",
+        "checkedAt": "2026-11-09T08:10:20.222Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M29",
+          "visualCheckedAt": "2026-11-09T08:14:33.300Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "1000×105×105mm 코스로프의 등록단위 1m 가격. 25m·50m 레인 전체 가격으로 표시하지 않음."
+        }
+      },
+      "classification": {
+        "name": "수영시설기구",
+        "code": "49141698",
+        "detailedCode": "4914169801"
+      },
+      "discoveryFamily": {
+        "key": "kind:수영시설기구",
+        "label": "수영시설기구"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:20.222Z",
+        "lastVerifiedAt": "2026-11-09T08:10:20.222Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "아리스포츠 주식회사",
+      "discoveryTopicId": "F096",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24663762",
+          "prdctSpecNm": "수영시설기구, 아리스포츠, AS-101S , 1000×105×105mm, 코스로프",
+          "prdctClsfcNoNm": "수영시설기구",
+          "prdctUnit": "m",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "26000",
+          "cntrctCorpNm": "아리스포츠 주식회사",
+          "prdctMakrNm": "아리스포츠 주식회사",
+          "shopngCntrctNo": "R26TA0216405400",
+          "shopngCntrctSno": "27",
+          "cntrctBgnDate": "2026-09-01",
+          "cntrctEndDate": "2029-08-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2022/07/19/ab52750b-33c1-4469-91f8-4263a95d6be1.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:20.222Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P10056914",
+      "title": "수영장 입수사다리",
+      "category": "수영장·체육",
+      "prompt": "이 수영장 입수사다리의 등록 계약단가는 얼마일까요? (1조)",
+      "specification": "수영시설기구, 범우티앤씨, ACT-HR-1, 핸드레일, 입수사다리",
+      "quantity": "1조",
+      "unit": "조",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 373500,
+      "scope": "사진의 수영장 입수사다리, 등록단위 1조. 핸드레일 금구만의 상품과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주)범우티앤씨",
+      "productId": "10056914",
+      "contractNumber": "R26TA0195322400",
+      "contractLine": "10",
+      "contractStart": "2026-06-12",
+      "contractEnd": "2029-06-10",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "10056914"
+      },
+      "checkedAt": "2026-11-09T08:10:19.720Z",
+      "triviaId": null,
+      "revealNote": "사진의 수영장 입수사다리, 등록단위 1조. 핸드레일 금구만의 상품과 구분. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P10056914-4a44c01f8b71.jpg",
+        "alt": "수영장 입수사다리 — 수영시설기구, 범우티앤씨, ACT-HR-1, 핸드레일, 입수사다리",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2005/02/핸드레일(입수사다리)_이미지(1).jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.300Z",
+        "sha256": "4a44c01f8b71a0609c122543405efbaa08737ed23f29777f6a62eee760c6d052"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "수영장에 내려갈 때 잡는 스테인리스 사다리는 얼마일까?",
+      "sourceChangedAt": "2026-06-12 10:14:53",
+      "evidence": {
+        "recordSha256": "f89ca51ef64ca13b732a6afe0adc578d9092491c86db8fb2bb50268301d1e5b1",
+        "checkedAt": "2026-11-09T08:10:19.720Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M30",
+          "visualCheckedAt": "2026-11-09T08:14:33.300Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "사진의 수영장 입수사다리, 등록단위 1조. 핸드레일 금구만의 상품과 구분."
+        }
+      },
+      "classification": {
+        "name": "수영시설기구",
+        "code": "49141698",
+        "detailedCode": "4914169801"
+      },
+      "discoveryFamily": {
+        "key": "kind:수영시설기구",
+        "label": "수영시설기구"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:19.720Z",
+        "lastVerifiedAt": "2026-11-09T08:10:19.720Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)범우티앤씨",
+      "discoveryTopicId": "F278",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "10056914",
+          "prdctSpecNm": "수영시설기구, 범우티앤씨, ACT-HR-1, 핸드레일, 입수사다리",
+          "prdctClsfcNoNm": "수영시설기구",
+          "prdctUnit": "조",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "373500",
+          "cntrctCorpNm": "(주)범우티앤씨",
+          "prdctMakrNm": "(주)범우티앤씨",
+          "shopngCntrctNo": "R26TA0195322400",
+          "shopngCntrctSno": "10",
+          "cntrctBgnDate": "2026-06-12",
+          "cntrctEndDate": "2029-06-10",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2005/02/핸드레일(입수사다리)_이미지(1).jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:19.720Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P24406361",
+      "title": "운동장 철봉 3칸",
+      "category": "수영장·체육",
+      "prompt": "이 운동장 철봉 3칸의 등록 계약단가는 얼마일까요? (1대 (3단 3칸))",
+      "specification": "철봉, 명선조경체육산업, MS-C0017-2, 3단3칸, 1200×1400~2000mm",
+      "quantity": "1대 (3단 3칸)",
+      "unit": "대",
+      "delivery": "현장설치도",
+      "vat": "부가가치세포함",
+      "answer": 1900000,
+      "scope": "높이가 다른 3단 3칸 철봉 완제품 1대, 1200×1400~2000mm. 철봉 막대 하나의 가격이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 명선조경체육산업",
+      "productId": "24406361",
+      "contractNumber": "R26TA0206725200",
+      "contractLine": "5",
+      "contractStart": "2026-08-01",
+      "contractEnd": "2029-07-31",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "24406361"
+      },
+      "checkedAt": "2026-11-09T08:10:20.290Z",
+      "triviaId": null,
+      "revealNote": "높이가 다른 3단 3칸 철봉 완제품 1대, 1200×1400~2000mm. 철봉 막대 하나의 가격이 아님. 현장설치도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P24406361-04db3614b8db.jpg",
+        "alt": "운동장 철봉 3칸 — 철봉, 명선조경체육산업, MS-C0017-2, 3단3칸, 1200×1400~2000mm",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/11/04/c0691a2c-74a6-4589-a171-05881de3c363.jpg",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.300Z",
+        "sha256": "04db3614b8db7805ed8ee3722dd7cbde393c3257d1b3b2f3d7ccea3e04593d80"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "학교 운동장의 높이가 다른 철봉 세 칸은 얼마일까?",
+      "sourceChangedAt": "2026-08-01 00:32:04",
+      "evidence": {
+        "recordSha256": "44e6d8e643875a6a13f2e31d76b76f80b90ef0b1f79221e016d7037b42e72858",
+        "checkedAt": "2026-11-09T08:10:20.290Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M31",
+          "visualCheckedAt": "2026-11-09T08:14:33.300Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "높이가 다른 3단 3칸 철봉 완제품 1대, 1200×1400~2000mm. 철봉 막대 하나의 가격이 아님."
+        }
+      },
+      "classification": {
+        "name": "체조용바또는빔",
+        "code": "49171501",
+        "detailedCode": "4917150101"
+      },
+      "discoveryFamily": {
+        "key": "kind:철봉",
+        "label": "철봉"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:20.290Z",
+        "lastVerifiedAt": "2026-11-09T08:10:20.290Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 명선조경체육산업",
+      "discoveryTopicId": "F279",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "24406361",
+          "prdctSpecNm": "철봉, 명선조경체육산업, MS-C0017-2, 3단3칸, 1200×1400~2000mm",
+          "prdctClsfcNoNm": "체조용바또는빔",
+          "prdctUnit": "대",
+          "prdctDlvryCndtnNm": "현장설치도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "1900000",
+          "cntrctCorpNm": "주식회사 명선조경체육산업",
+          "prdctMakrNm": "주식회사 명선조경체육산업",
+          "shopngCntrctNo": "R26TA0206725200",
+          "shopngCntrctSno": "5",
+          "cntrctBgnDate": "2026-08-01",
+          "cntrctEndDate": "2029-07-31",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2021/11/04/c0691a2c-74a6-4589-a171-05881de3c363.jpg"
+        },
+        "checkedAt": "2026-11-09T08:10:20.290Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P26059644",
+      "title": "구조대원 안전헬멧",
+      "category": "구조·소방",
+      "prompt": "이 구조대원 안전헬멧의 등록 계약단가는 얼마일까요? (1개)",
+      "specification": "헬멧, 한컴라이프케어, SCA1205XR-2, 구조용",
+      "quantity": "1개",
+      "unit": "개",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 285000,
+      "scope": "구조용 안전헬멧 1개. 방탄모나 일반 작업용 안전모로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "주식회사 한컴라이프케어",
+      "productId": "26059644",
+      "contractNumber": "R25TA0092852501",
+      "contractLine": "2",
+      "contractStart": "2025-09-23",
+      "contractEnd": "2028-09-22",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "26059644"
+      },
+      "checkedAt": "2026-11-09T08:10:23.163Z",
+      "triviaId": null,
+      "revealNote": "구조용 안전헬멧 1개. 방탄모나 일반 작업용 안전모로 표시하지 않음. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P26059644-0b5f1aed734d.png",
+        "alt": "구조대원 안전헬멧 — 헬멧, 한컴라이프케어, SCA1205XR-2, 구조용",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2025/12/01/74c03ade-f006-4ffd-8d28-3e6009691f8e.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.301Z",
+        "sha256": "0b5f1aed734d55a20f122448137a10909729237607bbaee1766cbe307fe4d56c"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "구조대원이 쓰는 안전헬멧 하나는 얼마일까?",
+      "sourceChangedAt": "2026-03-10 02:30:12",
+      "evidence": {
+        "recordSha256": "54501f45f57846278d6d7cc9c76c547fb611b90d0f327e4241c91af1bc99d301",
+        "checkedAt": "2026-11-09T08:10:23.163Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M32",
+          "visualCheckedAt": "2026-11-09T08:14:33.301Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "구조용 안전헬멧 1개. 방탄모나 일반 작업용 안전모로 표시하지 않음."
+        }
+      },
+      "classification": {
+        "name": "안전헬멧",
+        "code": "46181704",
+        "detailedCode": "4618170401"
+      },
+      "discoveryFamily": {
+        "key": "kind:헬멧",
+        "label": "헬멧"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:23.163Z",
+        "lastVerifiedAt": "2026-11-09T08:10:23.163Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "주식회사 한컴라이프케어",
+      "discoveryTopicId": "F280",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "26059644",
+          "prdctSpecNm": "헬멧, 한컴라이프케어, SCA1205XR-2, 구조용",
+          "prdctClsfcNoNm": "안전헬멧",
+          "prdctUnit": "개",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "285000",
+          "cntrctCorpNm": "주식회사 한컴라이프케어",
+          "prdctMakrNm": "주식회사 한컴라이프케어",
+          "shopngCntrctNo": "R25TA0092852501",
+          "shopngCntrctSno": "2",
+          "cntrctBgnDate": "2025-09-23",
+          "cntrctEndDate": "2028-09-22",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2025/12/01/74c03ade-f006-4ffd-8d28-3e6009691f8e.png"
+        },
+        "checkedAt": "2026-11-09T08:10:23.163Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    },
+    {
+      "id": "P23904362",
+      "title": "소방대원 방화장갑",
+      "category": "구조·소방",
+      "prompt": "이 소방대원 방화장갑의 등록 계약단가는 얼마일까요? (1켤레)",
+      "specification": "방호용장갑, 써미트코아퍼레이션, QU-27PBI, 방화장갑",
+      "quantity": "1켤레",
+      "unit": "켤레",
+      "delivery": "납품장소 하차도",
+      "vat": "부가가치세포함",
+      "answer": 204000,
+      "scope": "소방용 방화장갑 1켤레. 기존 전투장갑·작업장갑과 용도가 다름. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "supplier": "(주)써미트코아퍼레이션",
+      "productId": "23904362",
+      "contractNumber": "0024D113804",
+      "contractLine": "3",
+      "contractStart": "2024-12-19",
+      "contractEnd": "2027-12-18",
+      "endpoint": "getMASCntrctPrdctInfoList",
+      "sourceUrl": "https://apis.data.go.kr/1230000/at/ShoppingMallPrdctInfoService/getMASCntrctPrdctInfoList",
+      "queryWithoutSecret": {
+        "type": "json",
+        "pageNo": "1",
+        "numOfRows": "100",
+        "prdctIdntNo": "23904362"
+      },
+      "checkedAt": "2026-11-09T08:10:22.529Z",
+      "triviaId": null,
+      "revealNote": "소방용 방화장갑 1켤레. 기존 전투장갑·작업장갑과 용도가 다름. 납품장소 하차도, 부가가치세포함 기준 등록 계약단가.",
+      "image": {
+        "src": "./assets/products/P23904362-1eab0a0cc0be.png",
+        "alt": "소방대원 방화장갑 — 방호용장갑, 써미트코아퍼레이션, QU-27PBI, 방화장갑",
+        "sourceUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2024/10/02/4d5e341b-0694-4e57-b083-252443480974.png",
+        "sourceLabel": "나라장터 등록 상품 이미지",
+        "kind": "catalog-image",
+        "retrievedAt": "2026-11-09T08:14:33.301Z",
+        "sha256": "1eab0a0cc0be7b42c23ab93723a386f2889b3174ea418b19ce5df49debb8ae83"
+      },
+      "eligible": true,
+      "eligibilityReason": "공식 API에서 계약단가와 현재 유효한 계약 행 확인",
+      "interestReason": "뜨거운 현장에서 끼는 소방대원 장갑은 얼마일까?",
+      "sourceChangedAt": "2026-04-28 16:09:06",
+      "evidence": {
+        "recordSha256": "6d6e5cd8b97c6b42e9a470a82cc63ea0d4010143794b04ba2bd8cd8479e261e9",
+        "checkedAt": "2026-11-09T08:10:22.529Z",
+        "manualCuration": {
+          "batchId": "manual-30-20261109",
+          "kindKey": "M33",
+          "visualCheckedAt": "2026-11-09T08:14:33.301Z",
+          "priceCheck": "product-id-and-same-contract",
+          "scopeNote": "소방용 방화장갑 1켤레. 기존 전투장갑·작업장갑과 용도가 다름."
+        }
+      },
+      "classification": {
+        "name": "호신용장갑",
+        "code": "46181504",
+        "detailedCode": "4618150401"
+      },
+      "discoveryFamily": {
+        "key": "kind:방호용장갑",
+        "label": "방호용장갑"
+      },
+      "discoveryScore": 100,
+      "freshness": {
+        "status": "verified",
+        "lastAttemptAt": "2026-11-09T08:10:22.529Z",
+        "lastVerifiedAt": "2026-11-09T08:10:22.529Z",
+        "message": "현재 계약 행 확인 완료"
+      },
+      "lastChanges": [],
+      "manufacturer": "(주)써미트코아퍼레이션",
+      "discoveryTopicId": "F281",
+      "discoverySource": "manual-reviewed-official-contract",
+      "comparisonBaseline": {
+        "row": {
+          "prdctIdntNo": "23904362",
+          "prdctSpecNm": "방호용장갑, 써미트코아퍼레이션, QU-27PBI, 방화장갑",
+          "prdctClsfcNoNm": "호신용장갑",
+          "prdctUnit": "켤레",
+          "prdctDlvryCndtnNm": "납품장소 하차도",
+          "vatAplDivNm": "부가가치세포함",
+          "cntrctPrceAmt": "204000",
+          "cntrctCorpNm": "(주)써미트코아퍼레이션",
+          "prdctMakrNm": "(주)써미트코아퍼레이션",
+          "shopngCntrctNo": "0024D113804",
+          "shopngCntrctSno": "3",
+          "cntrctBgnDate": "2024-12-19",
+          "cntrctEndDate": "2027-12-18",
+          "prdctImgUrl": "https://shop.g2b.go.kr/static/CataAttach/XezCatalog/XZMOK/item_image/2024/10/02/4d5e341b-0694-4e57-b083-252443480974.png"
+        },
+        "checkedAt": "2026-11-09T08:10:22.529Z",
+        "operation": "getMASCntrctPrdctInfoList"
+      }
+    }
+  ]
+}
