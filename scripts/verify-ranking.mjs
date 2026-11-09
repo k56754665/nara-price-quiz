@@ -1,11 +1,12 @@
 // Read-only deployment gate. Does not submit a score or change the live DB.
-import { readJSON, projectRoot, answerFingerprint } from './curation.mjs';
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { LEADERBOARD_CONFIG } from '../dist/leaderboard-config.js';
 import { isConfigured } from '../dist/leaderboard.js';
-import path from 'node:path';
-import { kstDate } from './procurement-api.mjs';
-const bank = await readJSON(path.join(projectRoot, 'dist/data.json'));
-if(bank.questions.some(q=>!Number.isFinite(Date.parse(q.checkedAt)) || Date.now()-Date.parse(q.checkedAt)>86400000 || q.contractEnd<kstDate()))throw Error('24시간 이내에 확인하지 않은 품목이 있습니다. 선별실에서 검증 후 게임에 반영을 먼저 실행해 주세요.');
+const bank = JSON.parse(await readFile(new URL('../dist/data.json', import.meta.url), 'utf8'));
+const answerFingerprint = bank => createHash('md5').update([...bank.questions].sort((a,b)=>a.id.localeCompare(b.id)).map(q=>`${q.id}:${q.answer}`).join(',')).digest('hex');
+const today = new Intl.DateTimeFormat('en-CA', { timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit' }).format(new Date());
+if(bank.questions.some(q=>!Number.isFinite(Date.parse(q.checkedAt)) || Date.now()-Date.parse(q.checkedAt)>86400000 || q.contractEnd<today))throw Error('24시간 이내에 확인하지 않은 품목이 있습니다. 문제은행의 원본 계약 정보를 확인한 뒤 배포해 주세요.');
 if (!isConfigured(LEADERBOARD_CONFIG)) {
   console.log('Ranking is disabled; no live DB check required.');
 } else {

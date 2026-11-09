@@ -1,6 +1,18 @@
 node_modules/
 .env*
-!.env.example
 .artifacts/
 outputs/
 *.log
+
+# This PC's product research and curation workbench stays local.
+/content/
+/docs/
+/tools/
+/scripts/*.mjs
+!/scripts/stamp-version.mjs
+!/scripts/verify-ranking.mjs
+/tests/comparison.test.mjs
+/tests/curation.test.mjs
+/tests/familiar.test.mjs
+/tests/review-flow.test.mjs
+/tests/source.test.mjs
