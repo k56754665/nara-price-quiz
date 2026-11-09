@@ -25,6 +25,8 @@ test('정답 ±10% 안이면 성공이고 경계값도 포함', () => {
   assert.equal(isCorrect(110001, 100000), false);
   assert.equal(isCorrect(null, 100000), false);
   assert.equal(relativeError(850000, 425000), 100);
+  assert.equal(relativeError(null, 425000), null);
+  assert.equal(relativeError(425000, 0), null);
 });
 
 test('점수는 몇 번째에 맞혔는지로만 정하고, 3번 모두 틀리면 0점', () => {
@@ -38,6 +40,8 @@ test('점수는 몇 번째에 맞혔는지로만 정하고, 3번 모두 틀리�
   assert.equal(judge(500).tag, '아슬아슬 정답');
   assert.equal(judge(0).tag, '아쉽게 놓쳤어요');
   assert.equal(scoreBlocks([{ attempts: [1], score: 1000 }, { attempts: [1, 2, 3], score: 500 }, { attempts: [1, 2, 3], score: 0 }]), '🟩🟨🟥');
+  assert.equal(scoreBlocks([]), '');
+  assert.equal(scoreBlocks(null), '');
 });
 
 test('힌트는 오답에만 UP/DOWN과 거리를 주고, 숫자 정답·오차율을 노출하지 않음', () => {
