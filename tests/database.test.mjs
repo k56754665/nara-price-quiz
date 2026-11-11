@@ -7,6 +7,7 @@ import { createSession, scoreRound, rankingSet } from '../dist/engine.js';
 import { buildSubmission } from '../dist/leaderboard.js';
 const read = async file => JSON.parse(await readFile(new URL(file, import.meta.url), 'utf8'));
 const bank = await read('../dist/data.json');
+const triviaPool = await read('../dist/trivia.json');
 const legacy = await read('../dist/legacy-data.json');
 const original = await readFile(new URL('../supabase/leaderboard.sql', import.meta.url), 'utf8');
 const release = await readFile(new URL('../supabase/curated-release.sql', import.meta.url), 'utf8');
@@ -74,7 +75,7 @@ test('새 규칙(v4): ±10% 안 정답, 3번 추측 회차별 점수, 10문제 �
   await db.exec('create role anon; create role authenticated;');
   await db.exec(original); await db.exec(release); await db.exec(rulesV3); await db.exec(rulesV4); await db.exec(rulesV4);
   const call = async body => (await db.query('select * from public.submit_score_v4($1,$2,$3::uuid,$4,$5::jsonb)', [body.p_question_set,body.p_time_limit,body.p_client_id,body.p_nickname,JSON.stringify(body.p_attempts)])).rows[0];
-  const session = createSession(bank, true, () => 0);
+  const session = createSession(bank, triviaPool, true, () => 0);
   // 1번째·2번째·3번째 성공, 실패를 섞어 봅니다. 9%·10% 경계도 포함합니다.
   const plans = [a=>[a], a=>[1,Math.round(a*1.1)], a=>[1,2,Math.round(a*0.91)], a=>[1,2,3], a=>[a]];
   const rounds = session.questions.map((q,i) => { const attempts = plans[i % plans.length](q.answer); return { candidateId:q.id, attempts, score:scoreRound(attempts,q.answer) }; });

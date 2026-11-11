@@ -1,4 +1,4 @@
-import { MAX_GUESS, ROUND_COUNT, MAX_ATTEMPTS, TOLERANCE_PERCENT, ATTEMPT_SCORES, parseGuess, isCorrect, scoreRound, relativeError, koreanAmount, judge, totalScore, grade, guessHint, rankingSet, createSession, restoreSession } from './engine.js';
+import { MAX_GUESS, ROUND_COUNT, MAX_ATTEMPTS, TOLERANCE_PERCENT, ATTEMPT_SCORES, parseGuess, isCorrect, scoreRound, relativeError, koreanAmount, judge, totalScore, grade, guessHint, rankingSet, createSession, restoreSession, isValidTriviaPool } from './engine.js';
 import { LEADERBOARD_CONFIG } from './leaderboard-config.js';
 import { buildShareText, loadKakao, shareKakao, shareSystem } from './share.js';
 import { NICKNAME_MAX, isConfigured, normalizeNickname, buildSubmission, submitScore, fetchLeaderboard } from './leaderboard.js';
@@ -17,6 +17,7 @@ const write = (key, value) => { try { localStorage.setItem(key, JSON.stringify(v
 const remove = key => { try { localStorage.removeItem(key); } catch {} };
 
 let data;
+let triviaPool;
 let state = null;
 let screen = 'home';
 let soundOn = false;
@@ -169,6 +170,7 @@ function render({ focus = true } = {}) {
   document.body.classList.toggle('question-art', screen !== 'home' && state.phase === 'question');
   document.body.classList.toggle('title-art', screen === 'home');
   document.body.classList.toggle('result-art', screen !== 'home' && state.phase === 'results');
+  document.body.classList.toggle('reveal-art', screen !== 'home' && state.phase === 'reveal');
   if (screen !== 'home' && state.phase === 'question') {
     if (focus && !window.matchMedia('(max-width: 720px)').matches) document.querySelector('#guess')?.focus({ preventScroll: true });
   } else if (focus) document.querySelector('#screen-heading')?.focus({ preventScroll: true });
@@ -177,7 +179,7 @@ function render({ focus = true } = {}) {
 }
 
 function home() {
-  const hasResume = state && state.phase !== 'results';
+  const hasResume = Boolean(state);
   const label = (text, tone) => `<span class="art-title-label ${tone}" data-label="${text}" aria-hidden="true">${text}</span>`;
   return `<section class="art-title-screen" aria-label="처음 화면"><div class="art-title-stage">
     <h1 id="screen-heading" class="art-main-title" tabindex="-1"><span>맨날 보던 물건,</span><span>이게 얼마게?</span></h1>
@@ -188,7 +190,7 @@ function home() {
     <button type="button" class="art-title-action art-title-ranking" data-action="ranking" aria-label="온라인 랭킹 보기" ${rankingOn ? '' : 'disabled title="온라인 랭킹 준비 중"'}>${label('랭킹', 'title-orange')}</button>
     <button type="button" class="art-title-action art-title-exit" data-action="exit" aria-label="게임 종료">${label('게임종료', 'title-red')}</button>
     <details class="art-menu art-popover art-title-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="게임 안내">
-      ${hasResume ? `<button type="button" class="art-title-resume" data-action="resume">${state.index + 1}번째 문제부터 이어하기</button>` : ''}
+      ${hasResume ? `<button type="button" class="art-title-resume" data-action="resume">${state.phase === 'results' ? '지난 결과 다시 보기' : `${state.index + 1}번째 문제부터 이어하기`}</button>` : ''}
       <button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button>
       <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>
       <button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
@@ -270,33 +272,47 @@ function formatError(guess, answer) {
   return `정답보다 ${percent}% ${error > 0 ? '높게' : '낮게'}`;
 }
 
-function knowledge(q, compact = false) {
-  const card = (state?.trivia ?? data.trivia).find(t => t.id === q.triviaId);
-  if (!card) return '';
+function knowledge(index, compact = false) {
+  const card = state.triviaRounds[index];
   const source = card.sources[0];
-  const sourceControl = source.url.startsWith('https://apis.data.go.kr/')
-    ? `<button class="fact-source-button" data-action="source" data-id="${q.id}">출처 · ${esc(source.publisher)} 검증 정보 ↗</button>`
-    : `<a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">출처 · ${esc(source.publisher)} ↗</a>`;
-  return `<aside class="inline-knowledge ${compact ? 'compact-knowledge' : ''}" aria-label="${esc(q.title)} 틈새 지식"><div class="knowledge-mark" aria-hidden="true">✦</div><div class="knowledge-copy"><span class="eyebrow">알아두면 쓸모있는 틈새 지식</span><h${compact ? '4' : '2'}>${esc(card.title)}</h${compact ? '4' : '2'}><p class="knowledge-text">${esc(card.text)}</p><div class="knowledge-source"><span>기준 · ${esc(card.period)}</span>${sourceControl}</div></div></aside>`;
+  const sourceControl = `<a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">출처 · ${esc(source.publisher)} ↗</a>`;
+  return `<aside class="inline-knowledge ${compact ? 'compact-knowledge' : ''}" data-trivia-id="${esc(card.id)}" aria-label="${index + 1}라운드 틈새 지식"><div class="knowledge-mark" aria-hidden="true">✦</div><div class="knowledge-copy"><span class="eyebrow">알아두면 쓸모있는 틈새 지식</span><h${compact ? '4' : '2'}>${esc(card.title)}</h${compact ? '4' : '2'}><p class="knowledge-text">${esc(card.text)}</p><div class="knowledge-source"><span>기준 · ${esc(card.period)}</span>${sourceControl}</div></div></aside>`;
 }
 
-// 맞힌 라운드: 실제 가격과 맞힌 추측을 같은 크기로 나란히 보여 주고 오차율을 붙인다.
+// 정답과 마지막 추측을 같은 크기로 보여 주고, 성공 여부에 맞는 오차 문구를 붙인다.
 function priceCompare(q, round) {
   const guess = round.attempts.at(-1);
   // 두 금액 중 긴 쪽 자릿수에 맞춰 글자 크기를 정해 둘이 항상 같은 크기로 한 줄에 들어가게 한다.
   const length = Math.max(number(q.answer).length, number(guess).length) + 1;
   const error = Math.abs(relativeError(guess, q.answer));
-  const label = error < .00001 ? '오차 0% · 정확히 맞혔어요' : `오차 ${error.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}%로 맞혔어요`;
-  const cell = (title, value, cls) => `<div class="compare-cell ${cls}"><span>${title}</span><strong>${money(value)}</strong><small>${koreanAmount(value)}</small></div>`;
-  return `<div class="price-compare" style="--digits:${length}">${cell('실제 가격', q.answer, 'actual')}${cell(`내 추측 · ${round.attempts.length}번째`, guess, 'mine')}</div><p class="error-badge">✓ ${label}</p>`;
+  const matched = round.score > 0;
+  const label = matched ? (error < .00001 ? '오차 0% · 정확히 맞혔어요' : `오차 ${error.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}%로 맞혔어요`) : `마지막 추측은 ${formatError(guess, q.answer)}`;
+  const cell = (title, value, cls) => `<div class="compare-cell ${cls}"><span>${title}</span><strong>${money(value)}</strong></div>`;
+  return `<div class="price-compare" style="--digits:${length}">${cell('정답 · 등록 계약단가', q.answer, 'actual')}${cell(`내 추측 · ${round.attempts.length}번째`, guess, 'mine')}</div><p class="error-badge">${matched ? '✓ ' : ''}${label}</p>`;
 }
 
 function reveal() {
   const q = gameQuestions()[state.index];
   const round = state.rounds[state.index];
   const verdict = judge(round.score);
-  const attempts = round.attempts.map((value, i) => `<div class="guess-result"><div class="attempt-result-label">${i + 1}차 추측${isCorrect(value, q.answer) ? '<small>정답 범위 ✓</small>' : ''}</div><div class="result-guess"><span>${number(value)}원</span><small>${formatError(value, q.answer)}</small></div>${i === round.attempts.length - 1 ? `<strong class="earned-score">+${number(round.score)}<small>점</small></strong>` : ''}</div>`).join('');
-  return `<section class="game-shell">${progress()}<div class="reveal-heading"><span class="reveal-label ${verdict.tone}">✦ ${verdict.tag}</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1></div><div class="reveal-grid"><div>${productFigure(q, true)}<div class="revealed-product"><h2>${esc(q.title)}</h2>${conditions(q)}</div></div><div class="answer-panel"><span class="eyebrow">실제 등록 계약단가 · ${esc(q.quantity)}</span>${round.score > 0 ? priceCompare(q, round) : `<div class="answer-price">${money(q.answer)}</div><p class="answer-korean">${koreanAmount(q.answer)}</p>`}<div class="answer-condition"><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span><span>${esc(referenceDate())} 기준</span></div><div class="guess-results">${attempts}</div><p class="scope-note">${esc(q.revealNote || q.scope)}</p><button class="source-link" data-action="source" data-id="${q.id}">계약 정보와 출처 확인하기 ↗</button></div></div>${knowledge(q)}<div class="reveal-navigation"><button class="button button-blue next-button" data-action="next">${state.index === state.questionCount - 1 ? '최종 결과 확인하기' : '다음 물건 만나러 가기'} <span aria-hidden="true">→</span></button></div></section>`;
+  const matched = round.score > 0;
+  const knowledgeContent = knowledge(state.index);
+  const attempts = round.attempts.map((value, i) => `<div class="guess-result"><div class="attempt-result-label">${i + 1}차 추측${isCorrect(value, q.answer) ? '<small>정답 범위 ✓</small>' : ''}</div><div class="result-guess"><span>${number(value)}원</span><small>${formatError(value, q.answer)}</small></div></div>`).join('');
+  return `<section class="art-reveal-screen" aria-label="라운드 정답 공개"><div class="art-reveal-stage">
+    <img class="art-reveal-nareumi" src="./assets/designer/judge-nareumi.png" alt="" aria-hidden="true" draggable="false"><img class="art-reveal-dali" src="./assets/designer/judge-dali.png" alt="" aria-hidden="true" draggable="false">
+    <div class="art-reveal-board ${matched ? 'is-correct' : 'is-missed'}">
+      <header class="art-reveal-header"><div class="art-reveal-topline">
+        <div class="art-reveal-counter"><span>Round</span><strong>${state.index + 1}<small> / ${state.questionCount}</small></strong></div>
+        <div class="art-reveal-total"><span>현재 스코어</span><strong>${number(totalScore(state.rounds))}<small>점</small></strong></div>
+        <details class="art-reveal-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="정답 화면 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button><button type="button" data-action="source" data-id="${q.id}">계약 정보·출처</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button></nav></details>
+      </div><div class="art-reveal-outcome"><div><p class="art-reveal-tag">${matched ? verdict.tag : `${MAX_ATTEMPTS}번 모두 틀렸어요`}</p><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1></div><div class="art-reveal-earned"><span>획득 점수</span><strong>${matched ? '+' : ''}${number(round.score)}점</strong></div></div></header>
+      <div class="art-reveal-layout">
+        <section class="art-reveal-card art-reveal-answer" aria-label="정답과 내 추측 비교"><h2>${esc(q.title)}</h2><button type="button" class="art-reveal-photo" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q)}</button><div class="art-reveal-conditions"><span>${esc(q.quantity)}</span><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span></div><div class="art-reveal-prices">${priceCompare(q, round)}</div></section>
+        <aside class="art-reveal-card art-reveal-info" aria-label="나라장터 상식">${knowledgeContent}</aside>
+      </div>
+      <footer class="art-reveal-footer"><section class="art-reveal-history" aria-label="내 추측 기록"><h2>내 추측 기록</h2><div class="guess-results" style="--attempt-count:${round.attempts.length}">${attempts}</div></section><button type="button" class="art-reveal-next" data-action="next">${state.index === state.questionCount - 1 ? '최종 결과 확인하기' : '다음 물건 만나러 가기'} <span aria-hidden="true">→</span></button></footer>
+    </div>
+  </div></section>`;
 }
 
 function results() {
@@ -325,13 +341,13 @@ function results() {
     </nav></details>
   </div><template id="result-ranking-template">${rankingPanel()}</template><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
     const round = state.rounds[i];
-    return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(q.delivery)}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${number(value)}원</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(q, true)}</article>`;
+    return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(q.delivery)}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${number(value)}원</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(i, true)}</article>`;
   }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(referenceDate())} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></template></section>`;
 }
 
 function startGame() {
   // 매 게임 랭킹에 등록할 수 있습니다. 기기마다 최고 점수만 남습니다.
-  state = createSession(data, rankingOn);
+  state = createSession(data, triviaPool, rankingOn);
   screen = 'game';
   persist();
   render();
@@ -398,7 +414,7 @@ function showPhoto(id) {
 }
 
 function showAbout() {
-  openDialog('가격표의 기준을 알려드려요', `<span class="dialog-badge">${esc(referenceDate())} 조사 스냅샷</span><p>이 게임은 <strong>나라장터쇼핑몰에 실제 등록된 물품</strong>의 계약단가를 맞히는 퀴즈입니다.</p><dl class="info-definitions"><div><dt>어떤 가격인가요?</dt><dd>해당 모델의 계약단위 한 단위에 대한 등록 계약단가입니다. 실제 구매·지급총액을 뜻하지 않습니다. 문제의 규격·수량·인도조건·부가세를 함께 확인해 주세요.</dd></div><div><dt>지금 가격과 같나요?</dt><dd>${esc(referenceDate())}에 확인한 가격입니다. 이후 계약·할인·등록 상태가 달라질 수 있습니다. 물건별 등록 계약단가를 기준으로 출제하며, 할인 정보는 정답 계산에 반영하지 않습니다.</dd></div><div><dt>상품 이미지에 관하여</dt><dd>각 물품식별번호에 연결된 나라장터 공식 상품 이미지를 사용합니다. 원본을 수정하지 않았으며, 그네와 조합놀이대는 공급업체가 등록한 제품 이미지입니다. 이미지 크게 보기에서 출처를 확인할 수 있습니다.</dd></div><div><dt>힌트와 틈새 지식</dt><dd>추측이 정답의 ±${TOLERANCE_PERCENT}% 밖이면 UP/DOWN과 대략적인 차이를 알려드리고, 물건마다 최대 ${MAX_ATTEMPTS}번 추측할 수 있습니다. 틈새 지식은 정답·점수 화면과 최종 결과표에 바로 표시합니다.</dd></div></dl><p class="dialog-small">본 게임은 조달청 공식 서비스가 아닌 공모전 준비용 프로토타입입니다. 기록은 이 브라우저에 저장됩니다.</p><a class="external-link" href="${esc(data.catalogUrl)}" target="_blank" rel="noopener noreferrer">공식 API 안내 확인하기 ↗</a>`);
+  openDialog('가격표의 기준을 알려드려요', `<span class="dialog-badge">${esc(referenceDate())} 조사 스냅샷</span><p>이 게임은 <strong>나라장터쇼핑몰에 실제 등록된 물품</strong>의 계약단가를 맞히는 퀴즈입니다.</p><dl class="info-definitions"><div><dt>어떤 가격인가요?</dt><dd>해당 모델의 계약단위 한 단위에 대한 등록 계약단가입니다. 실제 구매·지급총액을 뜻하지 않습니다. 문제의 규격·수량·인도조건·부가세를 함께 확인해 주세요.</dd></div><div><dt>지금 가격과 같나요?</dt><dd>${esc(referenceDate())}에 확인한 가격입니다. 이후 계약·할인·등록 상태가 달라질 수 있습니다. 물건별 등록 계약단가를 기준으로 출제하며, 할인 정보는 정답 계산에 반영하지 않습니다.</dd></div><div><dt>상품 이미지에 관하여</dt><dd>각 물품식별번호에 연결된 나라장터 공식 상품 이미지를 사용합니다. 원본을 수정하지 않았으며, 그네와 조합놀이대는 공급업체가 등록한 제품 이미지입니다. 이미지 크게 보기에서 출처를 확인할 수 있습니다.</dd></div><div><dt>힌트와 틈새 지식</dt><dd>추측이 정답의 ±${TOLERANCE_PERCENT}% 밖이면 UP/DOWN과 대략적인 차이를 알려드리고, 물건마다 최대 ${MAX_ATTEMPTS}번 추측할 수 있습니다. 틈새 지식은 물건과 별도로 매 게임 10개를 중복 없이 배정하며, 정답·점수 화면과 최종 결과표에 표시합니다. 이어하기에도 같은 지식이 유지됩니다.</dd></div></dl><p class="dialog-small">본 게임은 조달청 공식 서비스가 아닌 공모전 준비용 프로토타입입니다. 기록은 이 브라우저에 저장됩니다.</p><a class="external-link" href="${esc(data.catalogUrl)}" target="_blank" rel="noopener noreferrer">공식 API 안내 확인하기 ↗</a>`);
 }
 
 function showRules() {
@@ -423,7 +439,7 @@ async function copyResults() {
 }
 
 function downloadResults() {
-  const payload = { game: data.title, price_reference_date: referenceDate(), question_set: state.questionSet, played_at: new Date().toISOString(), question_count: state.questionCount, total_score: totalScore(state.rounds), rounds: gameQuestions().map((q, i) => ({ round: i + 1, title: q.title, product_id: q.productId, registered_contract_unit_price_krw: q.answer, quantity: q.quantity, delivery: q.delivery, attempts_krw: state.rounds[i].attempts, score: state.rounds[i].score, trivia: state.trivia.find(t => t.id === q.triviaId) ?? null })) };
+  const payload = { game: data.title, price_reference_date: referenceDate(), question_set: state.questionSet, played_at: new Date().toISOString(), question_count: state.questionCount, total_score: totalScore(state.rounds), rounds: gameQuestions().map((q, i) => ({ round: i + 1, title: q.title, product_id: q.productId, registered_contract_unit_price_krw: q.answer, quantity: q.quantity, delivery: q.delivery, attempts_krw: state.rounds[i].attempts, score: state.rounds[i].score, trivia: state.triviaRounds[i] })) };
   const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' }));
   const a = document.createElement('a');
   a.href = url; a.download = '이게얼마게_플레이결과.json'; a.click();
@@ -494,16 +510,17 @@ document.addEventListener('click', async event => {
 dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
 
 try {
-  const response = await fetch('./data.json');
-  if (!response.ok) throw new Error('data unavailable');
-  data = await response.json();
-  if (!Array.isArray(data.questions) || data.questions.length < ROUND_COUNT || !Array.isArray(data.trivia) || data.questions.some(q => !q.image?.src)) throw new Error('invalid game data');
+  const responses = await Promise.all([fetch('./data.json'), fetch('./trivia.json')]);
+  if (responses.some(response => !response.ok)) throw new Error('data unavailable');
+  [data, triviaPool] = await Promise.all(responses.map(response => response.json()));
+  if (!Array.isArray(data.questions) || data.questions.length < ROUND_COUNT || data.questions.some(q => !q.image?.src) || !isValidTriviaPool(triviaPool)) throw new Error('invalid game data');
   // 예전 규칙(두 번 추측)으로 하던 게임 기록은 지웁니다.
   remove('nara-price-session-v2');
-  state = restoreSession(read(storageKeys.session, null));
+  state = restoreSession(read(storageKeys.session, null), triviaPool);
+  if (state) persist();
   if (!state) remove(storageKeys.session);
   render({ focus: false });
 } catch {
-  app.innerHTML = `<main class="loading"><span class="brand-mark">₩?</span><h1>가격표를 불러오지 못했어요.</h1><p>인터넷 연결을 확인한 뒤 다시 열어 주세요.</p><button class="button button-blue" id="reload-button">다시 불러오기</button></main>`;
+  app.innerHTML = `<main class="loading"><span class="brand-mark">₩?</span><h1>게임 정보를 불러오지 못했어요.</h1><p>인터넷 연결을 확인한 뒤 다시 열어 주세요.</p><button class="button button-blue" id="reload-button">다시 불러오기</button></main>`;
   document.querySelector('#reload-button').addEventListener('click', () => location.reload());
 }

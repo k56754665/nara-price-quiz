@@ -6,6 +6,7 @@ import { ROUND_COUNT, sampleQuestions, createSession, restoreSession } from '../
 
 const readJSON = async file => JSON.parse(await readFile(new URL(file, import.meta.url), 'utf8'));
 const bank = await readJSON('../dist/data.json');
+const triviaPool = await readJSON('../dist/trivia.json');
 const legacy = await readJSON('../dist/legacy-data.json');
 
 test('배포 문제은행과 SQL 정답표·이미지 출처 목록이 같은 버전과 항목을 사용', async () => {
@@ -40,7 +41,7 @@ test('전체 문제은행에서 10문제를 무작위로 중복 없이 출제하
   assert.equal(first.length,ROUND_COUNT);
   assert.equal(new Set(first.map(q=>q.id)).size,ROUND_COUNT);
   assert.notDeepEqual(first.map(q=>q.id),second.map(q=>q.id));
-  const session = createSession(bank,true,()=>0);
+  const session = createSession(bank,triviaPool,true,()=>0);
   assert.deepEqual(restoreSession(structuredClone(session)),session);
   assert.deepEqual(bank.questions,original);
 });

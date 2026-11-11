@@ -88,25 +88,56 @@ export function sampleQuestions(questions, count = ROUND_COUNT, random = Math.ra
 // 랭킹은 문제은행 버전 + 규칙 버전마다 따로 집계합니다(예전 규칙 기록과 섞이지 않게).
 export const rankingSet = bankVersion => `${bankVersion}:r${RULES_VERSION}`;
 
-export function createSession(bank, rankEligible = false, random = Math.random) {
-  const questions = structuredClone(sampleQuestions(bank.questions, ROUND_COUNT, random));
-  return { version: 5, phase: 'question', index: 0, attempts: [], rounds: [], draft: '', questionCount: ROUND_COUNT, rankEligible,
-    questionSet: bank.bankVersion, rankingSet: rankingSet(bank.bankVersion), rulesVersion: RULES_VERSION, referenceDate: bank.referenceDate,
-    questionIds: questions.map(q => q.id), questions, trivia: structuredClone(bank.trivia) };
+const nonempty = value => typeof value === 'string' && value.trim().length > 0;
+const httpsUrl = value => {
+  try { return new URL(value).protocol === 'https:'; } catch { return false; }
+};
+
+function validTriviaCards(cards) {
+  return Array.isArray(cards) && cards.every(card => card && nonempty(card.id) && nonempty(card.title)
+    && nonempty(card.text) && nonempty(card.period) && Array.isArray(card.sources) && card.sources.length > 0
+    && card.sources.every(source => source && nonempty(source.title) && nonempty(source.publisher) && httpsUrl(source.url)))
+    && new Set(cards.map(card => card.id)).size === cards.length
+    && new Set(cards.map(card => card.text.trim().replace(/\s+/g, ' '))).size === cards.length;
 }
 
-// 예전 규칙(두 번 추측)으로 하던 게임은 새 규칙으로 이어갈 수 없어 버립니다.
-export function restoreSession(saved) {
-  return saved?.version === 5 && isValidSession(saved, saved.questions) ? saved : null;
+// 지식 풀은 정답표·랭킹 버전과 별도로 관리합니다.
+export function isValidTriviaPool(pool) {
+  return pool?.schemaVersion === 1 && nonempty(pool.version) && validTriviaCards(pool.cards) && pool.cards.length >= ROUND_COUNT;
+}
+
+function assignTrivia(pool, random) {
+  if (!isValidTriviaPool(pool)) throw Error('invalid trivia pool');
+  return { triviaVersion: pool.version, triviaRounds: structuredClone(sampleQuestions(pool.cards, ROUND_COUNT, random)) };
+}
+
+export function createSession(bank, triviaPool, rankEligible = false, random = Math.random) {
+  const questions = structuredClone(sampleQuestions(bank.questions, ROUND_COUNT, random));
+  return { version: 6, phase: 'question', index: 0, attempts: [], rounds: [], draft: '', questionCount: ROUND_COUNT, rankEligible,
+    questionSet: bank.bankVersion, rankingSet: rankingSet(bank.bankVersion), rulesVersion: RULES_VERSION, referenceDate: bank.referenceDate,
+    questionIds: questions.map(q => q.id), questions, ...assignTrivia(triviaPool, random) };
+}
+
+// v5는 추측·점수·출제 순서를 보존하고 지식만 한 번 배정합니다. v6는 재추첨하지 않습니다.
+export function restoreSession(saved, triviaPool, random = Math.random) {
+  if (saved?.version === 6) return isValidSession(saved, saved.questions) ? saved : null;
+  if (saved?.version !== 5 || !Array.isArray(saved.trivia) || !isValidProgress(saved, saved.questions)) return null;
+  const { trivia, ...previous } = saved;
+  return { ...previous, version: 6, ...assignTrivia(triviaPool, random) };
 }
 
 // questions는 이 게임에 저장된 출제 순서이며, 현재 문제은행이 아닙니다.
 export function isValidSession(value, questions) {
-  if (!value || value.version !== 5 || value.rulesVersion !== RULES_VERSION || !["question", "reveal", "results"].includes(value.phase) || !Array.isArray(questions)) return false;
+  return value?.version === 6 && nonempty(value.triviaVersion) && validTriviaCards(value.triviaRounds)
+    && value.triviaRounds.length === ROUND_COUNT && isValidProgress(value, questions);
+}
+
+function isValidProgress(value, questions) {
+  if (!value || value.rulesVersion !== RULES_VERSION || !["question", "reveal", "results"].includes(value.phase) || !Array.isArray(questions)) return false;
   if (typeof value.questionSet !== 'string' || !value.questionSet || value.rankingSet !== rankingSet(value.questionSet) || typeof value.referenceDate !== 'string') return false;
   if (value.questionCount !== ROUND_COUNT || questions.length !== ROUND_COUNT) return false;
   if (!Array.isArray(value.questionIds) || value.questionIds.length !== questions.length || new Set(value.questionIds).size !== questions.length) return false;
-  if (!Array.isArray(value.trivia) || questions.some((q, i) => !q || q.id !== value.questionIds[i] || !Number.isSafeInteger(q.answer) || q.answer <= 0 || !q.image?.src || typeof q.title !== 'string' || typeof q.specification !== 'string')) return false;
+  if (questions.some((q, i) => !q || q.id !== value.questionIds[i] || !Number.isSafeInteger(q.answer) || q.answer <= 0 || !q.image?.src || typeof q.title !== 'string' || typeof q.specification !== 'string')) return false;
   if (!Number.isInteger(value.index) || value.index < 0 || value.index >= questions.length) return false;
   if (!Array.isArray(value.rounds) || value.rounds.length > questions.length) return false;
   const validGuess = x => Number.isSafeInteger(x) && x > 0 && x <= MAX_GUESS;

@@ -8,7 +8,8 @@ import { scoreBlocks } from '../dist/share.js';
 // 예전 10개 세트(데이터 보존 검사용)와 현재 문제은행
 const data = JSON.parse(await readFile(new URL('../dist/legacy-data.json', import.meta.url), 'utf8'));
 const bank = JSON.parse(await readFile(new URL('../dist/data.json', import.meta.url), 'utf8'));
-const fresh = () => createSession(bank, true, () => 0);
+const triviaPool = JSON.parse(await readFile(new URL('../dist/trivia.json', import.meta.url), 'utf8'));
+const fresh = () => createSession(bank, triviaPool, true, () => 0);
 
 test('가격 입력은 쉼표·공백을 처리하고 0원·음수·문자·범위 밖 금액을 거부', () => {
   assert.equal(parseGuess(' 425,000 '), 425000);
@@ -64,7 +65,7 @@ test('매 게임 문제은행에서 10문제를 중복 없이 뽑고 저장·복
   assert.equal(new Set(session.questionIds).size, ROUND_COUNT);
   assert.equal(session.rankingSet, rankingSet(bank.bankVersion));
   assert.deepEqual(restoreSession(structuredClone(session)), session);
-  assert.notDeepEqual(createSession(bank, true, () => .999).questionIds, session.questionIds);
+  assert.notDeepEqual(createSession(bank, triviaPool, true, () => .999).questionIds, session.questionIds);
 });
 
 test('오답이면 기회가 남은 동안 같은 문제를 이어가고, 정답이 섞인 진행 기록은 거부', () => {
