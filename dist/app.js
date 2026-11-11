@@ -99,32 +99,46 @@ function clientId() {
 }
 
 function rankingRows(rows, mine = null) {
-  if (!rows.length) return '<li class="ranking-empty">아직 등록된 기록이 없어요. 첫 번째 주인공이 되어 보세요!</li>';
-  return rows.map(r => `<li class="${mine && r.nickname === mine.nickname && r.totalScore === mine.totalScore ? 'mine' : ''}"><span class="ranking-rank">${r.rank}</span><span class="ranking-name">${esc(r.nickname)}</span><span class="ranking-perfect">정답 ${r.perfectCount}개</span><strong>${number(r.totalScore)}<small>점</small></strong></li>`).join('');
+  if (!rows.length) return '<li class="art-ranking-message"><strong>첫 번째 가격 고수를 기다려요!</strong><span>게임을 마치고 나만의 기록을 남겨 보세요.</span></li>';
+  return rows.map(r => {
+    const isMine = mine && r.nickname === mine.nickname && r.totalScore === mine.totalScore;
+    return `<li class="art-ranking-row${isMine ? ' is-mine' : ''}"><span class="art-ranking-place${r.rank <= 3 ? ` is-top-${r.rank}` : ''}" aria-label="${r.rank}위">${r.rank}</span><span class="art-ranking-name" title="${esc(r.nickname)}">${esc(r.nickname)}${isMine ? '<small>내 기록</small>' : ''}</span><span class="art-ranking-correct">${r.perfectCount}<small> / ${r.questionCount}</small></span><strong class="art-ranking-score">${number(r.totalScore)}<small>점</small></strong></li>`;
+  }).join('');
 }
 
 async function loadRankingList(selector, mine = null) {
   const list = document.querySelector(selector);
   if (!list) return;
-  list.innerHTML = '<li class="ranking-empty">랭킹을 불러오고 있어요…</li>';
+  list.setAttribute('aria-busy', 'true');
+  list.innerHTML = '<li class="art-ranking-message is-loading"><strong>가격 고수들을 찾고 있어요…</strong><span>잠시만 기다려 주세요.</span></li>';
   try {
     const rows = await fetchLeaderboard(LEADERBOARD_CONFIG, { questionSet: rankingKey(), limit: 20 });
     if (list.isConnected) list.innerHTML = rankingRows(rows, mine);
   } catch (error) {
-    if (list.isConnected) list.innerHTML = `<li class="ranking-empty">${esc(error.message)}</li>`;
+    if (list.isConnected) list.innerHTML = `<li class="art-ranking-message"><strong>기록을 불러오지 못했어요</strong><span>${esc(error.message)}</span><button type="button" class="art-ranking-retry" data-action="retry-ranking">다시 불러오기</button></li>`;
+  } finally {
+    if (list.isConnected) list.setAttribute('aria-busy', 'false');
   }
 }
 
-function rankingPanel() {
+function rankingPanel(registration = false) {
   if (!rankingOn) return '';
   const mine = mySubmission();
   // 기기마다 최고 점수 하나만 남습니다. 게임마다 한 번 등록할 수 있고, 더 높을 때만 기록이 바뀝니다.
-  const best = mine ? `<p class="ranking-status">내 최고 기록 <strong>${number(mine.totalScore)}점</strong> · 등록 당시 <strong>${number(mine.rank)}위</strong>${state.rankSubmitted ? '' : ' · 이번 점수가 더 높으면 바뀌어요'}</p>` : '';
-  let top;
-  if (state.rankSubmitted) top = best;
-  else if (state.rankEligible) top = best + `<form id="ranking-form" class="ranking-form"><label for="ranking-nickname">닉네임</label><input id="ranking-nickname" name="nickname" maxlength="${NICKNAME_MAX}" autocomplete="nickname" placeholder="최대 ${NICKNAME_MAX}자" value="${esc(ranking.nickname)}" required><button type="submit" class="button button-blue">랭킹에 등록하기</button><p id="ranking-error" class="ranking-error" role="alert"></p></form>`;
-  else top = best;
-  return `<section class="ranking-panel" aria-labelledby="ranking-heading"><div class="ranking-heading"><span class="eyebrow">온라인 랭킹 · 10문제 합산</span><h2 id="ranking-heading">다른 사람들은 몇 점일까?</h2></div>${top}<ol id="ranking-list" class="ranking-list"></ol></section>`;
+  const best = mine ? `<div class="art-ranking-best"><span>내 최고 기록<strong>${number(mine.totalScore)}<small>점</small></strong></span><p>등록 당시 ${number(mine.rank)}위${registration && state.rankSubmitted ? '<br>기록 등록 완료!' : '<br>더 높은 점수에 도전해 보세요!'}</p></div>` : '';
+  const form = registration && state.rankEligible && !state.rankSubmitted ? `<form id="ranking-form" class="art-ranking-form"><label for="ranking-nickname">이번 기록 <strong>${number(totalScore(state.rounds))}점</strong><span>닉네임을 정하고 기록을 남겨 보세요.</span></label><div class="art-ranking-entry"><input id="ranking-nickname" name="nickname" maxlength="${NICKNAME_MAX}" autocomplete="nickname" placeholder="닉네임 · 최대 ${NICKNAME_MAX}자" aria-describedby="ranking-error" value="${esc(ranking.nickname)}" required><button type="submit" class="art-ranking-submit">랭킹에 등록하기</button></div><p id="ranking-error" class="art-ranking-error" role="alert"></p></form>` : '';
+  return `<section class="art-ranking-screen"><div class="art-ranking-stage">
+    <img class="art-ranking-mascot art-ranking-bird" src="./assets/designer/result-bird.png" alt="" aria-hidden="true" draggable="false">
+    <img class="art-ranking-mascot art-ranking-squirrel" src="./assets/designer/result-backpack.png" alt="" aria-hidden="true" draggable="false">
+    <div class="art-ranking-panel">
+      <header class="art-ranking-header"><div><p>나라장터 가격 퀴즈</p><h2 id="dialog-title">온라인 랭킹</h2></div><button type="button" class="art-ranking-close" data-action="close-dialog" aria-label="랭킹 닫기" autofocus>×</button></header>
+      <p class="art-ranking-intro">오늘의 가격 고수 <strong>TOP 20</strong></p>
+      ${best}${form}
+      <div class="art-ranking-columns" aria-hidden="true"><span>순위</span><span>닉네임</span><span>정답</span><span>점수</span></div>
+      <ol id="ranking-list" class="art-ranking-list" aria-label="온라인 랭킹 상위 20명" aria-live="polite" tabindex="0"></ol>
+      <footer class="art-ranking-footer"><button type="button" class="art-ranking-return" data-action="close-dialog">${screen === 'home' ? '처음 화면으로' : '게임으로 돌아가기'} <span aria-hidden="true">→</span></button></footer>
+    </div>
+  </div></section>`;
 }
 
 async function submitRanking() {
@@ -147,9 +161,10 @@ async function submitRanking() {
     state.rankSubmitted = true;
     saveRanking(); persist();
     render({ focus: false });
+    showRanking(true);
     notify(kept ? `최고 기록 ${number(result.totalScore)}점(${number(result.rank)}위)이 그대로 유지돼요.` : previous ? `최고 기록 갱신! ${number(result.rank)}위예요.` : `${number(result.rank)}위로 등록했어요!`);
   } catch (e) {
-    if (e.code === 'already_submitted') { state.rankSubmitted = true; persist(); render({ focus: false }); notify(e.message); return; }
+    if (e.code === 'already_submitted') { state.rankSubmitted = true; persist(); render({ focus: false }); showRanking(true); notify(e.message); return; }
     if (button?.isConnected) { button.disabled = false; button.textContent = '랭킹에 등록하기'; }
     if (error?.isConnected) error.textContent = e.message;
   } finally {
@@ -157,9 +172,11 @@ async function submitRanking() {
   }
 }
 
-function showRanking() {
-  openDialog('온라인 랭킹', `<p class="dialog-small">${esc(referenceDate())} 문제은행 · 10문제 합산 점수 순위예요. 기기마다 최고 점수 하나만 남아요.</p><ol id="dialog-ranking-list" class="ranking-list"></ol>`, true);
-  loadRankingList('#dialog-ranking-list', mySubmission());
+function showRanking(registration = false) {
+  dialog.className = 'art-ranking-dialog';
+  dialog.innerHTML = rankingPanel(registration);
+  if (!dialog.open) dialog.showModal();
+  loadRankingList('#ranking-list', mySubmission());
 }
 
 function render({ focus = true } = {}) {
@@ -175,7 +192,6 @@ function render({ focus = true } = {}) {
     if (focus && !window.matchMedia('(max-width: 720px)').matches) document.querySelector('#guess')?.focus({ preventScroll: true });
   } else if (focus) document.querySelector('#screen-heading')?.focus({ preventScroll: true });
   if (screen !== 'home' && state.phase === 'results') loadKakao();
-  if (rankingOn && screen !== 'home' && state.phase === 'results') loadRankingList('#ranking-list', mySubmission());
 }
 
 function home() {
@@ -279,16 +295,14 @@ function knowledge(index, compact = false) {
   return `<aside class="inline-knowledge ${compact ? 'compact-knowledge' : ''}" data-trivia-id="${esc(card.id)}" aria-label="${index + 1}라운드 틈새 지식"><div class="knowledge-mark" aria-hidden="true">✦</div><div class="knowledge-copy"><span class="eyebrow">알아두면 쓸모있는 틈새 지식</span><h${compact ? '4' : '2'}>${esc(card.title)}</h${compact ? '4' : '2'}><p class="knowledge-text">${esc(card.text)}</p><div class="knowledge-source"><span>기준 · ${esc(card.period)}</span>${sourceControl}</div></div></aside>`;
 }
 
-// 정답과 마지막 추측을 같은 크기로 보여 주고, 성공 여부에 맞는 오차 문구를 붙인다.
+// 정답을 먼저 보여 주고 마지막 추측과 오차를 보조 정보로 표시한다.
 function priceCompare(q, round) {
   const guess = round.attempts.at(-1);
-  // 두 금액 중 긴 쪽 자릿수에 맞춰 글자 크기를 정해 둘이 항상 같은 크기로 한 줄에 들어가게 한다.
-  const length = Math.max(number(q.answer).length, number(guess).length) + 1;
   const error = Math.abs(relativeError(guess, q.answer));
   const matched = round.score > 0;
   const label = matched ? (error < .00001 ? '오차 0% · 정확히 맞혔어요' : `오차 ${error.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}%로 맞혔어요`) : `마지막 추측은 ${formatError(guess, q.answer)}`;
-  const cell = (title, value, cls) => `<div class="compare-cell ${cls}"><span>${title}</span><strong>${money(value)}</strong></div>`;
-  return `<div class="price-compare" style="--digits:${length}">${cell('정답 · 등록 계약단가', q.answer, 'actual')}${cell(`내 추측 · ${round.attempts.length}번째`, guess, 'mine')}</div><p class="error-badge">${matched ? '✓ ' : ''}${label}</p>`;
+  const cell = (title, value, cls) => `<div class="compare-cell ${cls}" style="--digits:${number(value).length + 1}"><span>${title}</span><strong>${money(value)}</strong></div>`;
+  return `<div class="price-compare">${cell('정답 · 등록 계약단가', q.answer, 'actual')}${cell(`내 추측 · ${round.attempts.length}번째`, guess, 'mine')}</div><p class="error-badge">${matched ? '✓ ' : ''}${label}</p>`;
 }
 
 function reveal() {
@@ -297,21 +311,20 @@ function reveal() {
   const verdict = judge(round.score);
   const matched = round.score > 0;
   const knowledgeContent = knowledge(state.index);
-  const attempts = round.attempts.map((value, i) => `<div class="guess-result"><div class="attempt-result-label">${i + 1}차 추측${isCorrect(value, q.answer) ? '<small>정답 범위 ✓</small>' : ''}</div><div class="result-guess"><span>${number(value)}원</span><small>${formatError(value, q.answer)}</small></div></div>`).join('');
   return `<section class="art-reveal-screen" aria-label="라운드 정답 공개"><div class="art-reveal-stage">
     <img class="art-reveal-nareumi" src="./assets/designer/judge-nareumi.png" alt="" aria-hidden="true" draggable="false"><img class="art-reveal-dali" src="./assets/designer/judge-dali.png" alt="" aria-hidden="true" draggable="false">
-    <div class="art-reveal-board ${matched ? 'is-correct' : 'is-missed'}">
-      <header class="art-reveal-header"><div class="art-reveal-topline">
-        <div class="art-reveal-counter"><span>Round</span><strong>${state.index + 1}<small> / ${state.questionCount}</small></strong></div>
-        <div class="art-reveal-total"><span>현재 스코어</span><strong>${number(totalScore(state.rounds))}<small>점</small></strong></div>
+    <div class="art-reveal-topline">
         <details class="art-reveal-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="정답 화면 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button><button type="button" data-action="source" data-id="${q.id}">계약 정보·출처</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button></nav></details>
-      </div><div class="art-reveal-outcome"><div><p class="art-reveal-tag">${matched ? verdict.tag : `${MAX_ATTEMPTS}번 모두 틀렸어요`}</p><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1></div><div class="art-reveal-earned"><span>획득 점수</span><strong>${matched ? '+' : ''}${number(round.score)}점</strong></div></div></header>
-      <div class="art-reveal-layout">
-        <section class="art-reveal-card art-reveal-answer" aria-label="정답과 내 추측 비교"><h2>${esc(q.title)}</h2><button type="button" class="art-reveal-photo" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q)}</button><div class="art-reveal-conditions"><span>${esc(q.quantity)}</span><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span></div><div class="art-reveal-prices">${priceCompare(q, round)}</div></section>
-        <aside class="art-reveal-card art-reveal-info" aria-label="나라장터 상식">${knowledgeContent}</aside>
-      </div>
-      <footer class="art-reveal-footer"><section class="art-reveal-history" aria-label="내 추측 기록"><h2>내 추측 기록</h2><div class="guess-results" style="--attempt-count:${round.attempts.length}">${attempts}</div></section><button type="button" class="art-reveal-next" data-action="next">${state.index === state.questionCount - 1 ? '최종 결과 확인하기' : '다음 물건 만나러 가기'} <span aria-hidden="true">→</span></button></footer>
+        <div class="art-reveal-total"><span>현재 스코어</span><strong style="--digits:${number(totalScore(state.rounds)).length + 1}">${number(totalScore(state.rounds))}<small>점</small></strong></div>
     </div>
+    <div class="art-reveal-board ${matched ? 'is-correct' : 'is-missed'}">
+      <header class="art-reveal-header"><div class="art-reveal-counter"><span>Round</span><strong>${state.index + 1}<small> / ${state.questionCount}</small></strong></div><p class="art-reveal-tag">${matched ? verdict.tag : `${MAX_ATTEMPTS}번 모두 틀렸어요`}</p><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><div class="art-reveal-earned"><span>획득 점수</span><strong>${matched ? '+' : ''}${number(round.score)}점</strong></div></header>
+      <div class="art-reveal-answer" aria-label="정답과 내 추측 비교">
+        <section class="art-reveal-product"><button type="button" class="art-reveal-photo" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q)}</button><h2>${esc(q.title)}</h2><div class="art-reveal-conditions"><span>${esc(q.quantity)}</span><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span></div></section>
+        <div class="art-reveal-prices">${priceCompare(q, round)}</div>
+      </div>
+    </div>
+    <footer class="art-reveal-footer"><aside class="art-reveal-info" aria-label="나라장터 상식">${knowledgeContent}</aside><button type="button" class="art-reveal-next" data-action="next">${state.index === state.questionCount - 1 ? '최종 결과 확인하기' : '다음 물건 만나러 가기'} <span aria-hidden="true">→</span></button></footer>
   </div></section>`;
 }
 
@@ -339,7 +352,7 @@ function results() {
       <button type="button" data-action="home">처음 화면</button><button type="button" data-action="about">데이터 기준</button>
       <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
     </nav></details>
-  </div><template id="result-ranking-template">${rankingPanel()}</template><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
+  </div><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
     const round = state.rounds[i];
     return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(q.delivery)}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${number(value)}원</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(i, true)}</article>`;
   }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(referenceDate())} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></template></section>`;
@@ -402,6 +415,7 @@ function nextQuestion() {
 }
 
 function openDialog(title, body, wide = false) {
+  dialog.classList.remove('art-ranking-dialog');
   dialog.classList.toggle('wide-dialog', wide);
   dialog.innerHTML = `<div class="dialog-heading"><h2 id="dialog-title">${title}</h2><button class="icon-button" data-action="close-dialog" aria-label="닫기">×</button></div><div class="dialog-content">${body}</div>`;
   dialog.showModal();
@@ -493,7 +507,8 @@ document.addEventListener('click', async event => {
   if (action === 'about') showAbout();
   if (action === 'rules') showRules();
   if (action === 'ranking') showRanking();
-  if (action === 'result-ranking') { openDialog('온라인 랭킹', document.querySelector('#result-ranking-template').innerHTML, true); loadRankingList('#ranking-list', mySubmission()); }
+  if (action === 'result-ranking') showRanking(true);
+  if (action === 'retry-ranking') loadRankingList('#ranking-list', mySubmission());
   if (action === 'result-details') openDialog('오늘 만난 물건들', document.querySelector('#result-details-template').innerHTML, true);
   if (action === 'source') showSource(button.dataset.id);
   if (action === 'photo') showPhoto(button.dataset.id);
