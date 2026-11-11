@@ -2,17 +2,21 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <meta name="theme-color" content="#2346ed" />
     <meta name="description" content="공원 벤치부터 노면청소차까지. 나라장터에 실제 등록된 다양한 물품의 계약단가를 맞혀 보세요." />
     <title>이게 얼마게? · 나라장터 가격 퀴즈</title>
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="preload" href="./assets/fonts/DNFBitBitv2.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preload" href="./assets/designer/result-panel.png" as="image" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./game-art.css" />
     <link rel="stylesheet" href="./title-art.css" />
     <link rel="stylesheet" href="./result-art.css" />
     <link rel="stylesheet" href="./reveal-art.css" />
     <link rel="stylesheet" href="./ranking-art.css" />
+    <link rel="stylesheet" href="./ui-system.css" />
+    <script type="module" src="./ui.js"></script>
     <script type="module" src="./app.js"></script>
   </head>
   <body>
@@ -20,6 +24,15 @@
     <div id="app"><main class="loading" aria-live="polite"><span class="brand-mark">₩?</span><p>가격표를 준비하고 있어요.</p></main></div>
     <dialog id="info-dialog" aria-labelledby="dialog-title"></dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <section id="rotation-guide" class="rotation-guide" aria-labelledby="rotation-title" hidden>
+      <div class="rotation-card">
+        <img src="./assets/designer/result-bird.png" alt="" aria-hidden="true" class="rotation-mascot">
+        <span class="rotation-device" aria-hidden="true">↻</span>
+        <h1 id="rotation-title">기기를 가로로 돌려 주세요</h1>
+        <p>넓은 무대에서 가격 퀴즈를 즐겨 보세요.<br>진행 중인 게임은 그대로 이어져요.</p>
+        <span class="rotation-caption">가로 화면으로 플레이하는 게임이에요</span>
+      </div>
+    </section>
     <noscript>이 게임을 플레이하려면 브라우저의 JavaScript를 켜 주세요.</noscript>
   </body>
 </html>

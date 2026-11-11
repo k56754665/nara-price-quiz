@@ -11,10 +11,24 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&a
 const number = value => value.toLocaleString('ko-KR');
 const money = value => `${number(value)}<span class="currency">원</span>`;
 const vatLabel = q => q.vat === '부가가치세포함' ? '부가세 포함' : q.vat === '부가가치세별도' ? '부가세 별도' : q.vat;
+// 게임 화면은 쉬운 말로 안내하고, 계약 정보와 원본 데이터는 공식 용어를 보존합니다.
+const deliveryLabels = {
+  '현장설치도': '배송·설치 포함',
+  '납품장소하차도': '배송·하차 포함',
+  '납품장소도': '지정 장소 배송',
+  '현장도착도': '현장까지 배송',
+  '생산공장상차도': '공장 수령·차량 적재 포함',
+  '납품장소차상도': '배송 포함·하차 별도',
+  '생산공장도(상차제외)': '공장 수령·차량 적재 별도',
+  '생산공장공장현장도': '공장 검사 후 수령',
+  '납품장소입고도': '배송·입고 포함',
+};
+const deliveryLabel = q => deliveryLabels[q.delivery.replace(/\s+/g, '')] ?? q.delivery;
 const arrow = '<span aria-hidden="true">↗</span>';
 const read = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
 const write = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
 const remove = key => { try { localStorage.removeItem(key); } catch {} };
+const usesTouchControls = () => window.matchMedia('(pointer: coarse), (hover: none)').matches;
 
 let data;
 let triviaPool;
@@ -34,6 +48,23 @@ if (!ranking.played || typeof ranking.played !== 'object') ranking.played = {};
 if (!ranking.submitted || typeof ranking.submitted !== 'object') ranking.submitted = {};
 if (typeof ranking.nickname !== 'string') ranking.nickname = '';
 let rankingBusy = false;
+// Child information windows retain the previous window and its scroll position.
+const dialogHistory = [];
+function closeDialog() {
+  const previous = dialogHistory.pop();
+  if (!previous) { dialog.close(); return; }
+  dialog.className = previous.className;
+  dialog.replaceChildren(...previous.nodes);
+  dialog.scrollTop = previous.scroll;
+  const content = dialog.querySelector('.dialog-content');
+  if (content) content.scrollTop = previous.contentScroll;
+  previous.trigger?.focus({ preventScroll: true });
+}
+dialog.addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
+dialog.addEventListener('close', () => {
+  if (dialog.dataset.rotationClosing) { delete dialog.dataset.rotationClosing; return; }
+  dialogHistory.length = 0;
+});
 
 const gameQuestions = () => state.questions;
 const referenceDate = () => screen !== 'home' && state ? state.referenceDate : data.referenceDate;
@@ -136,7 +167,6 @@ function rankingPanel(registration = false) {
       ${best}${form}
       <div class="art-ranking-columns" aria-hidden="true"><span>순위</span><span>닉네임</span><span>정답</span><span>점수</span></div>
       <ol id="ranking-list" class="art-ranking-list" aria-label="온라인 랭킹 상위 20명" aria-live="polite" tabindex="0"></ol>
-      <footer class="art-ranking-footer"><button type="button" class="art-ranking-return" data-action="close-dialog">${screen === 'home' ? '처음 화면으로' : '게임으로 돌아가기'} <span aria-hidden="true">→</span></button></footer>
     </div>
   </div></section>`;
 }
@@ -147,6 +177,7 @@ async function submitRanking() {
   const error = document.querySelector('#ranking-error');
   const nickname = normalizeNickname(input?.value);
   if (!nickname) { error.textContent = `닉네임은 1~${NICKNAME_MAX}자로 입력해 주세요.`; input?.focus(); return; }
+  error.textContent = '';
   rankingBusy = true;
   const button = document.querySelector('#ranking-form button');
   if (button) { button.disabled = true; button.textContent = '등록하는 중…'; }
@@ -173,6 +204,7 @@ async function submitRanking() {
 }
 
 function showRanking(registration = false) {
+  dialogHistory.length = 0;
   dialog.className = 'art-ranking-dialog';
   dialog.innerHTML = rankingPanel(registration);
   if (!dialog.open) dialog.showModal();
@@ -180,6 +212,7 @@ function showRanking(registration = false) {
 }
 
 function render({ focus = true } = {}) {
+  dialogHistory.length = 0;
   if (dialog.open) dialog.close();
   const content = screen === 'home' ? home() : state.phase === 'question' ? question() : state.phase === 'reveal' ? reveal() : results();
   app.innerHTML = (LEADERBOARD_CONFIG.preview ? '<div class="preview-banner">로컬 미리보기 · 랭킹은 이 PC의 테스트 기록이에요.</div>' : '') + header() + `<main id="main-content" tabindex="-1">${content}</main>` + footer();
@@ -189,7 +222,7 @@ function render({ focus = true } = {}) {
   document.body.classList.toggle('result-art', screen !== 'home' && state.phase === 'results');
   document.body.classList.toggle('reveal-art', screen !== 'home' && state.phase === 'reveal');
   if (screen !== 'home' && state.phase === 'question') {
-    if (focus && !window.matchMedia('(max-width: 720px)').matches) document.querySelector('#guess')?.focus({ preventScroll: true });
+    if (focus && !usesTouchControls()) document.querySelector('#guess')?.focus({ preventScroll: true });
   } else if (focus) document.querySelector('#screen-heading')?.focus({ preventScroll: true });
   if (screen !== 'home' && state.phase === 'results') loadKakao();
 }
@@ -225,7 +258,7 @@ function productFigure(q, small = false) {
 }
 
 function conditions(q) {
-  return `<div class="condition-tags"><span>${esc(q.quantity)}</span><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span></div><p class="specification">${esc(q.specification)}</p>${q.pricePolicy?.notice ? `<p class="basis-note price-policy-note">${esc(q.pricePolicy.notice)}</p>` : ''}`;
+  return `<div class="art-tags"><span>#${esc(q.quantity)} 기준</span><span>#${esc(deliveryLabel(q))}</span><span>#${esc(vatLabel(q))}</span></div>${q.pricePolicy?.notice ? `<p class="basis-note price-policy-note">${esc(q.pricePolicy.notice)}</p>` : ''}`;
 }
 
 function retryFeedback(q) {
@@ -254,9 +287,9 @@ function question() {
       ${decoration('judge-nareumi', 'art-judge-left')}
       ${decoration('judge-dali', 'art-judge-right')}
       <div class="art-board-content">
-        <h1 id="screen-heading" class="art-title" tabindex="-1"><span class="art-sr-only">${esc(q.title)}, </span>얼마일까요?</h1>
-        <button type="button" class="art-product" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q)}</button>
-        <div class="art-board-footer"><div class="art-tags"><span>#${esc(q.title)}</span><span>#${esc(q.specification.split(',')[0])}</span><span>#${esc(q.supplier)}</span></div><details class="art-specs art-popover"><summary>규격 보기</summary><div class="art-popover-content art-conditions"><h2>${esc(q.title)}</h2>${conditions(q)}<p>${imageLabel(q)} · 상품 이미지를 누르면 크게 볼 수 있어요.</p><p>${esc(q.quantity)}의 등록 계약단가 · ${esc(referenceDate())} 기준</p></div></details></div>
+        <h1 id="screen-heading" class="art-title" tabindex="-1"><span class="art-product-name">${esc(q.title)}</span> <span class="art-question-prompt">얼마일까요?</span></h1>
+        <figure class="art-product">${photo(q)}</figure>
+        <div class="art-board-footer"><div class="art-conditions" role="group" aria-label="가격 기준">${conditions(q)}</div></div>
       </div>
       <div class="art-round" aria-label="${state.index + 1} / ${state.questionCount} 라운드">Round ${state.index + 1}<span class="art-sr-only"> / ${state.questionCount}</span></div>
       <div class="art-hint retry-feedback ${hint ? hint.direction.toLowerCase() : 'neutral'}" role="status" aria-label="${hint ? esc(`${hint.direction}. ${hint.label}. ${hint.instruction}`) : '첫 번째 가격을 추측해 보세요'}">${bubble()}<span class="art-hint-word" aria-hidden="true">${hint ? `${hint.direction}!` : '?'}</span></div>
@@ -320,7 +353,7 @@ function reveal() {
     <div class="art-reveal-board ${matched ? 'is-correct' : 'is-missed'}">
       <header class="art-reveal-header"><div class="art-reveal-counter"><span>Round</span><strong>${state.index + 1}<small> / ${state.questionCount}</small></strong></div><p class="art-reveal-tag">${matched ? verdict.tag : `${MAX_ATTEMPTS}번 모두 틀렸어요`}</p><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><div class="art-reveal-earned"><span>획득 점수</span><strong>${matched ? '+' : ''}${number(round.score)}점</strong></div></header>
       <div class="art-reveal-answer" aria-label="정답과 내 추측 비교">
-        <section class="art-reveal-product"><button type="button" class="art-reveal-photo" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q)}</button><h2>${esc(q.title)}</h2><div class="art-reveal-conditions"><span>${esc(q.quantity)}</span><span>${esc(q.delivery)}</span><span>${esc(vatLabel(q))}</span></div></section>
+        <section class="art-reveal-product"><button type="button" class="art-reveal-photo" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q)}</button><h2>${esc(q.title)}</h2><div class="art-reveal-conditions"><span>${esc(q.quantity)}</span><span>${esc(deliveryLabel(q))}</span><span>${esc(vatLabel(q))}</span></div></section>
         <div class="art-reveal-prices">${priceCompare(q, round)}</div>
       </div>
     </div>
@@ -354,7 +387,7 @@ function results() {
     </nav></details>
   </div><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
     const round = state.rounds[i];
-    return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(q.delivery)}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${number(value)}원</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(i, true)}</article>`;
+    return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(deliveryLabel(q))}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${number(value)}원</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(i, true)}</article>`;
   }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(referenceDate())} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></template></section>`;
 }
 
@@ -371,7 +404,7 @@ function submitGuess() {
   if (screen !== 'game' || state.phase !== 'question') return;
   const value = parseGuess(document.querySelector('#guess').value);
   if (value === null) {
-    document.querySelector('#guess-error').textContent = '1원 이상의 금액을 숫자로 입력해 주세요.';
+    document.querySelector('#guess-error').textContent = '1원 이상 숫자로 입력해 주세요.';
     document.querySelector('#guess').setAttribute('aria-invalid', 'true');
     document.querySelector('#guess').focus();
     return;
@@ -415,10 +448,13 @@ function nextQuestion() {
 }
 
 function openDialog(title, body, wide = false) {
+  if (dialog.open) dialogHistory.push({ nodes: [...dialog.childNodes], className: dialog.className, scroll: dialog.scrollTop, contentScroll: dialog.querySelector('.dialog-content')?.scrollTop ?? 0, trigger: document.activeElement });
   dialog.classList.remove('art-ranking-dialog');
   dialog.classList.toggle('wide-dialog', wide);
-  dialog.innerHTML = `<div class="dialog-heading"><h2 id="dialog-title">${title}</h2><button class="icon-button" data-action="close-dialog" aria-label="닫기">×</button></div><div class="dialog-content">${body}</div>`;
-  dialog.showModal();
+  dialog.innerHTML = `<div class="dialog-heading">${dialogHistory.length ? '<button type="button" class="dialog-back" data-action="close-dialog" aria-label="이전 창으로 돌아가기">←</button>' : ''}<h2 id="dialog-title">${title}</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="${dialogHistory.length ? '닫고 이전 창으로' : '닫기'}" autofocus>×</button></div><div class="dialog-content" tabindex="0">${body}</div>`;
+  if (!dialog.open) dialog.showModal();
+  dialog.scrollTop = 0;
+  dialog.querySelector('[autofocus]')?.focus({ preventScroll: true });
 }
 
 function showPhoto(id) {
@@ -481,7 +517,16 @@ document.addEventListener('input', event => {
 document.addEventListener('error', event => {
   if (!(event.target instanceof HTMLImageElement) || !event.target.classList.contains('product-photo')) return;
   event.target.classList.add('image-unavailable');
-  event.target.alt = '상품 이미지를 불러오지 못했어요. 이미지 크게 보기에서 원본 링크를 확인해 주세요.';
+  const canEnlarge = !event.target.closest('.art-product');
+  event.target.alt = '상품 이미지를 불러오지 못했어요.' + (canEnlarge ? ' 이미지 크게 보기에서 원본 링크를 확인해 주세요.' : '');
+  event.target.hidden = true;
+  if (event.target.nextElementSibling?.classList.contains('product-photo-fallback')) return;
+  const fallback = document.createElement('div');
+  fallback.className = 'product-photo-fallback';
+  fallback.setAttribute('role', 'img');
+  fallback.setAttribute('aria-label', event.target.alt);
+  fallback.innerHTML = '<span class="photo-fallback-mark" aria-hidden="true">▧</span><strong>상품 사진을 불러오지 못했어요</strong>' + (canEnlarge ? '<span>사진 정보에서 원본 링크를 확인해 주세요.</span>' : '');
+  event.target.after(fallback);
 }, true);
 
 // 예상 가격 버튼: 윗줄은 더하기, 아랫줄은 빼기
@@ -499,9 +544,9 @@ document.addEventListener('click', async event => {
     const input = document.querySelector('#guess'); if (!input) return;
     const next = Math.min(MAX_GUESS, (parseGuess(input.value) ?? 0) + Number(button.dataset.amount));
     input.value = next > 0 ? number(next) : '';
-    input.dispatchEvent(new Event('input', { bubbles: true })); input.focus({ preventScroll: true });
+    input.dispatchEvent(new Event('input', { bubbles: true })); if (!usesTouchControls()) input.focus({ preventScroll: true });
   }
-  if (action === 'clear') { const input = document.querySelector('#guess'); if (input) { input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus({ preventScroll: true }); } }
+  if (action === 'clear') { const input = document.querySelector('#guess'); if (input) { input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); if (!usesTouchControls()) input.focus({ preventScroll: true }); } }
   if (action === 'next' && state?.phase === 'reveal') nextQuestion();
   if (action === 'replay') startGame();
   if (action === 'about') showAbout();
@@ -512,7 +557,7 @@ document.addEventListener('click', async event => {
   if (action === 'result-details') openDialog('오늘 만난 물건들', document.querySelector('#result-details-template').innerHTML, true);
   if (action === 'source') showSource(button.dataset.id);
   if (action === 'photo') showPhoto(button.dataset.id);
-  if (action === 'close-dialog') dialog.close();
+  if (action === 'close-dialog') closeDialog();
   // 공유는 사용자 제스처 안에서 불려야 하므로 await 없이 바로 부른다.
   if (action === 'share-kakao') shareKakao(shareResult(), notify);
   if (action === 'share-system') shareSystem(shareResult(), notify, copyResults);
@@ -522,7 +567,7 @@ document.addEventListener('click', async event => {
   if (action === 'fullscreen') { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); } catch { notify('이 브라우저에서는 전체 화면 전환을 지원하지 않아요.'); } }
 });
 
-dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); } });
+dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeDialog(); } });
 
 try {
   const responses = await Promise.all([fetch('./data.json'), fetch('./trivia.json')]);

@@ -6,19 +6,19 @@
   font-weight: 400;
   font-display: swap;
 }
-/* Shared type roles: title / section / body / caption. Display numbers alone
-   can shrink with their digit count; readable UI text never drops below 14px. */
+/* Shared desktop type roles. Compact stages lower text sizes independently of
+   the 44px hit targets; display numbers also fit their own available width. */
 .art-game, body.game-active, body.title-art {
   --art-font: DNFBitBitv2, 'Malgun Gothic', sans-serif;
-  --type-title: clamp(24px, 2.5cqw, 40px);
-  --type-section: clamp(18px, 1.5cqw, 24px);
-  --type-body: clamp(16px, 1.125cqw, 20px);
-  --type-caption: clamp(14px, .875cqw, 16px);
-  --type-action: clamp(18px, 1.4cqw, 24px);
+  --type-title: clamp(24px, calc(var(--stage-width) * .025), 40px);
+  --type-section: clamp(16px, calc(var(--stage-width) * .015), 24px);
+  --type-body: clamp(14px, calc(var(--stage-width) * .01125), 18px);
+  --type-caption: clamp(12px, calc(var(--stage-width) * .00875), 16px);
+  --type-action: clamp(16px, calc(var(--stage-width) * .014), 24px);
   --type-control: var(--type-body);
-  --type-score: clamp(32px, 4cqw, 72px);
-  --type-amount: clamp(40px, 4.8cqw, 88px);
-  --type-unit: clamp(20px, 2cqw, 32px);
+  --type-score: clamp(32px, calc(var(--stage-width) * .04), 72px);
+  --type-amount: clamp(28px, calc(var(--stage-width) * .034), 64px);
+  --type-unit: clamp(16px, calc(var(--stage-width) * .015), 24px);
   --type-direction-compact: clamp(22px, 2.55cqw, 44px);
   --type-icon: 24px;
   --bubble-panel-image: url('./assets/designer/bubble-box.png');
@@ -33,11 +33,11 @@
   --space-5: 24px;
   --space-6: 32px;
   --panel-padding: clamp(16px, 1.5cqw, 24px);
-  --control-padding-block: clamp(12px, 1.5cqw, 24px);
-  --control-gap: clamp(8px, 1cqw, 16px);
-  --control-row: clamp(48px, 5cqw, 88px);
+  --control-padding-block: clamp(8px, 1cqw, 20px);
+  --control-gap: clamp(4px, .6cqw, 12px);
+  --control-row: clamp(44px, 4.6cqw, 88px);
   --quick-row: clamp(32px, 2.5cqw, 44px);
-  --price-tail-height: clamp(16px, 1.5cqw, 24px);
+  --price-tail-height: clamp(6px, .6cqw, 12px);
   --line-title: 1.2;
   --line-body: 1.5;
   --line-caption: 1.4;
@@ -68,8 +68,7 @@ body.question-art { background: #251039; overflow: clip; }
 .art-judge-left { left: -.2%; top: calc(var(--scene-height) * .201); width: 20%; height: auto; z-index: 2; }
 .art-judge-right { left: 83.5%; top: calc(var(--scene-height) * .352); width: 14%; height: auto; z-index: 2; }
 .art-wood { left: 0; top: calc(var(--scene-height) * .598); width: 150%; height: calc(100% - var(--scene-height) * .598 + 1%); z-index: 3; }
-.art-board-content { position: absolute; left: 27.1%; top: calc(var(--scene-height) * .087); width: 45.8%; height: calc(var(--scene-height) * .44); z-index: 3; display: grid; grid-template-rows: max-content minmax(0, 1fr) max-content; gap: var(--control-gap); }
-.art-board-content:has(.art-specs[open]) { z-index: 15; }
+.art-board-content { position: absolute; left: 27.1%; top: calc(var(--scene-height) * .095); width: 45.8%; height: calc(var(--scene-height) * .432); z-index: 3; display: grid; grid-template-rows: max-content minmax(0, 1fr) max-content; gap: var(--control-gap); }
 .art-product {
   position: relative; justify-self: center; width: 82%; height: 100%; min-width: 0; min-height: 0;
   margin: 0; padding: var(--space-2); background: #fff; overflow: clip;
@@ -78,14 +77,16 @@ body.question-art { background: #251039; overflow: clip; }
 .art-title {
   margin: 0; min-width: 0;
   text-align: center; font: 400 var(--type-title)/var(--line-title) var(--art-font); letter-spacing: 0;
+  word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance;
 }
-.art-board-footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-3); min-width: 0; }
+.art-product-name { color: #2346ed; }
+.art-question-prompt { white-space: nowrap; }
+.art-board-footer { display: grid; gap: var(--space-1); min-width: 0; }
 .art-tags {
   min-width: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2);
   color: #99512f; font-size: var(--type-caption); line-height: var(--line-body);
 }
 .art-tags span { max-width: 100%; overflow-wrap: anywhere; }
-.art-tags span:first-child { font-size: var(--type-body); }
 .art-round { position: absolute; left: 30%; top: calc(var(--scene-height) * .56); width: 40%; text-align: center; color: #fff; font-size: var(--type-section); line-height: 1.25; z-index: 2; }
 .art-score-label { position: absolute; left: 79%; top: calc(var(--scene-height) * .129); width: 18.7%; text-align: center; color: #fff; font-size: var(--type-section); line-height: 1.25; z-index: 4; }
 .art-score { position: absolute; left: 79%; top: calc(var(--scene-height) * .176); width: 18.7%; height: calc(var(--scene-height) * .161); z-index: 4; }
@@ -112,31 +113,32 @@ body.question-art { background: #251039; overflow: clip; }
 .art-person-5 { left: 58.5%; top: calc(var(--scene-height) * .76); width: 17%; }
 .art-person-6 { left: 72%; top: calc(var(--scene-height) * .737); width: 17%; }
 .art-person-7 { left: 87.5%; top: calc(var(--scene-height) * .677); width: 18%; }
-/* Artwork keeps its reference height; the lower UI can grow when needed.
-   Status, panel, tail and lives reserve their own space in normal flow. */
-.art-lower { position: relative; margin-top: calc(var(--scene-height) * .609); min-height: calc(var(--scene-height) * .391); padding: 0 26% var(--space-2); display: flex; flex-direction: column; gap: var(--space-3); z-index: 5; pointer-events: none; }
+/* Anchor the whole control group near the stage bottom. Status, bubble, errors
+   and lives remain in one flow, so extra error text grows upward without
+   clipping hearts or opening a large gap between them and the bubble. */
+.art-lower { --controls-inset: 24%; --feedback-inset: 1.5%; --feedback-gap: clamp(16px, 1.5cqw, 24px); position: absolute; inset: auto 0 clamp(12px, calc(var(--scene-height) * .05), 40px); height: auto; min-height: 0; margin: 0; padding: 0 var(--controls-inset); display: flex; flex-direction: column; gap: clamp(6px, .75cqw, 14px); z-index: 5; pointer-events: none; }
 .art-lower > * { pointer-events: auto; }
-.art-controls { position: relative; width: 100%; z-index: 5; display: grid; gap: var(--space-3); margin-bottom: var(--price-tail-height); order: 0; }
-.art-price-bubble { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(88px, 24%); gap: var(--control-gap); align-items: center; padding: var(--control-padding-block) var(--panel-padding); }
+.art-controls { position: relative; width: 100%; z-index: 5; display: grid; gap: clamp(4px, .5cqw, 10px); margin-bottom: var(--price-tail-height); order: 0; }
+.art-price-bubble { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(88px, 24%); gap: var(--control-gap) clamp(16px, 1.5cqw, 28px); align-items: center; padding: var(--control-padding-block) var(--panel-padding); }
 .art-price-bubble > .art-bubble-body { height: 100%; }
 .art-price-bubble > .art-bubble-tail { left: 45%; right: auto; top: calc(100% - 1px); bottom: auto; width: 10%; height: var(--price-tail-height); transform: none; }
 .art-price-bubble > :is(.art-price-entry, .guess-submit, .art-guess-error, .art-quick) { z-index: 1; }
-.art-price-entry { min-width: 0; height: var(--control-row); display: flex; align-items: center; gap: var(--space-2); color: #344eff; }
+.art-price-entry { container-type: inline-size; min-width: 0; height: var(--control-row); display: flex; align-items: center; gap: var(--space-2); color: #344eff; }
 .art-price-entry input {
   display: block; min-width: 0; width: 100%; height: 100%; padding: 0;
   border: 0; border-radius: 0; outline-offset: 0; background: transparent;
-  color: inherit; font: 400 min(var(--type-amount), max(16px, calc(33.6cqw / var(--amount-chars, 7))))/1 var(--art-font); letter-spacing: -.15cqw;
+  color: inherit; font: 400 min(var(--type-amount), max(12px, calc(124cqw / var(--amount-chars, 7))))/1 var(--art-font); letter-spacing: -.025em;
   text-align: right; font-variant-numeric: tabular-nums;
 }
 .art-price-entry input::placeholder { color: #344eff; opacity: .5; }
 .art-price-entry input:focus-visible { outline: 0; box-shadow: 0 2px 0 #8a98ff; }
 .art-price-entry input[aria-invalid=true] { outline: 2px solid #d42828; }
-.art-price-entry .art-currency { flex-shrink: 0; align-self: flex-end; margin-bottom: var(--space-2); font-size: var(--type-unit); line-height: 1; }
+.art-price-entry .art-currency { flex-shrink: 0; align-self: center; font-size: var(--type-unit); line-height: 1; }
 .art-quick { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: var(--space-1); min-width: 0; }
 .art-quick button { min-height: var(--quick-row); padding: var(--space-1); color: #707ba8; font: 400 var(--type-control)/1.25 var(--art-font); white-space: nowrap; }
 .art-quick button:hover { color: #344eff; }
 .art-quick .art-clear { font-size: var(--type-icon); line-height: 1; }
-.art-lives { position: relative; width: 25.8333%; display: flex; gap: 1.2cqw; margin: auto auto 0; z-index: 6; flex-shrink: 0; order: 2; }
+.art-lives { position: relative; width: 25.8333%; display: flex; gap: 1.2cqw; margin: 0 auto; z-index: 6; flex-shrink: 0; order: 2; }
 .art-lives img { display: block; width: calc((100% - 2.4cqw) / 3); height: auto; }
 .art-lives .spent { opacity: .22; }
 .art-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
@@ -147,7 +149,9 @@ body.question-art { background: #251039; overflow: clip; }
 .art-guess-error:empty { display: none; }
 .art-attempt { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding-inline: var(--panel-padding); color: #fff; font-size: var(--type-caption); line-height: var(--line-caption); }
 .art-attempt > span { white-space: nowrap; }
-.art-feedback { position: absolute; left: 1.5%; top: calc(var(--scene-height) * .027); width: 23%; min-height: calc(var(--scene-height) * .15); max-height: calc(var(--scene-height) * .28); z-index: 5; padding: var(--panel-padding); overflow: auto; overscroll-behavior: contain; color: #626c99; }
+/* End the hint before the control column, including an explicit gutter. Both
+   derive from the same inset so resizing cannot make the two frames overlap. */
+.art-feedback { position: absolute; left: var(--feedback-inset); top: calc(var(--scene-height) * .027); width: calc(var(--controls-inset) - var(--feedback-inset) - var(--feedback-gap)); min-height: calc(var(--scene-height) * .15); max-height: calc(var(--scene-height) * .28); z-index: 5; padding: var(--panel-padding); overflow: auto; overflow-wrap: anywhere; overscroll-behavior: contain; color: #626c99; }
 .art-feedback:focus-visible { outline: 2px solid #879dff; outline-offset: 2px; }
 .art-feedback .retry-feedback { display: block; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; color: #626c99; }
 .art-feedback .retry-direction { display: none; }
@@ -167,13 +171,8 @@ body.question-art { background: #251039; overflow: clip; }
 .art-menu-content .sound-state { font: inherit; margin-left: 6px; }
 .art-menu-content button:hover { background: #dfe5ff; }
 .art-menu-content p { grid-column: 1 / -1; text-align: center; font-size: var(--type-caption); line-height: var(--line-body); padding-top: 6px; }
-.art-board-footer .art-specs { position: relative; color: #99512f; font-size: var(--type-caption); white-space: nowrap; }
-.art-specs > summary { display: flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 var(--space-2); text-decoration: underline; text-underline-offset: .2em; }
-.art-conditions { right: 0; bottom: calc(100% + .5cqw); width: 41cqw; max-height: 23cqw; overflow: auto; font: 400 var(--type-body)/var(--line-body) 'Malgun Gothic', sans-serif; }
-.art-conditions h2 { font: 400 var(--type-section)/1.25 var(--art-font); color: #99512f; margin-bottom: 12px; }
-.art-conditions p { font-size: var(--type-caption); margin-top: 10px; }
-.art-conditions .condition-tags { margin-top: 0; }
-.art-conditions .condition-tags span, .art-conditions .specification, .art-conditions .price-policy-note { font-size: var(--type-body); line-height: var(--line-body); }
+.art-conditions { min-width: 0; font: 400 var(--type-caption)/var(--line-body) var(--art-font); }
+.art-conditions .price-policy-note { margin: 4px 0 0; font: inherit; }
 .question-art #info-dialog { border-color: #aeb8ed; }
 .question-art #info-dialog::backdrop { background: #1d0b35b3; }
 :is(.game-active, .title-art) #info-dialog :is(p,dd,dt,a,button,li,summary,label,textarea) { font-size: var(--type-body); line-height: var(--line-body); }
@@ -219,45 +218,3 @@ body.game-active:has(.reveal-heading) { background: #251039; overflow: clip; }
   box-shadow: none;
 }
 .art-bubble-body { min-width: calc(var(--bubble-corner) * 2); min-height: calc(var(--bubble-corner) * 2); }
-@media (max-width: 900px) {
-  .art-game, body.game-active, body.title-art { --type-title: 24px; --type-section: 18px; --type-body: 16px; --type-caption: 14px; --type-action: 18px; --type-control: 16px; --type-score: 32px; --type-amount: 40px; --type-unit: 20px; --type-direction-compact: 22px; }
-  .art-game, body.game-active, body.title-art { --panel-padding: 16px; --control-padding-block: 16px; --control-gap: 12px; --control-row: 56px; --quick-row: 44px; }
-  .game-active:has(.reveal-heading) .game-shell { width: 94vw; }
-  .game-active:has(.reveal-heading) .price-compare { grid-template-columns: 1fr; }
-  .game-active:has(.reveal-heading) .compare-cell strong { font-size: var(--type-score); }
-  .art-game { display: block; height: 100svh; height: 100dvh; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-  .art-stage { --scene-height: max(760px, 100svh); --scene-height: max(760px, 100dvh); width: 100%; height: auto; min-height: var(--scene-height); display: flow-root; aspect-ratio: auto; background-size: auto 100%; }
-  .art-frame { left: 6%; top: calc(var(--scene-height) * .12); width: 88%; height: calc(var(--scene-height) * .38); }
-  .art-board-content { left: 16%; top: calc(var(--scene-height) * .155); width: 68%; height: calc(var(--scene-height) * .307); gap: var(--space-2); }
-  .art-product { width: 92%; }
-  .art-board-footer { align-items: start; gap: var(--space-2); }
-  .art-round { left: 15%; top: calc(var(--scene-height) * .474); width: 70%; }
-  .art-judge-left { left: -1%; top: calc(var(--scene-height) * .4); width: min(26%, 120px); }
-  .art-judge-right { left: auto; right: -1%; top: calc(var(--scene-height) * .4); width: min(25%, 120px); }
-  .art-wood { top: calc(var(--scene-height) * .505); height: calc(100% - var(--scene-height) * .505); }
-  .art-hint.retry-feedback { left: 27%; top: calc(var(--scene-height) * .025); width: 20%; height: calc(var(--scene-height) * .082); }
-  .art-score-label { left: 62%; top: calc(var(--scene-height) * .01); width: 32%; color: #626c99; }
-  .art-score { left: 62%; top: calc(var(--scene-height) * .048); width: 32%; height: calc(var(--scene-height) * .06); }
-  .art-score .art-bubble-tail { left: 67%; }
-  .art-menu { left: 3%; top: calc(var(--scene-height) * .03); width: 18%; }
-  .art-menu-content { width: 78cqw; }
-  .art-specs > summary { align-items: flex-start; min-height: 44px; }
-  .art-conditions { width: 78cqw; right: -5cqw; bottom: 7cqw; max-height: 70cqw; }
-  /* Status, price, hint and lives share one flow. Validation can add a row
-     without colliding with the next panel or changing the artwork above. */
-  .art-lower { position: relative; inset: auto; margin-top: calc(var(--scene-height) * .52); min-height: calc(var(--scene-height) * .48); padding: 0 4% var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); }
-  .art-controls { position: static; width: 100%; gap: var(--space-2); margin-bottom: var(--price-tail-height); order: 0; }
-  .art-attempt { gap: var(--space-2); }
-  .art-price-bubble { grid-template-columns: minmax(0, 1fr) 88px; }
-  .art-price-entry { gap: var(--space-1); }
-  .art-price-entry input { font-size: min(var(--type-amount), max(16px, calc(70cqw / var(--amount-chars, 7)))); }
-  .art-price-entry .art-currency { margin-bottom: 8px; }
-  .art-price-bubble .guess-submit { padding: var(--space-1); }
-  .art-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
-  .art-quick button { border: 1px solid #e1e6f7; border-radius: 8px; background: #f5f7ff; }
-  .art-feedback { position: relative; left: auto; top: auto; width: calc(100% - 32px); min-height: 0; height: 96px; max-height: 96px; margin: 0 auto; flex-shrink: 0; order: 1; }
-  .art-lives { position: relative; left: auto; top: auto; width: 32.6%; gap: 4cqw; margin: auto auto 0; flex-shrink: 0; order: 2; }
-  .art-lives img { width: calc((100% - 8cqw) / 3); }
-  .art-audience { top: calc(var(--scene-height) * .78); }
-  .art-person-1, .art-person-7 { top: calc(var(--scene-height) * .75); }
-}
