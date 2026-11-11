@@ -7,7 +7,12 @@ import { RULES_VERSION } from '../dist/engine.js';
 const bank = JSON.parse(await readFile(new URL('../dist/data.json', import.meta.url), 'utf8'));
 const answerFingerprint = bank => createHash('md5').update([...bank.questions].sort((a,b)=>a.id.localeCompare(b.id)).map(q=>`${q.id}:${q.answer}`).join(',')).digest('hex');
 const today = new Intl.DateTimeFormat('en-CA', { timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit' }).format(new Date());
-if(bank.questions.some(q=>!Number.isFinite(Date.parse(q.checkedAt)) || Date.now()-Date.parse(q.checkedAt)>86400000 || q.contractEnd<today))throw Error('24시간 이내에 확인하지 않은 품목이 있습니다. 문제은행의 원본 계약 정보를 확인한 뒤 배포해 주세요.');
+if (bank.questions.some(q => !Number.isFinite(Date.parse(q.checkedAt)))) {
+  throw Error('확인 시각이 누락되었거나 잘못된 품목이 있습니다. 문제은행의 원본 계약 정보를 확인해 주세요.');
+}
+if (bank.questions.some(q => q.contractEnd < today)) {
+  throw Error('계약 유효기간이 지난 품목이 있습니다. 문제은행의 원본 계약 정보를 확인한 뒤 배포해 주세요.');
+}
 if (!isConfigured(LEADERBOARD_CONFIG)) {
   console.log('Ranking is disabled; no live DB check required.');
 } else {
