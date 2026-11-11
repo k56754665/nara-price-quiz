@@ -1,0 +1,59 @@
+/* Supplied title composition, in the designer's 1920 x 1080 coordinates.
+   Artwork is unchanged. Text is live DNFBitBitv2, since button PNGs were not
+   supplied. Existing form/actions retain the game's start and resume logic. */
+body.title-art { background: #251039; overflow: clip; }
+.title-art :is(.site-header, .site-footer, .preview-banner) { display: none; }
+.title-art #main-content { width: 100%; max-width: none; margin: 0; padding: 0; }
+.art-title-screen { height: 100svh; height: 100dvh; display: grid; place-items: center; overflow-y: auto; overscroll-behavior: contain; background: #251039; }
+.art-title-stage {
+  container-type: inline-size; position: relative; isolation: isolate;
+  width: min(100vw, calc(100svh * 16 / 9));
+  width: min(100vw, calc(100dvh * 16 / 9));
+  aspect-ratio: 16 / 9; overflow: clip;
+  background: url('./assets/designer/stage-background.png') center / 100% 100% no-repeat;
+  font-family: var(--art-font);
+}
+.art-main-title { margin: 0; font: 400 3.541667cqw/1 var(--art-font); color: #a8aabb; letter-spacing: 0; }
+.art-main-title > span { position: absolute; top: 5.6%; white-space: nowrap; }
+.art-main-title > span:first-child { left: 21.8%; }
+.art-main-title > span:last-child { left: 55.1%; }
+.art-title-podium { position: absolute; left: 39.6875%; top: 38.3333%; width: 20.625%; height: auto; pointer-events: none; user-select: none; }
+.art-title-stage #setup-form { margin: 0; }
+.art-title-action {
+  position: absolute; z-index: 1; min-width: 44px; min-height: 44px;
+  padding: 0; border: 0; border-radius: 0; background: none;
+  font: 400 3.333333cqw/1 var(--art-font); letter-spacing: 0; white-space: nowrap;
+  filter: drop-shadow(0 4px 2px #24203e70);
+}
+.art-title-label { --title-gradient: linear-gradient(#1f7dff, #00d9f6); display: block; position: relative; color: #fff; -webkit-text-stroke: 10px #fff; }
+.art-title-label::after { content: attr(data-label); position: absolute; inset: 0; color: transparent; -webkit-text-stroke: 0; background: var(--title-gradient); background-clip: text; -webkit-background-clip: text; }
+.art-title-label.title-orange { --title-gradient: linear-gradient(#ffca8b, #ff7c25); }
+.art-title-label.title-red { --title-gradient: linear-gradient(#5b3dce 10%, #a71b72 65%, #d41434); }
+.art-title-start { left: 16.3%; top: 56.85%; }
+.art-title-exit { left: 70.9%; top: 56.85%; }
+.art-title-ranking { left: 50%; top: 65.75%; transform: translateX(-50%); }
+.art-title-action:hover { filter: brightness(1.1) drop-shadow(0 4px 2px #24203e70); }
+.art-title-action:active { translate: 0 2px; }
+.art-title-action:focus-visible { outline: 3px solid #344eff; outline-offset: 12px; }
+.art-title-action:disabled { cursor: default; opacity: .6; }
+.art-title-menu .art-title-resume { grid-column: 1 / -1; }
+.art-title-stage .art-title-menu { left: 16px; top: 16px; width: auto; }
+.art-title-menu > summary { min-width: 64px; font-size: 16px; }
+.art-title-menu .art-menu-content { max-height: calc(100dvh - 100px); overflow-y: auto; }
+.title-art #info-dialog::backdrop { background: #1d0b35b3; }
+@media (max-width: 720px) and (orientation: portrait) {
+  .art-title-screen { display: block; }
+  .art-title-stage { --title-podium-width: clamp(200px, 54vw, 280px); width: 100%; height: max(680px, 100svh); height: max(680px, 100dvh); aspect-ratio: auto; background-size: auto 100%; }
+  .art-main-title { position: absolute; top: 24%; left: 16px; right: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 24px; line-height: 1.2; }
+  .art-main-title > span { position: static; }
+  .art-title-podium { left: 50%; top: auto; bottom: 24px; width: var(--title-podium-width); transform: translateX(-50%); }
+  .art-title-action { font-size: 32px; }
+  .art-title-label { -webkit-text-stroke-width: 6px; }
+  .art-title-start { left: 6%; top: 41%; }
+  .art-title-exit { left: auto; right: 6%; top: 41%; }
+  .art-title-ranking { top: calc(100% - 24px - var(--title-podium-width) * 1.601533 * .54); }
+}
+@media (max-width: 900px) and (orientation: landscape) {
+  .art-title-stage { width: 100vw; }
+  .art-title-screen { display: grid; align-items: safe center; }
+}

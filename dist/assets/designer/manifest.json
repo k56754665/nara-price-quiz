@@ -1,0 +1,189 @@
+[
+  {
+    "file": "stage-background.png",
+    "source": "조달청_브리핑룸_3D배경_1920x1080.png",
+    "crop": [
+      0,
+      0,
+      1920,
+      1080
+    ],
+    "sourceSha256": "0032d834dbc55dce929921ef851aacb0f51aa317369961a35adff10dec0019d5"
+  },
+  {
+    "file": "title-podium.png",
+    "source": "조달청_연단_3D_정면_투명.png",
+    "crop": [
+      180,
+      61,
+      783,
+      1254
+    ],
+    "sourceSha256": "258ba92a74cfbc71fc945516f0493f392d3b6fbb557ffac4430d24783fbb610d"
+  },
+  {
+    "file": "result-panel.png",
+    "source": "하늘빛 프레임 결과 패널.png",
+    "crop": [
+      52,
+      72,
+      920,
+      1398
+    ],
+    "sourceSha256": "0e2d22aee8f80dec51875f24bb83922996eb8a3909bdac28bfd1f815f1abc6d3"
+  },
+  {
+    "file": "result-bird.png",
+    "source": "파란 고글 새와 배낭 다람쥐.png",
+    "crop": [
+      50,
+      28,
+      960,
+      920
+    ],
+    "sourceSha256": "b88863f620a5d410a528c898d6329e3362c8c331a133c39016358cd956dd9ead"
+  },
+  {
+    "file": "result-backpack.png",
+    "source": "파란 고글 새와 배낭 다람쥐.png",
+    "crop": [
+      1055,
+      372,
+      470,
+      500
+    ],
+    "sourceSha256": "b88863f620a5d410a528c898d6329e3362c8c331a133c39016358cd956dd9ead"
+  },
+  {
+    "file": "result-wave.png",
+    "source": "분홍 코의 주황 다람쥐.png",
+    "crop": [
+      142,
+      76,
+      949,
+      1080
+    ],
+    "sourceSha256": "6e2e5a8a33ee3f60c8a4396dec71352c25116bd888032908bca803731937a662"
+  },
+  {
+    "file": "judge-nareumi.png",
+    "source": "나르미_3D_판사_투명.png",
+    "crop": [
+      196,
+      47,
+      808,
+      1173
+    ],
+    "sourceSha256": "30abd48247df1e24246ea6a5bd525f7d28b41d2659a88afac0563703d24da19d"
+  },
+  {
+    "file": "judge-dali.png",
+    "source": "달이_3D_판사_소품제거_투명.png",
+    "crop": [
+      211,
+      50,
+      939,
+      1206
+    ],
+    "sourceSha256": "98c20c921d2a92d0e8d29ca7a1b44cb01361039539bda3d7c217a31bb30c5d50"
+  },
+  {
+    "file": "heart.png",
+    "source": "말랑한 빨간 하트 아이콘.png",
+    "crop": [
+      113,
+      216,
+      1014,
+      867
+    ],
+    "sourceSha256": "034727c985e0beffad84830c131b1e95158f45cd8f20a52ac37d74b8e43e98f9"
+  },
+  {
+    "file": "product-frame.png",
+    "source": "박스UI_3D_목재프레임_투명.png",
+    "crop": [
+      15,
+      23,
+      1555,
+      948
+    ],
+    "sourceSha256": "326c11d3c5ffb1266daf6f406e65f44cabbd50df51ceaf4a70d4bd8f3d014971"
+  },
+  {
+    "file": "wooden-front.png",
+    "source": "목재단상_3D_정면_투명_1920x500.png",
+    "crop": [
+      8,
+      27,
+      1904,
+      445
+    ],
+    "sourceSha256": "ace443f97a662fe3fe88352d0be80c9efb54aa31b319a7b7fbfd50cad495b48a"
+  },
+  {
+    "file": "bubble-box.png",
+    "source": "말풍선UI_박스_꼬리_분리시트.png",
+    "crop": [
+      10,
+      25,
+      1734,
+      655
+    ],
+    "sourceSha256": "fd4a9287bf70d8bf35a3531d872f410539ad6655c95315f7fa19c0c7ea21d903"
+  },
+  {
+    "file": "bubble-tail-left.png",
+    "source": "말풍선UI_박스_꼬리_분리시트.png",
+    "crop": [
+      55,
+      705,
+      235,
+      180
+    ],
+    "sourceSha256": "fd4a9287bf70d8bf35a3531d872f410539ad6655c95315f7fa19c0c7ea21d903"
+  },
+  {
+    "file": "bubble-tail-center.png",
+    "source": "말풍선UI_중앙꼬리_분리시트.png",
+    "crop": [
+      740,
+      700,
+      275,
+      185
+    ],
+    "sourceSha256": "b0f177ae8d4041740e4495ed946a49878e47986ad48d8c228b3b4a373f7f74ff"
+  },
+  {
+    "file": "audience-left.png",
+    "source": "세 가지 검은 뒷모습 실루엣.png",
+    "crop": [
+      45,
+      188,
+      545,
+      620
+    ],
+    "sourceSha256": "2401d1e4d7a31a17a3141a10b4c0b182b11ad07c7b240ccf8e39eaa22fca515b"
+  },
+  {
+    "file": "audience-center.png",
+    "source": "세 가지 검은 뒷모습 실루엣.png",
+    "crop": [
+      502,
+      326,
+      524,
+      583
+    ],
+    "sourceSha256": "2401d1e4d7a31a17a3141a10b4c0b182b11ad07c7b240ccf8e39eaa22fca515b"
+  },
+  {
+    "file": "audience-right.png",
+    "source": "세 가지 검은 뒷모습 실루엣.png",
+    "crop": [
+      988,
+      278,
+      494,
+      600
+    ],
+    "sourceSha256": "2401d1e4d7a31a17a3141a10b4c0b182b11ad07c7b240ccf8e39eaa22fca515b"
+  }
+]

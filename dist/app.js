@@ -166,6 +166,9 @@ function render({ focus = true } = {}) {
   const content = screen === 'home' ? home() : state.phase === 'question' ? question() : state.phase === 'reveal' ? reveal() : results();
   app.innerHTML = (LEADERBOARD_CONFIG.preview ? '<div class="preview-banner">로컬 미리보기 · 랭킹은 이 PC의 테스트 기록이에요.</div>' : '') + header() + `<main id="main-content" tabindex="-1">${content}</main>` + footer();
   document.body.classList.toggle('game-active', screen !== 'home');
+  document.body.classList.toggle('question-art', screen !== 'home' && state.phase === 'question');
+  document.body.classList.toggle('title-art', screen === 'home');
+  document.body.classList.toggle('result-art', screen !== 'home' && state.phase === 'results');
   if (screen !== 'home' && state.phase === 'question') {
     if (focus && !window.matchMedia('(max-width: 720px)').matches) document.querySelector('#guess')?.focus({ preventScroll: true });
   } else if (focus) document.querySelector('#screen-heading')?.focus({ preventScroll: true });
@@ -175,8 +178,23 @@ function render({ focus = true } = {}) {
 
 function home() {
   const hasResume = state && state.phase !== 'results';
-  const first = data.questions[0];
-  return `<section class="home-hero"><div class="hero-copy"><div class="eyebrow"><span class="live-dot" aria-hidden="true"></span>실제 등록 가격으로 플레이하는 퀴즈</div><h1 id="screen-heading" tabindex="-1">맨날 보던 물건,<br>이게 <span class="highlight">얼마게?</span></h1><p class="hero-description">공원 벤치부터 도로의 청소차까지.<br>진짜 물건을 보고 가격을 추측해 보세요.<br>정답의 ±${TOLERANCE_PERCENT}% 안이면 성공, 힌트 보고 ${MAX_ATTEMPTS}번까지!</p><div class="hero-facts"><span><strong>${ROUND_COUNT}</strong> 라운드</span><span><strong>${MAX_ATTEMPTS}</strong> 번의 기회</span><span><strong>±${TOLERANCE_PERCENT}%</strong> 정답 범위</span></div><form id="setup-form" class="setup-card"><div class="solo-mode-note"><span>UP ↗ / DOWN ↘</span> 틀릴 때마다 방향과 거리 힌트를 알려드려요. 문제은행 ${data.questions.length}개 중 ${ROUND_COUNT}개가 무작위로 나와요.</div><button type="submit" class="button button-blue start-button">${hasResume ? '새 게임 시작하기' : '가격 맞히러 가기'} ${arrow}</button>${hasResume ? `<button type="button" class="resume-button" data-action="resume">${state.index + 1}번째 문제부터 이어하기 <span>→</span></button>` : ''}<p class="setup-note">빨리 맞힐수록 높은 점수 · ${scoreList}점</p></form>${rankingOn ? '<button class="ranking-link" data-action="ranking"><span aria-hidden="true">🏆</span> 다른 사람들의 점수 보기 · 온라인 랭킹 <span aria-hidden="true">→</span></button>' : ''}<button class="rules-link" data-action="rules">점수는 어떻게 매기나요? ↗</button></div><div class="hero-visual hero-real-photo"><div class="visual-grid"></div><span class="artifact-stamp">물건은 익숙하게<br><strong>가격은 새롭게.</strong></span><span class="doodle-spark" aria-hidden="true">✳</span><button class="hero-photo" data-action="photo" data-id="${first.id}" aria-label="${esc(first.title)} 사진 크게 보기">${photo(first)}</button><div class="floating-label"><span class="label-dot"></span><div><small>문제은행 미리보기</small><strong>${esc(first.title)}</strong></div><span class="label-arrow">↗</span></div><div class="mystery-price"><span>${esc(first.quantity)}의 가격은</span><strong>₩ <span>???</span></strong></div><span class="hero-image-credit">${imageLabel(first)}</span><div class="corner-note"><span>PRICE DISCOVERY CLUB</span><span>01—${String(ROUND_COUNT).padStart(2, '0')}</span></div></div></section><section class="how-it-works" aria-label="게임 방법"><div class="section-label">아는 만큼 보이고,<br>맞힐수록 놀라워요.</div><div><span class="step-number">01</span><strong>진짜 물건을 살펴보고</strong><p>등록 상품 이미지와<br>크기, 단위, 인도조건을 살펴봐요.</p></div><div><span class="step-number">02</span><strong>힌트를 보고 다시 도전</strong><p>틀리면 UP/DOWN과 대략적인 차이를<br>알려드려요. 최대 ${MAX_ATTEMPTS}번까지!</p></div><div><span class="step-number">03</span><strong>가격과 잡학을 한눈에</strong><p>정답·점수·틈새 지식을<br>결과 화면에서 함께 확인해요.</p></div></section>${best > 0 ? `<div class="local-best"><span>이 기기 최고 기록</span><strong>${number(best)} <small>/ ${number(MAX_TOTAL)}점</small></strong></div>` : ''}`;
+  const label = (text, tone) => `<span class="art-title-label ${tone}" data-label="${text}" aria-hidden="true">${text}</span>`;
+  return `<section class="art-title-screen" aria-label="처음 화면"><div class="art-title-stage">
+    <h1 id="screen-heading" class="art-main-title" tabindex="-1"><span>맨날 보던 물건,</span><span>이게 얼마게?</span></h1>
+    <img class="art-title-podium" src="./assets/designer/title-podium.png" alt="" aria-hidden="true" draggable="false">
+    <form id="setup-form" aria-label="새 게임 시작">
+      <button type="submit" class="art-title-action art-title-start" aria-label="${hasResume ? '새 게임 시작하기' : '게임 시작하기'}">${label('게임시작', 'title-blue')}</button>
+    </form>
+    <button type="button" class="art-title-action art-title-ranking" data-action="ranking" aria-label="온라인 랭킹 보기" ${rankingOn ? '' : 'disabled title="온라인 랭킹 준비 중"'}>${label('랭킹', 'title-orange')}</button>
+    <button type="button" class="art-title-action art-title-exit" data-action="exit" aria-label="게임 종료">${label('게임종료', 'title-red')}</button>
+    <details class="art-menu art-popover art-title-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="게임 안내">
+      ${hasResume ? `<button type="button" class="art-title-resume" data-action="resume">${state.index + 1}번째 문제부터 이어하기</button>` : ''}
+      <button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button>
+      <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>
+      <button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
+      <p>${ROUND_COUNT}라운드 · ${MAX_ATTEMPTS}번의 기회 · 정답 ±${TOLERANCE_PERCENT}%<br>${scoreList}점${best > 0 ? `<br>이 기기 최고 기록 ${number(best)} / ${number(MAX_TOTAL)}점` : ''}</p>
+    </nav></details>
+  </div></section>`;
 }
 
 function progress() {
@@ -196,9 +214,8 @@ function retryFeedback(q) {
   if (!state.attempts.length) return '';
   const last = state.attempts.at(-1);
   const hint = guessHint(last, q.answer);
-  const left = MAX_ATTEMPTS - state.attempts.length;
-  const history = state.attempts.map((value, i) => `${i + 1}차 ${number(value)}원 ${guessHint(value, q.answer).direction === 'UP' ? '↗' : '↘'}`).join(' · ');
-  return `<div class="retry-feedback ${hint.direction.toLowerCase()}" role="status"><div class="retry-direction">${hint.direction}<span aria-hidden="true">${hint.direction === 'UP' ? '↗' : '↘'}</span></div><div><strong>${hint.label}</strong><p>${hint.instruction}</p><small>${history} · ${left === 1 ? '마지막 기회예요' : `기회 ${left}번 남았어요`}</small></div></div>`;
+  const history = state.attempts.map((value, i) => `${i + 1}차 ${number(value)}원 ${guessHint(value, q.answer).direction === 'UP' ? '↗' : '↘'}`).join('<br>');
+  return `<div class="retry-feedback ${hint.direction.toLowerCase()}" role="status"><div class="retry-direction">${hint.direction}<span aria-hidden="true">${hint.direction === 'UP' ? '↗' : '↘'}</span></div><div><strong>${hint.label}</strong><p>${hint.instruction}</p><small>${history}</small></div></div>`;
 }
 
 function question() {
@@ -206,7 +223,44 @@ function question() {
   const attempt = state.attempts.length + 1;
   const retry = attempt > 1;
   const last = attempt === MAX_ATTEMPTS;
-  return `<section class="game-shell">${progress()}<div class="question-grid">${productFigure(q)}<div class="question-panel"><div class="eyebrow">${esc(q.category)}</div><h1 id="screen-heading" tabindex="-1">${esc(q.title)}<br><span>얼마일까요?</span></h1>${conditions(q)}<div class="guess-zone">${retryFeedback(q)}<form id="guess-form" novalidate><div class="guess-label"><label for="guess">${last ? '마지막 예상 등록 계약단가' : '예상 등록 계약단가'}</label><div class="attempt-tools"><span class="attempt-count ${last ? 'last' : ''}">${last ? '마지막 기회' : `${attempt}번째 추측`} · ${attempt} / ${MAX_ATTEMPTS}</span></div></div><div class="amount-input"><span class="won-symbol" aria-hidden="true">₩</span><input id="guess" name="guess" type="text" inputmode="numeric" autocomplete="off" maxlength="15" value="${esc(state.draft || '')}" placeholder="${retry ? '힌트 보고 다시 입력' : '얼마일까요?'}" aria-describedby="amount-hint guess-error"><span>원</span></div><p id="amount-hint" class="amount-hint">${koreanAmount(parseGuess(state.draft || ''))}</p><div class="quick-amounts" role="group" aria-label="예상 가격 조절">${quickAmountButtons()}<button type="button" data-action="clear" class="clear-amount" aria-label="예상 가격 지우기">↺</button></div><p class="form-error" id="guess-error" role="alert"></p><button class="button button-blue guess-submit" type="submit">${last ? '마지막 추측! 정답 확인하기' : `${attempt}번째 추측 제출하기`} <span aria-hidden="true">→</span></button></form><p class="basis-note">${esc(q.quantity)}의 계약단가 · ${esc(referenceDate())} 기준 · 정답 ±${TOLERANCE_PERCENT}% 안이면 성공 · 지금 맞히면 ${number(ATTEMPT_SCORES[attempt - 1])}점</p></div></div></div><div class="game-bottom"><button class="text-button" data-action="home">← 처음 화면</button><span>물건의 규격과 인도조건까지 살펴보세요.</span><button class="text-button" data-action="rules">점수 안내 ↗</button></div></section>`;
+  const left = MAX_ATTEMPTS - state.attempts.length;
+  const hint = retry ? guessHint(state.attempts.at(-1), q.answer) : null;
+  const art = name => `./assets/designer/${name}.png`;
+  const decoration = (name, cls) => `<img class="art-decoration ${cls}" src="${art(name)}" alt="" aria-hidden="true" draggable="false">`;
+  const bubble = (tail = 'left') => `<span class="art-bubble-body" aria-hidden="true"></span><img class="art-bubble-tail" src="${art(`bubble-tail-${tail}`)}" alt="">`;
+  const audience = ['left', 'center', 'right', 'left', 'center', 'right', 'left'].map((name, i) => decoration(`audience-${name}`, `art-audience art-person-${i + 1}`)).join('');
+  return `<section class="art-game" aria-label="가격 맞히기 게임"><form id="guess-form" novalidate>
+    <div class="art-stage">
+      <details class="art-menu art-popover"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="게임 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button>${rankingOn ? '<button type="button" data-action="ranking" aria-label="온라인 랭킹 보기">온라인 랭킹</button>' : ''}<button type="button" data-action="about">데이터 기준</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button><p>${esc(referenceDate())} 조사 기준<br>정답 ±${TOLERANCE_PERCENT}% · 최대 ${MAX_ATTEMPTS}번 추측</p></nav></details>
+      ${decoration('product-frame', 'art-frame')}
+      ${decoration('judge-nareumi', 'art-judge-left')}
+      ${decoration('judge-dali', 'art-judge-right')}
+      <div class="art-board-content">
+        <h1 id="screen-heading" class="art-title" tabindex="-1"><span class="art-sr-only">${esc(q.title)}, </span>얼마일까요?</h1>
+        <button type="button" class="art-product" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q)}</button>
+        <div class="art-board-footer"><div class="art-tags"><span>#${esc(q.title)}</span><span>#${esc(q.specification.split(',')[0])}</span><span>#${esc(q.supplier)}</span></div><details class="art-specs art-popover"><summary>규격 보기</summary><div class="art-popover-content art-conditions"><h2>${esc(q.title)}</h2>${conditions(q)}<p>${imageLabel(q)} · 상품 이미지를 누르면 크게 볼 수 있어요.</p><p>${esc(q.quantity)}의 등록 계약단가 · ${esc(referenceDate())} 기준</p></div></details></div>
+      </div>
+      <div class="art-round" aria-label="${state.index + 1} / ${state.questionCount} 라운드">Round ${state.index + 1}<span class="art-sr-only"> / ${state.questionCount}</span></div>
+      <div class="art-hint retry-feedback ${hint ? hint.direction.toLowerCase() : 'neutral'}" role="status" aria-label="${hint ? esc(`${hint.direction}. ${hint.label}. ${hint.instruction}`) : '첫 번째 가격을 추측해 보세요'}">${bubble()}<span class="art-hint-word" aria-hidden="true">${hint ? `${hint.direction}!` : '?'}</span></div>
+      <span class="art-score-label" id="art-score-label">현재스코어</span>
+      <div class="art-score">${bubble()}<output aria-labelledby="art-score-label">${number(totalScore(state.rounds))}</output></div>
+      ${decoration('wooden-front', 'art-wood')}${audience}
+      <div class="art-lower">
+      ${retry ? `<div class="art-feedback" tabindex="0" aria-label="가격 힌트">${retryFeedback(q)}</div>` : ''}
+      <div class="art-controls">
+      <span id="art-attempt" class="art-attempt"><span>${last ? '마지막 기회' : `${attempt}번째 추측`} · ${attempt} / ${MAX_ATTEMPTS}</span><span>성공 시 ${number(ATTEMPT_SCORES[attempt - 1])}점</span></span>
+      <div class="art-price-bubble">${bubble('center')}
+        <label for="guess" class="art-sr-only">${last ? '마지막 예상 등록 계약단가' : '예상 등록 계약단가'}</label>
+        <div class="art-price-entry"><input id="guess" name="guess" type="text" inputmode="numeric" autocomplete="off" maxlength="15" value="${esc(state.draft || '')}" placeholder="0" style="--amount-chars:${Math.max(7, (state.draft || '').length)}" aria-describedby="guess-error art-attempt"><span class="art-currency">원</span></div>
+        <button class="guess-submit" type="submit" aria-label="${last ? '마지막 추측! 정답 확인하기' : `${attempt}번째 추측 제출하기`}">${last ? '마지막 제출' : '추측 제출'}</button>
+        <p class="art-guess-error" id="guess-error" role="alert"></p>
+        <div class="art-quick" role="group" aria-label="예상 가격 조절">${QUICK_STEPS.map(([amount, label]) => `<button type="button" data-action="add" data-amount="${amount}" aria-label="${label}원 더하기">+${label.replace(',', '')}</button>`).join('')}<button type="button" data-action="clear" class="art-clear" aria-label="예상 가격 지우기">↺</button></div>
+      </div>
+      </div>
+      <div class="art-lives" role="img" aria-label="남은 추측 기회 ${left} / ${MAX_ATTEMPTS}">${Array.from({ length: MAX_ATTEMPTS }, (_, i) => `<img src="${art('heart')}" alt="" class="${i >= left ? 'spent' : ''}">`).join('')}</div>
+      </div>
+    </div>
+  </form></section>`;
 }
 
 function formatError(guess, answer) {
@@ -251,10 +305,28 @@ function results() {
   const verdict = grade(total, questions.length);
   const correct = state.rounds.filter(r => r.score > 0).length;
   const firstTry = state.rounds.filter(r => r.score === ATTEMPT_SCORES[0]).length;
-  return `<section class="results-shell"><div class="results-banner"><div class="result-sticker" aria-hidden="true">${verdict.symbol}</div><span class="eyebrow">${questions.length}개의 가격, ${questions.length}개의 새로운 발견</span><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><p>${verdict.subtitle}</p><div class="final-score">${number(total)}<span> / ${number(MAX_TOTAL)}점</span></div><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div><div class="result-actions"><button class="button button-blue" data-action="replay">다시 도전하기 ↗</button></div><div class="share-actions"><button class="share-button share-kakao" data-action="share-kakao"><span class="share-icon" aria-hidden="true">💬</span>카카오톡 공유</button><button class="share-button" data-action="share-system"><span class="share-icon" aria-hidden="true">↗</span>공유하기</button><button class="share-button" data-action="share"><span class="share-icon" aria-hidden="true">⧉</span>결과 복사</button></div></div>${rankingPanel()}<div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
+  const mine = mySubmission();
+  const rankLabel = state.rankSubmitted && mine ? `내 최고 기록 · 등록 당시 ${number(mine.rank)}위!` : '랭킹에 등록하기';
+  return `<section class="art-result-screen" aria-label="최종 결과"><div class="art-result-stage">
+    <img class="art-result-bird" src="./assets/designer/result-bird.png" alt="" aria-hidden="true" draggable="false">
+    <img class="art-result-backpack" src="./assets/designer/result-backpack.png" alt="" aria-hidden="true" draggable="false">
+    <div class="art-result-panel">
+      <output class="art-result-score" style="--score-length:${number(total).length + 1}" aria-label="최종 점수 ${number(total)}점">${number(total)}점</output>
+      <div class="art-result-identity"><p class="art-result-prompt">당신은...</p><h1 id="screen-heading" class="art-result-grade" tabindex="-1" style="--grade-length:${verdict.title.length}">${esc(verdict.title)}</h1></div>
+      <img class="art-result-wave" src="./assets/designer/result-wave.png" alt="" aria-hidden="true" draggable="false">
+      ${rankingOn ? `<button type="button" class="art-result-rank" data-action="result-ranking">${rankLabel}</button>` : `<p class="art-result-rank">최고 기록 ${number(Math.max(best, total))}점</p>`}
+      <div class="art-result-actions"><button type="button" class="art-result-kakao" data-action="share-kakao">카카오톡 공유</button><div class="art-result-primary"><button type="button" class="art-result-share" data-action="share-system">공유하기</button><button type="button" class="art-result-replay" data-action="replay">다시하기</button></div></div>
+    </div>
+    <details class="art-menu art-popover art-result-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="결과 도구">
+      <button type="button" data-action="result-details">결과 자세히</button>${rankingOn ? '<button type="button" data-action="result-ranking">랭킹 등록·조회</button>' : ''}
+      <button type="button" data-action="share">결과 복사</button>
+      <button type="button" data-action="home">처음 화면</button><button type="button" data-action="about">데이터 기준</button>
+      <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
+    </nav></details>
+  </div><template id="result-ranking-template">${rankingPanel()}</template><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
     const round = state.rounds[i];
     return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(q.delivery)}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${number(value)}원</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(q, true)}</article>`;
-  }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(referenceDate())} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></section>`;
+  }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(referenceDate())} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></template></section>`;
 }
 
 function startGame() {
@@ -369,7 +441,7 @@ document.addEventListener('input', event => {
   const input = event.target;
   const digits = input.value.replace(/\D/g, '').slice(0, 12);
   input.value = digits ? number(Number(digits)) : '';
-  document.querySelector('#amount-hint').textContent = koreanAmount(parseGuess(input.value));
+  input.style.setProperty('--amount-chars', Math.max(7, input.value.length));
   document.querySelector('#guess-error').textContent = '';
   input.removeAttribute('aria-invalid');
   state.draft = input.value;
@@ -392,6 +464,7 @@ document.addEventListener('click', async event => {
   const action = button.dataset.action;
   if (action === 'home') { screen = 'home'; render(); window.scrollTo({ top: 0, behavior: 'instant' }); }
   if (action === 'resume' && state) { screen = 'game'; render(); }
+  if (action === 'exit') { if (document.fullscreenElement) await document.exitFullscreen().catch(() => {}); openDialog('게임 종료', `<p>게임을 마치려면 현재 브라우저 탭이나 창을 닫아 주세요.</p>${state && state.phase !== 'results' ? '<p>진행 기록은 이 브라우저에 저장되어 있어요. 다음에 열면 이어하기로 계속할 수 있어요.</p>' : ''}`); }
   if (action === 'add') {
     const input = document.querySelector('#guess'); if (!input) return;
     const next = Math.min(MAX_GUESS, (parseGuess(input.value) ?? 0) + Number(button.dataset.amount));
@@ -404,6 +477,8 @@ document.addEventListener('click', async event => {
   if (action === 'about') showAbout();
   if (action === 'rules') showRules();
   if (action === 'ranking') showRanking();
+  if (action === 'result-ranking') { openDialog('온라인 랭킹', document.querySelector('#result-ranking-template').innerHTML, true); loadRankingList('#ranking-list', mySubmission()); }
+  if (action === 'result-details') openDialog('오늘 만난 물건들', document.querySelector('#result-details-template').innerHTML, true);
   if (action === 'source') showSource(button.dataset.id);
   if (action === 'photo') showPhoto(button.dataset.id);
   if (action === 'close-dialog') dialog.close();

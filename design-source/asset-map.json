@@ -1,0 +1,184 @@
+[
+  {
+    "file": "보랏빛 극장 커튼 왼쪽 패널.png",
+    "driveId": "1CuWoP5sNh1uNok4hL5lo_aWIuvAsmyis",
+    "role": "별도 커튼 대안",
+    "applied": false,
+    "notes": "현재 배경에 커튼이 있어 미사용. 별도 합성용으로 보존."
+  },
+  {
+    "file": "세 가지 검은 뒷모습 실루엣.png",
+    "driveId": "1z0u-HzXha7qV_Z7U9ecinhGOl32RHgRN",
+    "role": "게임 관객 7명",
+    "applied": true,
+    "notes": "3개 흉상을 잘라 반복 배치. 가운데 흉상 옆의 이웃 어깨만 CSS로 가림."
+  },
+  {
+    "file": "말랑한 빨간 하트 아이콘.png",
+    "driveId": "1wXsxnfl1WQSdvJbAI_z5RC1NxicMFkjV",
+    "role": "게임 남은 추측 기회",
+    "applied": true,
+    "notes": "기존 MAX_ATTEMPTS와 state.attempts에 연결."
+  },
+  {
+    "file": "말풍선UI_중앙꼬리_분리시트.png",
+    "driveId": "1CBfFFAn8R39lxzTvF9N3GTzrkj7WeLui",
+    "role": "게임 금액 말풍선 중앙 꼬리",
+    "applied": true,
+    "notes": "분리 시트의 중앙 꼬리만 사용."
+  },
+  {
+    "file": "말풍선UI_박스_꼬리_분리시트.png",
+    "driveId": "1B1bTpsmduEOL3IRB0zzi5lh_82xe9yMK",
+    "role": "게임 힌트·점수·금액 말풍선 본체와 측면 꼬리",
+    "applied": true,
+    "notes": "분리 시트의 본체와 꼬리를 잘라 재사용. 오른쪽 꼬리는 수평 반전."
+  },
+  {
+    "file": "말풍선UI_3D_흰색_투명.png",
+    "driveId": "1WTSMqjjVJ_orLfTpyO4F4U4cnengOcnO",
+    "role": "말풍선 대안",
+    "applied": false,
+    "notes": "본체·측면 꼬리가 결합된 버전. 배치 조절을 위해 분리 시트를 사용."
+  },
+  {
+    "file": "박스UI_3D_목재프레임_투명.png",
+    "driveId": "12Y0QUsuiv9dOEm4yQ9EnH5zTbqVF_t0d",
+    "role": "게임 중앙 상품 패널",
+    "applied": true,
+    "notes": "일치. 원본 패널을 기준 비율로 배치."
+  },
+  {
+    "file": "목재단상_3D_정면_투명_1920x500.png",
+    "driveId": "1MEy1DCynQeruJcP_RZejIQLEdypB3pTT",
+    "role": "게임 전면 목재 단상",
+    "applied": true,
+    "notes": "일치. 가로 비율을 시안에 맞추고 넘친 부분 가림."
+  },
+  {
+    "file": "조달청_브리핑룸_3D배경_1920x1080.png",
+    "driveId": "1M3K0pNwVi2Yw_T7HWcVNjJ1IitabvDPH",
+    "role": "메인·게임 배경과 좌우 커튼",
+    "applied": true,
+    "notes": "일치. 커튼이 합성되어 있어 별도 커튼 중복 사용 없음."
+  },
+  {
+    "file": "달이_3D_판사_소품제거_투명.png",
+    "driveId": "1DFBY1LBIpwppgylz1qXop3ycTmCK3Uko",
+    "role": "게임 오른쪽 판사",
+    "applied": true,
+    "notes": "시안의 소품 없는 버전과 일치."
+  },
+  {
+    "file": "달이_3D_판사_투명.png",
+    "driveId": "1FhQaaOnMAtAYQ-zxQmhexL6VJpGOIttG",
+    "role": "게임 오른쪽 판사의 소품 포함 대안",
+    "applied": false,
+    "notes": "시안에는 이 캐릭터의 망치와 받침이 없어 소품 제거 버전을 사용."
+  },
+  {
+    "file": "나르미_3D_판사_투명.png",
+    "driveId": "1z6IslQWgC1pm3D0M1p310Iy_owXqP9OL",
+    "role": "게임 왼쪽 판사",
+    "applied": true,
+    "notes": "일치. 투명 여백만 자르고 단상 뒤로 가림."
+  },
+  {
+    "file": "푸른 배경의 조달청 엠블럼.png",
+    "driveId": "1vWhkPwM-3Df7HV__T4C44S6VGsBJuJ3M",
+    "role": "커튼 없는 배경 대안",
+    "applied": false,
+    "notes": "게임 배경과 같은 계열. 현재 배경에 이미 커튼이 있어 미사용."
+  },
+  {
+    "file": "완전히 닫힌 보랏빛 무대 커튼.png",
+    "driveId": "1ONi04qkEPq4dy_pLdU8bYpNDXnPOCs5Y",
+    "role": "시안 대응 불명",
+    "applied": false,
+    "notes": "세 시안에 닫힌 커튼이 없음. 전환 연출로 추정할 수 있으나 임의 사용하지 않음."
+  },
+  {
+    "file": "투명 배경의 파란 라운드 패널.png",
+    "driveId": "1_FWSrE2I_UFH2dafk4AxMtzpgXWoY8Bg",
+    "role": "결과 패널 대안, 정확한 사용처 미확정",
+    "applied": false,
+    "notes": "결과 시안 패널보다 프레임이 얇음. 두 파란 패널 중 지정 필요."
+  },
+  {
+    "file": "하늘빛 프레임 결과 패널.png",
+    "driveId": "1tZUuROzDjp6v2FuW9jCu_p8aEuXWbqah",
+    "role": "결과 시안 중앙 패널",
+    "applied": true,
+    "notes": "결과 시안의 두꺼운 파란 프레임과 일치. 바깥 투명 여백만 자르고 9-slice로 재사용."
+  },
+  {
+    "file": "그물 든 새와 호두 클립보드 다람쥐.png",
+    "driveId": "1cinoL1ScpFura9XsNPAog0GocONBtJAR",
+    "role": "시안 대응 불명",
+    "applied": false,
+    "notes": "세 시안에 없음. 상태·배치 지정 필요."
+  },
+  {
+    "file": "파란 고글 새와 배낭 다람쥐.png",
+    "driveId": "1Aq_wFdBEuUUrtE9rqizoSZPcSnieANQf",
+    "role": "결과 시안 오른쪽 새·왼쪽 아래 다람쥐",
+    "applied": true,
+    "notes": "결과 시안과 일치. 시트의 새와 배낭 다람쥐를 각각 잘라 원본 비율로 배치."
+  },
+  {
+    "file": "로봇과 주황 동물 과학자.png",
+    "driveId": "1PC6nk1c8j5A8hx1MiNm32QV9TpL4vTf_",
+    "role": "시안 대응 불명",
+    "applied": false,
+    "notes": "세 시안에 없음. 상태·배치 지정 필요."
+  },
+  {
+    "file": "다람쥐와 새 마스코트 투명 컷아웃.png",
+    "driveId": "18AHUkQPjkDoxaFPKbaYmO33PAge9oCTl",
+    "role": "시안 대응 불명",
+    "applied": false,
+    "notes": "판사 다람쥐·경찰 새 조합으로 현재 시안과 포즈·의상이 다름."
+  },
+  {
+    "file": "호루라기 부는 주황 다람쥐.png",
+    "driveId": "1F7psjv7NMXQtBLA1ArqKY7rAslWLgOWe",
+    "role": "시안 대응 불명",
+    "applied": false,
+    "notes": "세 시안에 없음. 상태·배치 지정 필요."
+  },
+  {
+    "file": "고글 쓴 놀란 흰 새.png",
+    "driveId": "1UXk7_UnMlB2KlPrYh_EuGAefI8bg3gmm",
+    "role": "시안 대응 불명",
+    "applied": false,
+    "notes": "세 시안의 포즈와 다름. 오답/리액션 용도 등 임의 연결하지 않음."
+  },
+  {
+    "file": "분홍 코의 주황 다람쥐.png",
+    "driveId": "14T8d6jCCYPY9XVTrf_yaEBiHMWZKhamQ",
+    "role": "결과 시안 중앙 캐릭터",
+    "applied": true,
+    "notes": "결과 시안 중앙의 손 든 캐릭터와 일치. 투명 여백만 잘라 원본 비율로 배치."
+  },
+  {
+    "file": "고글 쓴 흰 새 마스코트.png",
+    "driveId": "1jJzOpWswFIHJ1izozEzbE3NLP9p-K7XB",
+    "role": "시안 대응 불명",
+    "applied": false,
+    "notes": "세 시안의 포즈와 다름. 상태·배치 지정 필요."
+  },
+  {
+    "file": "세 개의 검은 3D 이모지 흉상.png",
+    "driveId": "130HKL1SWo5fjNJpWzH1kzI6ovKbCktqG",
+    "role": "게임 관객 대안",
+    "applied": false,
+    "notes": "같은 종류의 긴 몸통 버전. 현재 선택한 뒷모습 시트와 중복되어 미사용."
+  },
+  {
+    "file": "조달청_연단_3D_정면_투명.png",
+    "driveId": "1pt8vlD6Unw7EYpT37dEyk-FKVOPY-Yhq",
+    "role": "메인 시안 중앙 연단",
+    "applied": true,
+    "notes": "메인 시안과 일치. 투명 여백만 잘라 원본 비율로 배치."
+  }
+]
