@@ -6,10 +6,18 @@
   font-weight: 400;
   font-display: swap;
 }
+/* Galmuri 2.40.3 (quiple/galmuri), distributed with LICENSE-Galmuri.txt. */
+@font-face {
+  font-family: Galmuri14;
+  src: url('./assets/fonts/Galmuri14.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 /* Shared desktop type roles. Compact stages lower text sizes independently of
    the 44px hit targets; display numbers also fit their own available width. */
 .art-game, body.game-active, body.title-art {
-  --art-font: DNFBitBitv2, 'Malgun Gothic', sans-serif;
+  --art-font: DNFBitBitv2, var(--body-font);
   --type-title: clamp(24px, calc(var(--stage-width) * .025), 40px);
   --type-section: clamp(16px, calc(var(--stage-width) * .015), 24px);
   --type-body: clamp(14px, calc(var(--stage-width) * .01125), 18px);
