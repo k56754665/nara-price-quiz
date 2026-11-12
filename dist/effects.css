@@ -15,6 +15,7 @@
 .fx-curtain { position: absolute; inset: 0; z-index: 30; overflow: hidden; pointer-events: none; }
 .fx-curtain-half {
   position: absolute; top: 0; bottom: 0; width: 50.1%;
+  background-color: #251039;
   background-image: url('./assets/designer/curtain-closed.png');
   background-size: 200% 100%; background-repeat: no-repeat;
 }

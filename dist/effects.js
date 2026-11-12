@@ -368,8 +368,8 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
 
   // Scene locks are transient. Cancelling restores controls and original art,
   // while app.js has already saved the valid destination session.
-  function scene(stage, name, duration, setup) {
-    if (!stage || reducedMotion.matches || document.hidden) return Promise.resolve(true);
+  function scene(stage, name, duration, setup, prepare) {
+    if (!stage || (!prepare && (reducedMotion.matches || document.hidden))) return Promise.resolve(true);
     stopIdle();
     return new Promise(resolve => {
       const controls = [...stage.querySelectorAll('button, input')].map(element => [element, element.disabled]);
@@ -377,7 +377,7 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
       stage.classList.add('fx-scene-busy');
       stage.dataset.scene = name;
       stage.setAttribute('aria-busy', 'true');
-      const dispose = setup();
+      let dispose = () => {};
       let finished = false;
       const finish = completed => {
         if (finished) return;
@@ -387,27 +387,64 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
         controls.forEach(([element, disabled]) => { element.disabled = disabled; });
         stage.classList.remove('fx-scene-busy');
         delete stage.dataset.scene;
+        delete stage.dataset.preparing;
         stage.removeAttribute('aria-busy');
         if (completed) idle();
         resolve(completed);
       };
       finishScene = finish;
-      later(() => finish(true), duration);
+      const start = () => {
+        if (finished) return;
+        delete stage.dataset.preparing;
+        if (reducedMotion.matches || document.hidden) { finish(true); return; }
+        const disposePreparation = dispose;
+        const disposeAnimation = setup();
+        dispose = () => { disposeAnimation?.(); disposePreparation(); };
+        later(() => finish(true), duration);
+      };
+      if (prepare) {
+        stage.dataset.preparing = 'true';
+        const pending = prepare();
+        dispose = pending.dispose;
+        pending.ready.then(start, start);
+      } else start();
     });
+  }
+
+  async function prepareOpening(stage) {
+    const images = [...stage.querySelectorAll('img')];
+    for (const image of images) image.loading = 'eager';
+    const artwork = ['stage-background', 'bubble-box', 'curtain-closed'].map(name => {
+      const image = new Image();
+      image.src = new URL(`./assets/designer/${name}.png`, import.meta.url).href;
+      return image.decode();
+    });
+    await Promise.allSettled([
+      ...images.map(image => image.decode()), ...artwork,
+      document.fonts.load('16px DNFBitBitv2'), document.fonts.load('14px Galmuri14'), document.fonts.ready,
+    ]);
+    // Let image fallbacks, the responsive stage and bubble canvases settle
+    // behind the closed curtain before any opening frame becomes visible.
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   }
 
   function enterRound({ curtain = false } = {}) {
     const stage = document.querySelector('.art-stage');
     const opening = curtain ? 760 : 0;
+    let overlay;
+    const prepare = curtain ? () => {
+      overlay = document.createElement('div');
+      overlay.className = 'fx-curtain';
+      overlay.dataset.loading = 'true';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.innerHTML = '<span class="fx-curtain-half fx-curtain-left"></span><span class="fx-curtain-half fx-curtain-right"></span>';
+      stage.append(overlay);
+      return { ready: prepareOpening(stage), dispose: () => overlay.remove() };
+    } : null;
     return scene(stage, curtain ? 'opening' : 'round', opening + 350, () => {
       const current = [];
-      let overlay;
-      if (curtain) {
-        overlay = document.createElement('div');
-        overlay.className = 'fx-curtain';
-        overlay.setAttribute('aria-hidden', 'true');
-        overlay.innerHTML = '<span class="fx-curtain-half fx-curtain-left"></span><span class="fx-curtain-half fx-curtain-right"></span>';
-        stage.append(overlay);
+      if (overlay) {
+        delete overlay.dataset.loading;
         for (const [side, direction] of [['left', -1], ['right', 1]]) {
           current.push(animate(overlay.querySelector(`.fx-curtain-${side}`), [
             { translate: '0 0', offset: 0 }, { translate: '0 0', offset: .1 }, { translate: `${direction * 102}% 0`, offset: 1 },
@@ -420,8 +457,8 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
       current.push(animate(stage.querySelector('.art-board-content'), [
         { opacity: 0, translate: '0 8px' }, { opacity: 1, translate: '0 0' },
       ], { delay: opening + 90, duration: 260, fill: 'both' }));
-      return () => { current.forEach(animation => animation?.cancel()); overlay?.remove(); };
-    });
+      return () => current.forEach(animation => animation?.cancel());
+    }, prepare);
   }
 
   function exitReveal() {
@@ -656,12 +693,19 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { clearParticles(); finishReward?.(); stopAudio(); stopIdle(); finishAnnouncement?.(); finishReaction?.(true); finishScene?.(true); }
+    if (document.hidden) {
+      clearParticles(); finishReward?.(); stopAudio(); stopIdle(); finishAnnouncement?.(); finishReaction?.(true);
+      if (!document.querySelector('.fx-scene-busy[data-preparing]')) finishScene?.(true);
+    }
     else { if (context) unlock(); idle(); }
     music.sync();
   });
   reducedMotion.addEventListener('change', () => {
-    if (reducedMotion.matches) { clearParticles(); finishReward?.(); finishAnnouncement?.(); finishScene?.(true); for (const animation of animations) animation.cancel(); }
+    if (reducedMotion.matches) {
+      clearParticles(); finishReward?.(); finishAnnouncement?.();
+      if (!document.querySelector('.fx-scene-busy[data-preparing]')) finishScene?.(true);
+      for (const animation of animations) animation.cancel();
+    }
     idle();
   });
   document.addEventListener('focusin', () => { if (document.activeElement?.matches('input, textarea')) stopIdle(); });

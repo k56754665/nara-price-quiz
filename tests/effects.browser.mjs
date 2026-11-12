@@ -87,16 +87,36 @@ try {
   }
   async function settled() { await page.locator('.fx-reacting').waitFor({ state: 'detached' }); }
   await page.goto(origin);
+  let releaseOpeningImage;
+  const openingImageHold = new Promise(resolve => { releaseOpeningImage = resolve; });
+  const holdOpeningImage = async route => { await openingImageHold; await route.continue(); };
+  await page.route('**/assets/products/**', holdOpeningImage);
   await page.locator('.art-title-start').click();
   await page.waitForFunction(() => window.__clickPlayed > 0);
   pass('First start click unlocks Web Audio and plays its button sound across navigation');
   assert.deepEqual(await readFile(path.join(project, 'dist/assets/designer/curtain-closed.png')), await readFile(path.join(project, 'design-source/완전히 닫힌 보랏빛 무대 커튼.png')));
   assert.equal(await page.locator('.fx-curtain-half').count(), 2);
   assert.equal(await page.locator('.guess-submit').isDisabled(), true);
+  await page.waitForTimeout(1250);
+  assert.equal(await page.locator('.art-stage[data-preparing=true] .fx-curtain[data-loading=true]').count(), 1);
+  assert(await page.locator('.fx-curtain-half').evaluateAll(halves => halves.every(half => {
+    const style = getComputedStyle(half);
+    return (style.translate === 'none' || parseFloat(style.translate) === 0) && style.backgroundColor === 'rgb(37, 16, 57)';
+  })));
+  assert.equal((await saved()).phase, 'question');
+  assert.equal((await saved()).index, 0);
+  assert.equal((await saved()).rounds.length, 0);
+  assert.equal(await page.locator('.guess-submit').isDisabled(), true);
+  await page.screenshot({ path: path.join(output, 'curtain-loading.png') });
+  pass('A delayed first product stays behind the fully closed curtain beyond the old opening timer; progress is saved and input remains locked');
+  releaseOpeningImage();
   await page.waitForFunction(() => {
     const halves = document.querySelectorAll('.fx-curtain-half');
     return halves.length === 2 && parseFloat(getComputedStyle(halves[0]).translate) < 0 && parseFloat(getComputedStyle(halves[1]).translate) > 0;
   });
+  assert(await page.locator('.art-product img').evaluate(image => image.complete && image.naturalWidth > 0));
+  assert.equal(await page.locator('.art-stage[data-preparing]').count(), 0);
+  await page.unroute('**/assets/products/**', holdOpeningImage);
   const curtainMotion = await page.locator('.fx-curtain').evaluate(el => [...el.children].map(half => parseFloat(getComputedStyle(half).translate)));
   assert(curtainMotion[0] < 0 && curtainMotion[1] > 0);
   await page.screenshot({ path: path.join(output, 'curtain-opening.png') });
@@ -280,6 +300,7 @@ try {
   await page.reload();
   await page.locator('.art-title-start').click();
   const reduced = (await saved()).questions[0];
+  await page.locator('.fx-scene-busy').waitFor({ state: 'detached' });
   assert.equal(await page.locator('.fx-curtain, .fx-scene-busy').count(), 0);
   assert.equal(await page.locator('#guess').isEnabled(), true);
   await submit(reduced.answer);
@@ -287,7 +308,7 @@ try {
   await page.locator('.art-reveal-screen').waitFor();
   assert.equal(await page.locator('.fx-score-fly').count(), 0);
   assert.equal(await page.locator('.art-reveal-total strong').textContent(), '1,000점');
-  pass('Reduced motion skips curtain/entry delays and retains feedback and score without motion');
+  pass('Reduced motion waits for ready artwork, then skips curtain/entry animation delays and retains feedback and score');
 
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.setViewportSize({ width: 844, height: 390 });
