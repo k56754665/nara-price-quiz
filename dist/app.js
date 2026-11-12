@@ -161,23 +161,32 @@ async function submitRanking() {
   if (!nickname) { error.textContent = `닉네임은 1~${NICKNAME_MAX}자로 입력해 주세요.`; input?.focus(); return; }
   error.textContent = '';
   rankingBusy = true;
+  const submittedSession = state, submittedStage = dialog.querySelector('.art-ranking-stage'), submittedSet = rankingKey();
+  const previous = mySubmission();
+  const confirmationVisible = () => state === submittedSession && screen === 'game' && dialog.open && submittedStage?.isConnected;
   const button = document.querySelector('#ranking-form button');
   if (button) { button.disabled = true; button.textContent = '등록하는 중…'; }
   try {
-    const result = await submitScore(LEADERBOARD_CONFIG, buildSubmission({ questionSet: state.questionSet, clientId: clientId(), nickname, rounds: state.rounds }));
-    const previous = mySubmission();
-    const total = totalScore(state.rounds);
+    const result = await submitScore(LEADERBOARD_CONFIG, buildSubmission({ questionSet: submittedSession.questionSet, clientId: clientId(), nickname, rounds: submittedSession.rounds }));
+    const total = totalScore(submittedSession.rounds);
     ranking.nickname = nickname;
     // 서버는 이 기기의 최고 기록을 돌려줍니다. 이번 점수가 더 낮으면 예전 기록(닉네임 포함)이 그대로입니다.
-    const kept = result.totalScore > total;
-    ranking.submitted[rankingKey()] = { nickname: kept ? previous?.nickname ?? nickname : nickname, rank: result.rank, totalScore: result.totalScore };
-    state.rankSubmitted = true;
-    saveRanking(); persist();
+    const kept = result.totalScore > total || previous?.totalScore === result.totalScore;
+    ranking.submitted[submittedSet] = { nickname: kept ? previous?.nickname ?? nickname : nickname, rank: result.rank, totalScore: result.totalScore };
+    submittedSession.rankSubmitted = true;
+    saveRanking(); if (state === submittedSession) persist();
+    if (!confirmationVisible()) return;
     render({ focus: false });
     showRanking(true);
+    effects.rankingRegistered({ celebrate: !kept && (!previous || result.totalScore > previous.totalScore) });
     notify(kept ? `최고 기록 ${number(result.totalScore)}점(${number(result.rank)}위)이 그대로 유지돼요.` : previous ? `최고 기록 갱신! ${number(result.rank)}위예요.` : `${number(result.rank)}위로 등록했어요!`);
   } catch (e) {
-    if (e.code === 'already_submitted') { state.rankSubmitted = true; persist(); render({ focus: false }); showRanking(true); notify(e.message); return; }
+    if (e.code === 'already_submitted') {
+      submittedSession.rankSubmitted = true;
+      if (state === submittedSession) persist();
+      if (confirmationVisible()) { render({ focus: false }); showRanking(true); notify(e.message); }
+      return;
+    }
     if (button?.isConnected) { button.disabled = false; button.textContent = '랭킹에 등록하기'; }
     if (error?.isConnected) error.textContent = e.message;
   } finally {
@@ -560,9 +569,11 @@ document.addEventListener('click', async event => {
   if (action === 'exit') { if (document.fullscreenElement) await document.exitFullscreen().catch(() => {}); openDialog('게임 종료', `<p>게임을 마치려면 현재 브라우저 탭이나 창을 닫아 주세요.</p>${state && state.phase !== 'results' ? '<p>진행 기록은 이 브라우저에 저장되어 있어요. 다음에 열면 이어하기로 계속할 수 있어요.</p>' : ''}`); }
   if (action === 'add') {
     const input = document.querySelector('#guess'); if (!input) return;
-    const next = Math.min(MAX_GUESS, (parseGuess(input.value) ?? 0) + Number(button.dataset.amount));
+    const previous = parseGuess(input.value) ?? 0;
+    const next = Math.min(MAX_GUESS, previous + Number(button.dataset.amount));
     input.value = next > 0 ? number(next) : '';
     input.dispatchEvent(new Event('input', { bubbles: true })); if (!usesTouchControls()) input.focus({ preventScroll: true });
+    if (Number(button.dataset.amount) > 0 && next > previous) effects.amountAdded(button);
   }
   if (action === 'clear') { const input = document.querySelector('#guess'); if (input) { input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); if (!usesTouchControls()) input.focus({ preventScroll: true }); } }
   if (action === 'next' && state?.phase === 'reveal') nextQuestion();
