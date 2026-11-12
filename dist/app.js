@@ -607,9 +607,10 @@ document.addEventListener('click', event => {
   if (!button.matches('.guess-submit, [data-action="sound"]')) effects.click();
 }, true);
 
-// Browsers permit music after a real user gesture; never autoplay on page load.
+// Resume blocked audio on a real gesture, including touch clicks after pointerup.
 document.addEventListener('pointerdown', () => effects.unlock(), { once: true });
 document.addEventListener('keydown', () => effects.unlock(), { once: true });
+document.addEventListener('click', () => effects.unlock(), { once: true });
 
 dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeDialog(); } });
 
@@ -624,6 +625,8 @@ try {
   if (state) persist();
   if (!state) remove(storageKeys.session);
   render({ focus: false });
+  // Play on entry when allowed; gesture hooks resume it if autoplay is blocked.
+  if (musicOn) effects.unlock();
 } catch {
   app.innerHTML = `<main class="loading"><span class="brand-mark">₩?</span><h1>게임 정보를 불러오지 못했어요.</h1><p>인터넷 연결을 확인한 뒤 다시 열어 주세요.</p><button class="button button-blue" id="reload-button">다시 불러오기</button></main>`;
   document.querySelector('#reload-button').addEventListener('click', () => location.reload());

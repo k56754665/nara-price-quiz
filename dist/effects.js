@@ -27,9 +27,9 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
     if (!soundEnabled() && !musicEnabled()) return Promise.resolve(null);
     try {
       context ??= new (window.AudioContext || window.webkitAudioContext)();
-      const resume = context.resume().catch(() => {});
+      const resume = context.resume().then(() => music.sync()).catch(() => {});
       decoded ??= samples.then(bytes => bytes && Promise.all(bytes.map(buffer => context.decodeAudioData(buffer)))).catch(() => null);
-      return Promise.all([resume, decoded]).then(([, buffers]) => { music.sync(); return buffers; });
+      return Promise.all([resume, decoded]).then(([, buffers]) => buffers);
     } catch { return Promise.resolve(null); }
   }
 

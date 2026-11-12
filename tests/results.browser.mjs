@@ -35,7 +35,7 @@ const checks = [], errors = [];
 function pass(text) { checks.push(text); console.log('PASS ' + text); }
 let browser;
 try {
-  browser = await playwright.chromium.launch({ headless: true, executablePath: process.env.UI_BROWSER || 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+  browser = await playwright.chromium.launch({ headless: true, executablePath: process.env.UI_BROWSER || 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--autoplay-policy=document-user-activation-required'] });
   const context = await browser.newContext({ viewport: { width: 1280, height: 720 }, hasTouch: true });
   await context.route('**/*', route => route.request().url().startsWith(origin) ? route.continue() : route.abort());
   await context.addInitScript(() => {
