@@ -16,3 +16,5 @@ outputs/
 /tests/familiar.test.mjs
 /tests/review-flow.test.mjs
 /tests/source.test.mjs
+/tests/admin.browser.mjs
+/tests/local-server.test.mjs
