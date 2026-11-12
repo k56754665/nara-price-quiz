@@ -55,17 +55,6 @@
     "sourceSha256": "b88863f620a5d410a528c898d6329e3362c8c331a133c39016358cd956dd9ead"
   },
   {
-    "file": "result-wave.png",
-    "source": "분홍 코의 주황 다람쥐.png",
-    "crop": [
-      142,
-      76,
-      949,
-      1080
-    ],
-    "sourceSha256": "6e2e5a8a33ee3f60c8a4396dec71352c25116bd888032908bca803731937a662"
-  },
-  {
     "file": "judge-nareumi.png",
     "source": "나르미_3D_판사_투명.png",
     "crop": [
@@ -191,5 +180,29 @@
     "source": "완전히 닫힌 보랏빛 무대 커튼.png",
     "copyOriginal": true,
     "sourceSha256": "1b53bc0791d962c000cb8555adf25b3f4731fcfa224b6d554ad7471765e07b99"
+  },
+  {
+    "file": "result-catchers.png",
+    "source": "그물 든 새와 호두 클립보드 다람쥐.png",
+    "copyOriginal": true,
+    "sourceSha256": "49e6488748c5dcce6d98b92d5f0150989e181f621e8ab269e97d2d8be498b66d"
+  },
+  {
+    "file": "result-surprised.png",
+    "source": "고글 쓴 놀란 흰 새.png",
+    "copyOriginal": true,
+    "sourceSha256": "b049162376b7f85d4dd22193cf248b0f68a9f52fec4cc27b5ad0834add5231b6"
+  },
+  {
+    "file": "result-scientists.png",
+    "source": "로봇과 주황 동물 과학자.png",
+    "copyOriginal": true,
+    "sourceSha256": "799696083427de92cc6f53e73ab7a734b7f85b74a522a6a3f31a5932e1002d61"
+  },
+  {
+    "file": "result-officials.png",
+    "source": "다람쥐와 새 마스코트 투명 컷아웃.png",
+    "copyOriginal": true,
+    "sourceSha256": "ded5f4a62ad6947463a42fb2cffa9c978a13320c68e88422d72ab10a8e347bd4"
   }
 ]

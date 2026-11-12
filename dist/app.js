@@ -370,13 +370,14 @@ function results() {
   const mine = mySubmission();
   const rankLabel = state.rankSubmitted && mine ? `내 최고 기록 · 등록 당시 ${number(mine.rank)}위!` : '랭킹에 등록하기';
   const honor = total === MAX_TOTAL ? `${number(MAX_TOTAL)}점 만점!` : state.newBest ? '이 기기 최고 기록!' : '';
-  return `<section class="art-result-screen" aria-label="최종 결과"><div class="art-result-stage">
-    <img class="art-result-bird" src="./assets/designer/result-bird.png" alt="" aria-hidden="true" draggable="false">
-    <img class="art-result-backpack" src="./assets/designer/result-backpack.png" alt="" aria-hidden="true" draggable="false">
+  return `<section class="art-result-screen" aria-label="최종 결과"><div class="art-result-stage" data-result-tier="${verdict.tier}">
     <div class="art-result-panel">
       <output class="art-result-score" style="--score-length:${number(total).length + 1}" aria-label="최종 점수 ${number(total)}점">${number(total)}점</output>
       <div class="art-result-identity"><p class="art-result-prompt${honor ? ' fx-result-honor' : ''}">${honor || '당신은...'}</p><h1 id="screen-heading" class="art-result-grade" tabindex="-1" style="--grade-length:${verdict.title.length}">${esc(verdict.title)}</h1></div>
-      <img class="art-result-wave" src="./assets/designer/result-wave.png" alt="" aria-hidden="true" draggable="false">
+      <div class="art-result-story">
+        <div class="art-result-character art-result-character--${verdict.imageCrop}"><img src="./assets/designer/${verdict.image}" alt="${esc(verdict.imageAlt)}" draggable="false"></div>
+        <div class="art-result-copy"><p class="art-result-description" tabindex="0" aria-label="결과 설명">${esc(verdict.subtitle)}</p><span class="art-result-description-hint" aria-hidden="true">↕ 스크롤해서 더 보기</span></div>
+      </div>
       ${rankingOn ? `<button type="button" class="art-result-rank" data-action="result-ranking">${rankLabel}</button>` : `<p class="art-result-rank">최고 기록 ${number(Math.max(best, total))}점</p>`}
       <div class="art-result-actions"><button type="button" class="art-result-kakao" data-action="share-kakao">카카오톡 공유</button><div class="art-result-primary"><button type="button" class="art-result-share" data-action="share-system">공유하기</button><button type="button" class="art-result-replay" data-action="replay">다시하기</button></div></div>
     </div>

@@ -11,7 +11,6 @@ $regions = @(
     @('result-panel.png', '하늘빛 프레임 결과 패널.png', 52, 72, 920, 1398),
     @('result-bird.png', '파란 고글 새와 배낭 다람쥐.png', 50, 28, 960, 920),
     @('result-backpack.png', '파란 고글 새와 배낭 다람쥐.png', 1055, 372, 470, 500),
-    @('result-wave.png', '분홍 코의 주황 다람쥐.png', 142, 76, 949, 1080),
     @('judge-nareumi.png', '나르미_3D_판사_투명.png', 196, 47, 808, 1173),
     @('judge-dali.png', '달이_3D_판사_소품제거_투명.png', 211, 50, 939, 1206),
     @('heart.png', '말랑한 빨간 하트 아이콘.png', 113, 216, 1014, 867),
@@ -39,5 +38,18 @@ $manifest = foreach ($region in $regions) {
 $curtainSource = Join-Path $source '완전히 닫힌 보랏빛 무대 커튼.png'
 Copy-Item -LiteralPath $curtainSource -Destination (Join-Path $output 'curtain-closed.png') -Force
 $manifest += [ordered]@{ file = 'curtain-closed.png'; source = '완전히 닫힌 보랏빛 무대 커튼.png'; copyOriginal = $true; sourceSha256 = (Get-FileHash -LiteralPath $curtainSource -Algorithm SHA256).Hash.ToLower() }
+# Result tiers use untouched Drive originals. CSS crops the left/right character
+# of result-catchers.png so the two tiers share one lossless sprite sheet.
+$resultSources = @(
+    @('result-catchers.png', '그물 든 새와 호두 클립보드 다람쥐.png'),
+    @('result-surprised.png', '고글 쓴 놀란 흰 새.png'),
+    @('result-scientists.png', '로봇과 주황 동물 과학자.png'),
+    @('result-officials.png', '다람쥐와 새 마스코트 투명 컷아웃.png')
+)
+foreach ($entry in $resultSources) {
+    $sourceFile = Join-Path $source $entry[1]
+    Copy-Item -LiteralPath $sourceFile -Destination (Join-Path $output $entry[0]) -Force
+    $manifest += [ordered]@{ file = $entry[0]; source = $entry[1]; copyOriginal = $true; sourceSha256 = (Get-FileHash -LiteralPath $sourceFile -Algorithm SHA256).Hash.ToLower() }
+}
 $manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $output 'manifest.json') -Encoding utf8
 Write-Output "Prepared $($manifest.Count) designer assets."

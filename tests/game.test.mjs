@@ -102,8 +102,41 @@ test('최종 결과는 10문제가 완료돼야 복구할 수 있고 합계가 �
   assert.equal(isValidSession({ ...s, phase: 'results', index: 9, rounds }, s.questions), true);
   assert.equal(isValidSession({ ...s, phase: 'results', index: 9, rounds: rounds.slice(0, 9) }, s.questions), false);
   assert.equal(isValidSession({ ...s, index: 99 }, s.questions), false);
-  assert.equal(grade(9000).title, '나라장터 가격의 달인');
+  assert.equal(grade(9000).title, '걸어 다니는 견적서');
   assert.equal(koreanAmount(951500000), '9억 5,150만 원');
+});
+
+test('최종 등급은 2000·4000·6000점 경계와 10000점 만점을 구분', () => {
+  for (const [total, title, image, crop] of [
+    [0, '가격표 앞에서 동공지진', 'result-catchers.png', 'right'],
+    [1999, '가격표 앞에서 동공지진', 'result-catchers.png', 'right'],
+    [2000, '가격표와 밀당 중', 'result-officials.png', 'full'],
+    [3999, '가격표와 밀당 중', 'result-officials.png', 'full'],
+    [4000, '견적서 수사대 에이스', 'result-scientists.png', 'full'],
+    [5999, '견적서 수사대 에이스', 'result-scientists.png', 'full'],
+    [6000, '걸어 다니는 견적서', 'result-surprised.png', 'full'],
+    [9999, '걸어 다니는 견적서', 'result-surprised.png', 'full'],
+    [10000, '조달의 신', 'result-catchers.png', 'left'],
+  ]) {
+    const result = grade(total);
+    assert.equal(result.title, title, String(total));
+    assert.equal(result.image, image, String(total));
+    assert.equal(result.imageCrop, crop, String(total));
+  }
+  assert.equal(grade(10000).subtitle, '말도 안 돼요!! 설마 모든 가격을 맞히신 건가요?! 조달청이 발칵 뒤집혔습니다! 전국의 견적서들이 당신 앞에 무릎을 꿇고, 나라장터에는 당신을 위한 황금 동상이 세워질 예정입니다. 축하합니다! 당신은 이제 인간의 영역을 넘어선 조달의 신입니다!');
+  assert.equal(grade(6000).subtitle, '웬만한 가격에는 눈썹 하나 까딱하지 않는 경지! 이제 물건을 보면 가격보다 규격과 납품 조건이 먼저 보이시나요? 나라장터가 당신에게 견적을 물어볼지도 모르겠네요.');
+});
+
+test('점수별 결과 이미지는 보관된 Drive 원본과 같은 바이트를 배포', async () => {
+  const manifest = JSON.parse(await readFile(new URL('../dist/assets/designer/manifest.json', import.meta.url), 'utf8'));
+  for (const image of new Set([0, 2000, 4000, 6000, 10000].map(total => grade(total).image))) {
+    const entry = manifest.find(item => item.file === image);
+    assert.ok(entry?.copyOriginal, image);
+    const source = await readFile(new URL('../design-source/' + entry.source, import.meta.url));
+    const deployed = await readFile(new URL('../dist/assets/designer/' + image, import.meta.url));
+    assert.deepEqual(deployed, source, image);
+    assert.equal(createHash('sha256').update(deployed).digest('hex'), entry.sourceSha256, image);
+  }
 });
 
 test('검증된 가격·단위·인도조건과 계약기간을 유지', () => {

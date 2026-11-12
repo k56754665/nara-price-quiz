@@ -67,10 +67,31 @@ export function totalScore(rounds) {
 
 export function grade(total, roundCount = ROUND_COUNT) {
   const average = total / roundCount;
-  if (average >= 850) return { title: "나라장터 가격의 달인", subtitle: "이 정도면 가격표와 마음이 통했어요.", symbol: "✦" };
-  if (average >= 600) return { title: "예리한 가격 탐정", subtitle: "규격 속에 숨은 가격의 단서를 잘 찾았어요.", symbol: "◎" };
-  if (average >= 350) return { title: "호기심 많은 발견가", subtitle: "익숙한 물건을 새로운 가격으로 발견했어요.", symbol: "↗" };
-  return { title: "뜻밖의 가격 수집가", subtitle: "오늘의 놀라움이 다음 추측의 힌트가 될 거예요.", symbol: "?" };
+  const legendaryDescription = "말도 안 돼요!! 설마 모든 가격을 맞히신 건가요?! 조달청이 발칵 뒤집혔습니다! 전국의 견적서들이 당신 앞에 무릎을 꿇고, 나라장터에는 당신을 위한 황금 동상이 세워질 예정입니다. 축하합니다! 당신은 이제 인간의 영역을 넘어선 조달의 신입니다!";
+  if (total === roundCount * ATTEMPT_SCORES[0]) return {
+    tier: 'deity', title: '조달의 신', subtitle: legendaryDescription,
+    image: 'result-catchers.png', imageCrop: 'left', imageAlt: '그물을 든 흰 새',
+  };
+  if (average >= 600) return {
+    tier: 'estimate', title: '걸어 다니는 견적서',
+    subtitle: '웬만한 가격에는 눈썹 하나 까딱하지 않는 경지! 이제 물건을 보면 가격보다 규격과 납품 조건이 먼저 보이시나요? 나라장터가 당신에게 견적을 물어볼지도 모르겠네요.',
+    image: 'result-surprised.png', imageCrop: 'full', imageAlt: '고글을 쓰고 놀란 흰 새',
+  };
+  if (average >= 400) return {
+    tier: 'ace', title: '견적서 수사대 에이스',
+    subtitle: "수상한 가격을 제법 정확하게 추리했습니다! 하지만 견적서는 아직 당신에게 몇 가지 비밀을 숨기고 있어요. 다음엔 '현장 설치 포함' 같은 조건도 놓치지 마세요.",
+    image: 'result-scientists.png', imageCrop: 'full', imageAlt: '로봇과 주황 동물 과학자',
+  };
+  if (average >= 200) return {
+    tier: 'bargain', title: '가격표와 밀당 중',
+    subtitle: '분명 이 정도 가격일 줄 알았는데…! 맞힐 듯 말 듯, 가격표와 치열한 심리전을 벌였습니다. 이제 알겠죠? 세상의 모든 물건이 우리가 생각하는 가격에 팔리지는 않는다는 걸요.',
+    image: 'result-officials.png', imageCrop: 'full', imageAlt: '판사 다람쥐와 경찰 새 마스코트',
+  };
+  return {
+    tier: 'shocked', title: '가격표 앞에서 동공지진',
+    subtitle: '네?! 이게 이 가격이라고요?! 오늘 당신의 상식이 몇 번이나 흔들렸는지 모르겠네요. 하지만 이제 길거리의 가로수 보호판 하나도 예사롭게 보이지 않을 겁니다.',
+    image: 'result-catchers.png', imageCrop: 'right', imageAlt: '호두 클립보드를 든 다람쥐',
+  };
 }
 
 export function sampleQuestions(questions, count = ROUND_COUNT, random = Math.random) {

@@ -78,6 +78,9 @@ function markScrollableKnowledge() {
     card.dataset.scrollable = String(card.scrollHeight > card.clientHeight + 1);
     card.tabIndex = 0;
   });
+  document.querySelectorAll('.art-result-description').forEach(description => {
+    description.parentElement.dataset.scrollable = String(description.scrollHeight > description.clientHeight + 1);
+  });
 }
 function updateViewport() {
   // Layout viewport stays stable while a phone's software keyboard is open.

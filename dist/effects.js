@@ -576,7 +576,7 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled) {
   function idle() {
     stopIdle();
     if (reducedMotion.matches || document.hidden || document.querySelector('#app')?.inert || finishScene || finishReaction || document.querySelector('.art-result-stage[data-announcing], dialog[open], .art-popover[open], .art-reveal-menu[open]') || document.activeElement?.matches('input, textarea')) return;
-    const elements = document.querySelectorAll('.art-title-start .art-title-label, .art-stage .art-judge-left, .art-stage .art-judge-right, .art-result-bird, .art-result-backpack, .art-result-wave');
+    const elements = document.querySelectorAll('.art-title-start .art-title-label, .art-stage .art-judge-left, .art-stage .art-judge-right, .art-result-character');
     elements.forEach((element, i) => {
       const title = Boolean(element.closest('.art-title-start'));
       const frames = title
@@ -642,7 +642,7 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled) {
       }
       output.textContent = '0점';
       counterFrame = requestAnimationFrame(count);
-      stage.querySelectorAll('.art-result-bird, .art-result-backpack, .art-result-wave').forEach((character, i) => {
+      stage.querySelectorAll('.art-result-character').forEach((character, i) => {
         track(character, [{ translate: '0 0' }, { translate: '0 -10px', offset: .25 }, { translate: '0 0', offset: .5 }, { translate: '0 -5px', offset: .75 }, { translate: '0 0' }], { delay: 620 + i * 70, duration: 400, fill: 'backwards', easing: 'ease-in-out' });
       });
       if (special) queueParticles(() => {

@@ -114,30 +114,30 @@
   {
     "file": "그물 든 새와 호두 클립보드 다람쥐.png",
     "driveId": "1cinoL1ScpFura9XsNPAog0GocONBtJAR",
-    "role": "시안 대응 불명",
-    "applied": false,
-    "notes": "세 시안에 없음. 상태·배치 지정 필요."
+    "role": "최종 결과 만점·최저 등급 캐릭터",
+    "applied": true,
+    "notes": "만점은 왼쪽 그물 든 새, 2000점 미만은 오른쪽 클립보드 다람쥐. 원본을 그대로 복사하고 CSS의 정사각 뷰포트로 좌우 절반만 표시."
   },
   {
     "file": "파란 고글 새와 배낭 다람쥐.png",
     "driveId": "1Aq_wFdBEuUUrtE9rqizoSZPcSnieANQf",
-    "role": "결과 시안 오른쪽 새·왼쪽 아래 다람쥐",
+    "role": "온라인 랭킹 장식 캐릭터",
     "applied": true,
-    "notes": "결과 시안과 일치. 시트의 새와 배낭 다람쥐를 각각 잘라 원본 비율로 배치."
+    "notes": "시트의 새와 배낭 다람쥐를 각각 잘라 온라인 랭킹에서 사용. 최종 결과는 점수별 이미지로 교체."
   },
   {
     "file": "로봇과 주황 동물 과학자.png",
     "driveId": "1PC6nk1c8j5A8hx1MiNm32QV9TpL4vTf_",
-    "role": "시안 대응 불명",
-    "applied": false,
-    "notes": "세 시안에 없음. 상태·배치 지정 필요."
+    "role": "최종 결과 4000~5999점 이미지",
+    "applied": true,
+    "notes": "견적서 수사대 에이스 등급. 두 캐릭터가 있는 원본 전체를 그대로 사용."
   },
   {
     "file": "다람쥐와 새 마스코트 투명 컷아웃.png",
     "driveId": "18AHUkQPjkDoxaFPKbaYmO33PAge9oCTl",
-    "role": "시안 대응 불명",
-    "applied": false,
-    "notes": "판사 다람쥐·경찰 새 조합으로 현재 시안과 포즈·의상이 다름."
+    "role": "최종 결과 2000~3999점 이미지",
+    "applied": true,
+    "notes": "가격표와 밀당 중 등급. 판사 다람쥐·경찰 새 원본 전체를 그대로 사용."
   },
   {
     "file": "호루라기 부는 주황 다람쥐.png",
@@ -149,16 +149,16 @@
   {
     "file": "고글 쓴 놀란 흰 새.png",
     "driveId": "1UXk7_UnMlB2KlPrYh_EuGAefI8bg3gmm",
-    "role": "시안 대응 불명",
-    "applied": false,
-    "notes": "세 시안의 포즈와 다름. 오답/리액션 용도 등 임의 연결하지 않음."
+    "role": "최종 결과 6000~9999점 이미지",
+    "applied": true,
+    "notes": "걸어 다니는 견적서 등급. 놀란 흰 새 원본 전체를 그대로 사용."
   },
   {
     "file": "분홍 코의 주황 다람쥐.png",
     "driveId": "14T8d6jCCYPY9XVTrf_yaEBiHMWZKhamQ",
-    "role": "결과 시안 중앙 캐릭터",
-    "applied": true,
-    "notes": "결과 시안 중앙의 손 든 캐릭터와 일치. 투명 여백만 잘라 원본 비율로 배치."
+    "role": "이전 결과 시안 중앙 캐릭터",
+    "applied": false,
+    "notes": "최종 결과를 점수별 이미지로 교체. 디자인 원본은 보존하고 사용하지 않는 result-wave.png 파생 파일은 제거."
   },
   {
     "file": "고글 쓴 흰 새 마스코트.png",

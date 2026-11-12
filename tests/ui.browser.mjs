@@ -81,8 +81,8 @@ try {
       const lives = visibleGame && !dialog.open && document.querySelector('.art-lives');
       const panel = visibleGame ? document.querySelector('.art-result-panel') : null;
       const rect = e => e.getBoundingClientRect();
-      const wave = panel?.querySelector('.art-result-wave');
-      const backpack = document.querySelector('.art-result-backpack');
+      const character = panel?.querySelector('.art-result-character');
+      const description = panel?.querySelector('.art-result-copy');
       const revealBoard = visibleGame && !dialog.open && document.querySelector('.art-reveal-board');
       const rankingList = visibleGame && dialog.open && dialog.querySelector('.art-ranking-list');
       const intersects = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
@@ -115,7 +115,7 @@ try {
       return {
         headingInset: heading ? rect(heading).top - rect(dialog).top : 20,
         heartsInside: lives ? rect(lives).bottom <= rect(lives.closest('.art-stage')).bottom + 1 : true,
-        mascotsSeparate: panel && !dialog.open ? !intersects(rect(wave), rect(backpack)) : true,
+        mascotsSeparate: panel && !dialog.open ? !intersects(rect(character), rect(description)) : true,
         resultActionsInside: panel && !dialog.open ? rect(panel.querySelector('.art-result-actions')).bottom <= rect(panel).bottom - 12 : true,
         desktopRevealFits: revealBoard && document.documentElement.dataset.stageLayout === 'desktop' ? revealBoard.scrollHeight <= revealBoard.clientHeight + 1 : true,
         desktopRankingRowsVisible: rankingList && rect(rankingList.closest('.art-ranking-stage')).width > 900 ? rect(rankingList).height >= 88 : true,
