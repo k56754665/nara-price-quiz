@@ -38,7 +38,8 @@ let screen = 'home';
 let soundOn = read('nara-price-sound', true) !== false;
 let musicOn = read('nara-price-music', true) !== false;
 let guessBusy = false;
-const effects = createGameEffects(() => soundOn, () => musicOn);
+const effects = createGameEffects(() => soundOn, () => musicOn,
+  () => screen === 'home' || state?.phase === 'results' ? 'wallpaper' : 'bossa');
 let toastTimeout;
 const MAX_TOTAL = ROUND_COUNT * ATTEMPT_SCORES[0];
 let best = read(storageKeys.best, 0);
@@ -491,7 +492,7 @@ function showPhoto(id) {
 }
 
 function showAbout() {
-  openDialog('가격표의 기준을 알려드려요', `<span class="dialog-badge">${esc(referenceDate())} 조사 스냅샷</span><p>이 게임은 <strong>나라장터쇼핑몰에 실제 등록된 물품</strong>의 계약단가를 맞히는 퀴즈입니다.</p><dl class="info-definitions"><div><dt>어떤 가격인가요?</dt><dd>해당 모델의 계약단위 한 단위에 대한 등록 계약단가입니다. 실제 구매·지급총액을 뜻하지 않습니다. 문제의 규격·수량·인도조건·부가세를 함께 확인해 주세요.</dd></div><div><dt>지금 가격과 같나요?</dt><dd>${esc(referenceDate())}에 확인한 가격입니다. 이후 계약·할인·등록 상태가 달라질 수 있습니다. 물건별 등록 계약단가를 기준으로 출제하며, 할인 정보는 정답 계산에 반영하지 않습니다.</dd></div><div><dt>상품 이미지에 관하여</dt><dd>각 물품식별번호에 연결된 나라장터 공식 상품 이미지를 사용합니다. 원본을 수정하지 않았으며, 그네와 조합놀이대는 공급업체가 등록한 제품 이미지입니다. 이미지 크게 보기에서 출처를 확인할 수 있습니다.</dd></div><div><dt>힌트와 틈새 지식</dt><dd>추측이 정답의 ±${TOLERANCE_PERCENT}% 밖이면 UP/DOWN과 대략적인 차이를 알려드리고, 물건마다 최대 ${MAX_ATTEMPTS}번 추측할 수 있습니다. 틈새 지식은 물건과 별도로 매 게임 10개를 중복 없이 배정하며, 정답·점수 화면과 최종 결과표에 표시합니다. 이어하기에도 같은 지식이 유지됩니다.</dd></div></dl><p class="dialog-small">본 게임은 조달청 공식 서비스가 아닌 공모전 준비용 프로토타입입니다. 기록은 이 브라우저에 저장됩니다.</p><a class="external-link" href="${esc(data.catalogUrl)}" target="_blank" rel="noopener noreferrer">공식 API 안내 확인하기 ↗</a>`);
+  openDialog('가격표의 기준을 알려드려요', `<span class="dialog-badge">${esc(referenceDate())} 조사 스냅샷</span><p>이 게임은 <strong>나라장터쇼핑몰에 실제 등록된 물품</strong>의 계약단가를 맞히는 퀴즈입니다.</p><dl class="info-definitions"><div><dt>어떤 가격인가요?</dt><dd>해당 모델의 계약단위 한 단위에 대한 등록 계약단가입니다. 실제 구매·지급총액을 뜻하지 않습니다. 문제의 규격·수량·인도조건·부가세를 함께 확인해 주세요.</dd></div><div><dt>지금 가격과 같나요?</dt><dd>${esc(referenceDate())}에 확인한 가격입니다. 이후 계약·할인·등록 상태가 달라질 수 있습니다. 물건별 등록 계약단가를 기준으로 출제하며, 할인 정보는 정답 계산에 반영하지 않습니다.</dd></div><div><dt>상품 이미지에 관하여</dt><dd>각 물품식별번호에 연결된 나라장터 공식 상품 이미지를 사용합니다. 원본을 수정하지 않았으며, 그네와 조합놀이대는 공급업체가 등록한 제품 이미지입니다. 이미지 크게 보기에서 출처를 확인할 수 있습니다.</dd></div><div><dt>힌트와 틈새 지식</dt><dd>추측이 정답의 ±${TOLERANCE_PERCENT}% 밖이면 UP/DOWN과 대략적인 차이를 알려드리고, 물건마다 최대 ${MAX_ATTEMPTS}번 추측할 수 있습니다. 틈새 지식은 물건과 별도로 매 게임 10개를 중복 없이 배정하며, 정답·점수 화면과 최종 결과표에 표시합니다. 이어하기에도 같은 지식이 유지됩니다.</dd></div></dl><p class="dialog-small">본 게임은 조달청 공식 서비스가 아닌 공모전 준비용 프로토타입입니다. 기록은 이 브라우저에 저장됩니다.</p><p class="dialog-small">타이틀·결과 음악: <a href="https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100843" target="_blank" rel="noopener noreferrer">Wallpaper — Kevin MacLeod (incompetech.com)</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a><br>음량·반복 경계 조정 · <a href="./assets/audio/CREDITS.txt" target="_blank" rel="noopener noreferrer">전체 음원 출처와 편집 기록</a></p><a class="external-link" href="${esc(data.catalogUrl)}" target="_blank" rel="noopener noreferrer">공식 API 안내 확인하기 ↗</a>`);
 }
 
 function showRules() {

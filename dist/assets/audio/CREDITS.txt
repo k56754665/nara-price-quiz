@@ -49,3 +49,16 @@ Answer reveal accent
   Plays once with the actual-price highlight (120 ms after the reveal starts),
   with a soft attack and natural release. It also marks a reveal after three
   misses, without implying a correct guess. Mute and manual navigation cancel it.
+
+bgm-wallpaper.mp3 — selected R3 for title and results (2026-11-12)
+  "Wallpaper" Kevin MacLeod (incompetech.com)
+  Source: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100843
+  Licensed under Creative Commons: By Attribution 4.0 License
+  https://creativecommons.org/licenses/by/4.0/
+  Official MP3: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Wallpaper.mp3
+  The bundled full-length MP3 bytes are unchanged (220 seconds).
+  Playback edits: gain 0.33892175462452356, matching the R3 audition;
+  5 ms fades at loop edges, with a short fade when switching tracks.
+  Title and final results use Wallpaper; questions and answer reveals use
+  the existing Short Elevator Music Loop. Each track retains its position
+  across screen changes, BGM mute and inactive tabs. All playback is local.

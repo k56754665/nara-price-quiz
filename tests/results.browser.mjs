@@ -109,6 +109,17 @@ try {
   assert.equal(await idleCount(), 1);
   pass('Title idles with a fixed hit target; BGM waits for a user gesture');
 
+  await page.locator('.art-title-menu > summary').click();
+  await page.waitForFunction(() => window.__buffers.some(event => event.loop && event.active));
+  assert.equal(await activeMusic(), 1);
+  assert(await page.evaluate(() => Math.abs(window.__buffers.find(event => event.loop && event.active).duration - 220) < .02));
+  await menu('about');
+  assert((await page.locator('#info-dialog').textContent()).includes('Wallpaper — Kevin MacLeod'));
+  assert.equal(await page.locator('#info-dialog a[href="https://creativecommons.org/licenses/by/4.0/"]').count(), 1);
+  await page.locator('#info-dialog [data-action=close-dialog]').click();
+  assert.equal(await page.evaluate(() => window.__buffers.filter(event => event.loop).length), 1);
+  pass('Title plays full-length R3 Wallpaper after interaction, displays attribution and does not restart for dialogs');
+
   await seedFinish('mixed', 9000);
   assert.equal((await saved()).phase, 'results');
   assert.equal(await page.locator('.art-result-score').getAttribute('aria-label'), '최종 점수 8,300점');
@@ -121,10 +132,10 @@ try {
   assert.equal(await idleCount(), 1);
   assert.equal(await activeMusic(), 1);
   assert(await page.evaluate(() => window.__buffers.find(event => event.loop && event.active).energy > .01));
-  assert(await page.evaluate(() => { const music = window.__buffers.find(event => event.loop && event.active); return music.channels === 2 && Math.abs(music.duration - 27.042) < .02; }));
+  assert(await page.evaluate(() => { const music = window.__buffers.find(event => event.loop && event.active); return music.channels === 2 && Math.abs(music.duration - 220) < .02; }));
   assert(await page.evaluate(() => window.__ramps.some(value => Math.abs(value - .16 * .22) < .00001)));
   await page.screenshot({ path: path.join(output, 'result-normal.png') });
-  pass('Normal result counts to 8,300, shares the real total during counting and keeps one non-silent ducked BGM loop');
+  pass('Normal result counts to 8,300, shares the real total and switches from gameplay bossa to one non-silent ducked Wallpaper loop');
 
   await menu('about');
   assert.equal(await idleCount(), 0);

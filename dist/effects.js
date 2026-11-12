@@ -2,7 +2,7 @@
 import { createBackgroundMusic } from './music.js';
 import { playAnswerFeedback, playRevealFeedback } from './feedback-audio.js';
 
-export function createGameEffects(soundEnabled, musicEnabled = soundEnabled) {
+export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, musicTrack) {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const animations = new Set();
   const sources = new Set();
@@ -15,7 +15,7 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled) {
   let particleEpoch = 0;
   let lastAmountAt = -Infinity;
   let context, decoded, finishReaction, finishScene, finishAnnouncement, finishReward, counterFrame;
-  const music = createBackgroundMusic(() => context, musicEnabled);
+  const music = createBackgroundMusic(() => context, musicEnabled, musicTrack);
   let audioEpoch = 0;
   const samples = Promise.all(['cheer', 'boo'].map(async name => {
     const response = await fetch(`./assets/audio/${name}.wav`);
