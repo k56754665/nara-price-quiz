@@ -388,7 +388,7 @@ function results() {
       <button type="button" data-action="home">처음 화면</button><button type="button" data-action="about">데이터 기준</button>
       <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">효과음 <span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>${musicControl()}<button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
     </nav></details>
-  </div><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
+  </div><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div></div><div class="recap-list">${questions.map((q, i) => {
     const round = state.rounds[i];
     return `<article class="recap-entry"><div class="recap-row"><span class="recap-number">${String(i + 1).padStart(2, '0')}</span><button class="recap-art" data-action="photo" data-id="${q.id}" aria-label="${esc(q.title)} 이미지 크게 보기">${photo(q, '', 'lazy')}</button><div class="recap-item"><h3>${esc(q.title)}</h3><span>${esc(q.quantity)} · ${esc(deliveryLabel(q))}</span><button class="source-link" data-action="source" data-id="${q.id}">출처 ↗</button></div><div class="recap-answer"><small>등록 계약단가</small><strong>${number(q.answer)}<span>원</span></strong><div class="recap-guesses">${round.attempts.map((value, attempt) => `<span>${attempt + 1}차 ${number(value)}원</span>`).join('')}<b>+${number(round.score)}점</b></div></div></div>${knowledge(i, true)}</article>`;
   }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(referenceDate())} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></template></section>`;
@@ -516,14 +516,6 @@ async function copyResults() {
   catch { openDialog('결과 복사', `<p>아래 내용을 선택해 복사해 주세요.</p><textarea class="share-fallback" aria-label="복사할 결과" readonly>${esc(text)}</textarea>`); dialog.querySelector('textarea')?.select(); }
 }
 
-function downloadResults() {
-  const payload = { game: data.title, price_reference_date: referenceDate(), question_set: state.questionSet, played_at: new Date().toISOString(), question_count: state.questionCount, total_score: totalScore(state.rounds), rounds: gameQuestions().map((q, i) => ({ round: i + 1, title: q.title, product_id: q.productId, registered_contract_unit_price_krw: q.answer, quantity: q.quantity, delivery: q.delivery, attempts_krw: state.rounds[i].attempts, score: state.rounds[i].score, trivia: state.triviaRounds[i] })) };
-  const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' }));
-  const a = document.createElement('a');
-  a.href = url; a.download = '이게얼마게_플레이결과.json'; a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
 document.addEventListener('submit', event => {
   if (event.target.id === 'setup-form') { event.preventDefault(); startGame(); }
   if (event.target.id === 'guess-form') { event.preventDefault(); submitGuess(); }
@@ -593,7 +585,6 @@ document.addEventListener('click', async event => {
   if (action === 'share-kakao') shareKakao(shareResult(), notify);
   if (action === 'share-system') shareSystem(shareResult(), notify, copyResults);
   if (action === 'share') await copyResults();
-  if (action === 'download') downloadResults();
   if (action === 'music') {
     musicOn = !musicOn;
     write('nara-price-music', musicOn);

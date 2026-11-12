@@ -231,11 +231,9 @@ try {
   const sourceDownload = page.waitForEvent('download'); await page.locator('.download-link').click();
   assert((await sourceDownload).suggestedFilename().includes('검증데이터'));
   await page.locator('.dialog-back').click();
-  const download = page.waitForEvent('download'); await page.locator('[data-action=download]').click();
-  const downloaded = await download; const downloadPath = path.join(output, 'downloaded-result.json'); await downloaded.saveAs(downloadPath);
-  assert.equal(JSON.parse(await readFile(downloadPath)).rounds.length, 10);
+  assert.equal(await page.locator('[data-action=download]').count(), 0);
   await capture('result-details-1920'); await close();
-  record('상세 결과 10개·중첩 사진/계약 창·이전 창 및 스크롤 복귀·결과 JSON/출제 데이터 다운로드');
+  record('상세 결과 10개·중첩 사진/계약 창·이전 창 및 스크롤 복귀·결과 저장 버튼 없음·출제 데이터 다운로드');
   await menu('share'); assert((await page.evaluate(() => window.__copied)).includes('8,300'));
   await page.evaluate(() => { window.__clipboardFail = true; });
   await menu('share'); await capture('copy-fallback'); assert(await page.locator('.share-fallback').isVisible()); await close();
