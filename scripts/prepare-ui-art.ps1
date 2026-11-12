@@ -35,5 +35,9 @@ $manifest = foreach ($region in $regions) {
     } finally { $image.Dispose() }
     [ordered]@{ file = $region[0]; source = $region[1]; crop = $region[2..5]; sourceSha256 = (Get-FileHash -LiteralPath $sourceFile -Algorithm SHA256).Hash.ToLower() }
 }
+# The opening curtain uses the full supplied image, with no pixel changes.
+$curtainSource = Join-Path $source '완전히 닫힌 보랏빛 무대 커튼.png'
+Copy-Item -LiteralPath $curtainSource -Destination (Join-Path $output 'curtain-closed.png') -Force
+$manifest += [ordered]@{ file = 'curtain-closed.png'; source = '완전히 닫힌 보랏빛 무대 커튼.png'; copyOriginal = $true; sourceSha256 = (Get-FileHash -LiteralPath $curtainSource -Algorithm SHA256).Hash.ToLower() }
 $manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $output 'manifest.json') -Encoding utf8
 Write-Output "Prepared $($manifest.Count) designer assets."

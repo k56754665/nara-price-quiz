@@ -71,7 +71,7 @@ document.addEventListener('pointerdown', event => {
 document.addEventListener('click', event => {
   const button = event.target.closest('[data-action]');
   const menu = button?.closest('.art-menu-content')?.closest('details');
-  if (!menu || ['sound', 'fullscreen'].includes(button.dataset.action)) return;
+  if (!menu || ['sound', 'music', 'fullscreen'].includes(button.dataset.action)) return;
   menu.open = false;
   menu.querySelector('summary')?.focus({ preventScroll: true });
 }, true);

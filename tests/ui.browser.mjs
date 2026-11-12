@@ -17,7 +17,7 @@ try { playwright = require('playwright'); }
 catch { playwright = require(process.env.PLAYWRIGHT_MODULE || 'C:/Users/Admin/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'); }
 const bank = JSON.parse(await readFile(path.join(project, 'dist/data.json')));
 const trivia = JSON.parse(await readFile(path.join(project, 'dist/trivia.json')));
-const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.otf': 'font/otf', '.svg': 'image/svg+xml' };
+const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.wav': 'audio/wav', '.otf': 'font/otf', '.svg': 'image/svg+xml' };
 const server = http.createServer(async (req, res) => {
   try {
     const pathname = new URL(req.url, 'http://localhost').pathname;
@@ -142,9 +142,13 @@ try {
   const close = () => page.locator('#info-dialog [data-action=close-dialog]').last().click();
   const menu = async action => { const details = page.locator('details').filter({ has: page.locator('nav.art-menu-content') }); if (!await details.evaluate(e => e.open)) await details.locator('summary').click(); await page.locator(`.art-menu-content [data-action="${action}"]`).click(); };
   const resume = async () => { await menu('resume'); };
-  const guess = async value => { await page.locator('#guess').fill(String(value)); await page.locator('.guess-submit').click(); };
+  const guess = async value => {
+    await page.locator('#guess').fill(String(value));
+    await page.locator('.guess-submit').click();
+    await page.locator('.fx-reacting').waitFor({ state: 'detached' });
+  };
   const fit = async selector => {
-    await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished.catch(() => {}))));
+    await page.evaluate(() => Promise.all(document.getAnimations().filter(animation => animation.effect.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {}))));
     const metrics = await page.locator(selector).evaluate(e => { const b = e.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height, vw: innerWidth, vh: innerHeight, overflow: document.documentElement.scrollWidth > innerWidth }; });
     assert(Math.abs(metrics.w / metrics.h - 16 / 9) < .005, JSON.stringify(metrics));
     assert(metrics.x >= -.5 && metrics.y >= -.5 && metrics.x + metrics.w <= metrics.vw + .5 && metrics.y + metrics.h <= metrics.vh + .5, JSON.stringify(metrics));
@@ -167,8 +171,10 @@ try {
     if (action === 'rules') { await page.locator('.formula summary').click(); assert(await page.locator('.formula').getAttribute('open') !== null); }
     await page.keyboard.press('Escape'); assert(!await page.locator('dialog').evaluate(e => e.open));
   }
-  await menu('sound'); assert.equal(await page.locator('.art-menu-content [data-action=sound]').getAttribute('aria-pressed'), 'true');
+  const initialSound = await page.locator('.art-menu-content [data-action=sound]').getAttribute('aria-pressed');
+  await menu('sound'); assert.notEqual(await page.locator('.art-menu-content [data-action=sound]').getAttribute('aria-pressed'), initialSound);
   await page.locator('.art-menu-content [data-action=sound]').click();
+  assert.equal(await page.locator('.art-menu-content [data-action=sound]').getAttribute('aria-pressed'), initialSound);
   await page.locator('.art-menu-content [data-action=fullscreen]').click();
   assert(await page.evaluate(() => !!document.fullscreenElement));
   await page.locator('.art-menu-content [data-action=fullscreen]').click();
@@ -203,6 +209,7 @@ try {
       await menu('source'); await capture('source-1920'); await close();
     }
     await page.locator('[data-action=next]').click();
+    await page.locator('.fx-scene-busy').waitFor({ state: 'detached' });
   }
   const completed = await saved();
   assert.deepEqual(completed.rounds.map(r => r.score), [1000, 800, 500, 0, 1000, 1000, 1000, 1000, 1000, 1000]);

@@ -2,6 +2,7 @@ import { MAX_GUESS, ROUND_COUNT, MAX_ATTEMPTS, TOLERANCE_PERCENT, ATTEMPT_SCORES
 import { LEADERBOARD_CONFIG } from './leaderboard-config.js';
 import { buildShareText, loadKakao, shareKakao, shareSystem } from './share.js';
 import { NICKNAME_MAX, isConfigured, normalizeNickname, buildSubmission, submitScore, fetchLeaderboard } from './leaderboard.js';
+import { createGameEffects } from './effects.js';
 
 const app = document.querySelector('#app');
 const dialog = document.querySelector('#info-dialog');
@@ -34,8 +35,10 @@ let data;
 let triviaPool;
 let state = null;
 let screen = 'home';
-let soundOn = false;
-let audioContext;
+let soundOn = read('nara-price-sound', true) !== false;
+let musicOn = read('nara-price-music', true) !== false;
+let guessBusy = false;
+const effects = createGameEffects(() => soundOn, () => musicOn);
 let toastTimeout;
 const MAX_TOTAL = ROUND_COUNT * ATTEMPT_SCORES[0];
 let best = read(storageKeys.best, 0);
@@ -78,27 +81,6 @@ function notify(text) {
   toast.classList.add('show');
   clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-function tone(type = 'reveal') {
-  if (!soundOn) return;
-  try {
-    audioContext ??= new (window.AudioContext || window.webkitAudioContext)();
-    audioContext.resume().catch(() => {});
-    (type === 'reveal' ? [440, 554, 659] : [440, 554]).forEach((frequency, i) => {
-      const oscillator = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      const start = audioContext.currentTime + i * .095;
-      oscillator.type = 'sine';
-      oscillator.frequency.value = frequency;
-      gain.gain.setValueAtTime(0, start);
-      gain.gain.linearRampToValueAtTime(.055, start + .015);
-      gain.gain.exponentialRampToValueAtTime(.001, start + .25);
-      oscillator.connect(gain).connect(audioContext.destination);
-      oscillator.start(start);
-      oscillator.stop(start + .26);
-    });
-  } catch {}
 }
 
 function header() {
@@ -211,7 +193,9 @@ function showRanking(registration = false) {
   loadRankingList('#ranking-list', mySubmission());
 }
 
-function render({ focus = true } = {}) {
+function render({ focus = true, keepFeedback = false } = {}) {
+  effects.reset({ keepFeedback });
+  guessBusy = false;
   dialogHistory.length = 0;
   if (dialog.open) dialog.close();
   const content = screen === 'home' ? home() : state.phase === 'question' ? question() : state.phase === 'reveal' ? reveal() : results();
@@ -225,6 +209,12 @@ function render({ focus = true } = {}) {
     if (focus && !usesTouchControls()) document.querySelector('#guess')?.focus({ preventScroll: true });
   } else if (focus) document.querySelector('#screen-heading')?.focus({ preventScroll: true });
   if (screen !== 'home' && state.phase === 'results') loadKakao();
+  effects.idle();
+  effects.syncMusic();
+}
+
+function musicControl() {
+  return `<button type="button" data-action="music" aria-pressed="${musicOn}" aria-label="${musicOn ? '배경음악 끄기' : '배경음악 켜기'}">BGM <span class="sound-state">${musicOn ? 'ON' : 'OFF'}</span></button>`;
 }
 
 function home() {
@@ -241,7 +231,7 @@ function home() {
     <details class="art-menu art-popover art-title-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="게임 안내">
       ${hasResume ? `<button type="button" class="art-title-resume" data-action="resume">${state.phase === 'results' ? '지난 결과 다시 보기' : `${state.index + 1}번째 문제부터 이어하기`}</button>` : ''}
       <button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button>
-      <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>
+      <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">효과음 <span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>${musicControl()}
       <button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
       <p>${ROUND_COUNT}라운드 · ${MAX_ATTEMPTS}번의 기회 · 정답 ±${TOLERANCE_PERCENT}%<br>${scoreList}점${best > 0 ? `<br>이 기기 최고 기록 ${number(best)} / ${number(MAX_TOTAL)}점` : ''}</p>
     </nav></details>
@@ -282,7 +272,7 @@ function question() {
   const audience = ['left', 'center', 'right', 'left', 'center', 'right', 'left'].map((name, i) => decoration(`audience-${name}`, `art-audience art-person-${i + 1}`)).join('');
   return `<section class="art-game" aria-label="가격 맞히기 게임"><form id="guess-form" novalidate>
     <div class="art-stage">
-      <details class="art-menu art-popover"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="게임 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button>${rankingOn ? '<button type="button" data-action="ranking" aria-label="온라인 랭킹 보기">온라인 랭킹</button>' : ''}<button type="button" data-action="about">데이터 기준</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button><p>${esc(referenceDate())} 조사 기준<br>정답 ±${TOLERANCE_PERCENT}% · 최대 ${MAX_ATTEMPTS}번 추측</p></nav></details>
+      <details class="art-menu art-popover"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="게임 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button>${rankingOn ? '<button type="button" data-action="ranking" aria-label="온라인 랭킹 보기">온라인 랭킹</button>' : ''}<button type="button" data-action="about">데이터 기준</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">효과음 <span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>${musicControl()}<button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button><p>${esc(referenceDate())} 조사 기준<br>정답 ±${TOLERANCE_PERCENT}% · 최대 ${MAX_ATTEMPTS}번 추측</p></nav></details>
       ${decoration('product-frame', 'art-frame')}
       ${decoration('judge-nareumi', 'art-judge-left')}
       ${decoration('judge-dali', 'art-judge-right')}
@@ -347,7 +337,7 @@ function reveal() {
   return `<section class="art-reveal-screen" aria-label="라운드 정답 공개"><div class="art-reveal-stage">
     <img class="art-reveal-nareumi" src="./assets/designer/judge-nareumi.png" alt="" aria-hidden="true" draggable="false"><img class="art-reveal-dali" src="./assets/designer/judge-dali.png" alt="" aria-hidden="true" draggable="false">
     <div class="art-reveal-topline">
-        <details class="art-reveal-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="정답 화면 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button><button type="button" data-action="source" data-id="${q.id}">계약 정보·출처</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button></nav></details>
+        <details class="art-reveal-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="정답 화면 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button><button type="button" data-action="source" data-id="${q.id}">계약 정보·출처</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">효과음 <span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>${musicControl()}<button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button></nav></details>
         <div class="art-reveal-total"><span>현재 스코어</span><strong style="--digits:${number(totalScore(state.rounds)).length + 1}">${number(totalScore(state.rounds))}<small>점</small></strong></div>
     </div>
     <div class="art-reveal-board ${matched ? 'is-correct' : 'is-missed'}">
@@ -369,12 +359,13 @@ function results() {
   const firstTry = state.rounds.filter(r => r.score === ATTEMPT_SCORES[0]).length;
   const mine = mySubmission();
   const rankLabel = state.rankSubmitted && mine ? `내 최고 기록 · 등록 당시 ${number(mine.rank)}위!` : '랭킹에 등록하기';
+  const honor = total === MAX_TOTAL ? `${number(MAX_TOTAL)}점 만점!` : state.newBest ? '이 기기 최고 기록!' : '';
   return `<section class="art-result-screen" aria-label="최종 결과"><div class="art-result-stage">
     <img class="art-result-bird" src="./assets/designer/result-bird.png" alt="" aria-hidden="true" draggable="false">
     <img class="art-result-backpack" src="./assets/designer/result-backpack.png" alt="" aria-hidden="true" draggable="false">
     <div class="art-result-panel">
       <output class="art-result-score" style="--score-length:${number(total).length + 1}" aria-label="최종 점수 ${number(total)}점">${number(total)}점</output>
-      <div class="art-result-identity"><p class="art-result-prompt">당신은...</p><h1 id="screen-heading" class="art-result-grade" tabindex="-1" style="--grade-length:${verdict.title.length}">${esc(verdict.title)}</h1></div>
+      <div class="art-result-identity"><p class="art-result-prompt${honor ? ' fx-result-honor' : ''}">${honor || '당신은...'}</p><h1 id="screen-heading" class="art-result-grade" tabindex="-1" style="--grade-length:${verdict.title.length}">${esc(verdict.title)}</h1></div>
       <img class="art-result-wave" src="./assets/designer/result-wave.png" alt="" aria-hidden="true" draggable="false">
       ${rankingOn ? `<button type="button" class="art-result-rank" data-action="result-ranking">${rankLabel}</button>` : `<p class="art-result-rank">최고 기록 ${number(Math.max(best, total))}점</p>`}
       <div class="art-result-actions"><button type="button" class="art-result-kakao" data-action="share-kakao">카카오톡 공유</button><div class="art-result-primary"><button type="button" class="art-result-share" data-action="share-system">공유하기</button><button type="button" class="art-result-replay" data-action="replay">다시하기</button></div></div>
@@ -383,7 +374,7 @@ function results() {
       <button type="button" data-action="result-details">결과 자세히</button>${rankingOn ? '<button type="button" data-action="result-ranking">랭킹 등록·조회</button>' : ''}
       <button type="button" data-action="share">결과 복사</button>
       <button type="button" data-action="home">처음 화면</button><button type="button" data-action="about">데이터 기준</button>
-      <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button><button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
+      <button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">효과음 <span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>${musicControl()}<button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button>
     </nav></details>
   </div><template id="result-details-template"><section class="art-result-summary"><h2>${esc(verdict.title)}</h2><p>${esc(verdict.subtitle)}</p><div class="final-metrics"><span>맞힌 문제 <strong>${correct}개</strong></span><span>한 번에 맞힌 문제 <strong>${firstTry}개</strong></span><span>최고 기록 <strong>${number(Math.max(best, total))}점</strong></span></div></section><div class="recap-heading"><div><span class="eyebrow">가격과 틈새 지식, 함께 돌아보기</span><h2>오늘 만난 물건들</h2></div><button class="text-button" data-action="download">결과 저장 ↓</button></div><div class="recap-list">${questions.map((q, i) => {
     const round = state.rounds[i];
@@ -391,46 +382,67 @@ function results() {
   }).join('')}</div><div class="result-bottom"><p>모든 정답은 ${esc(referenceDate())} 기준 등록 계약단가입니다.<br>실제 지급총액과 다르며, 계약·할인·인도조건에 따라 달라질 수 있습니다.</p><button class="text-button" data-action="home">처음 화면으로 돌아가기 →</button></div></template></section>`;
 }
 
+function presentQuestion({ curtain = false } = {}) {
+  const session = state;
+  const stage = document.querySelector('.art-stage');
+  effects.enterRound({ curtain }).then(completed => {
+    if (completed && state === session && stage?.isConnected && screen === 'game' && !usesTouchControls() && !app.inert && !dialog.open) {
+      document.querySelector('#guess')?.focus({ preventScroll: true });
+    }
+  });
+}
+
 function startGame() {
+  effects.unlock();
   // 매 게임 랭킹에 등록할 수 있습니다. 기기마다 최고 점수만 남습니다.
   state = createSession(data, triviaPool, rankingOn);
   screen = 'game';
   persist();
-  render();
+  render({ focus: false });
+  presentQuestion({ curtain: true });
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
-function submitGuess() {
-  if (screen !== 'game' || state.phase !== 'question') return;
+async function submitGuess() {
+  if (guessBusy || effects.isSceneBusy() || screen !== 'game' || state.phase !== 'question') return;
   const value = parseGuess(document.querySelector('#guess').value);
   if (value === null) {
     document.querySelector('#guess-error').textContent = '1원 이상 숫자로 입력해 주세요.';
     document.querySelector('#guess').setAttribute('aria-invalid', 'true');
     document.querySelector('#guess').focus();
+    effects.invalid();
     return;
   }
   const q = gameQuestions()[state.index];
+  const correct = isCorrect(value, q.answer);
+  const previousTotal = totalScore(state.rounds);
+  const submittedSession = state;
+  const submittedStage = document.querySelector('.art-stage');
+  guessBusy = true;
   state.attempts.push(value);
   state.draft = '';
   // 틀렸고 기회가 남았으면 힌트를 보여주고 다시 추측합니다.
-  if (!isCorrect(value, q.answer) && state.attempts.length < MAX_ATTEMPTS) {
-    persist();
-    render();
-    tone('hint');
-    document.querySelector('.retry-feedback')?.scrollIntoView({ block: 'center', behavior: 'instant' });
-    return;
+  const retry = !correct && state.attempts.length < MAX_ATTEMPTS;
+  const spentIndex = MAX_ATTEMPTS - state.attempts.length;
+  if (!retry) {
+    state.rounds.push({ candidateId: q.id, attempts: [...state.attempts], score: scoreRound(state.attempts, q.answer) });
+    state.attempts = [];
+    state.phase = 'reveal';
   }
-  state.rounds.push({ candidateId: q.id, attempts: [...state.attempts], score: scoreRound(state.attempts, q.answer) });
-  state.attempts = [];
-  state.phase = 'reveal';
+  // Save the valid result immediately; animation never owns game progress.
   persist();
-  render();
-  tone('reveal');
+  const completed = await effects.react({ correct, spentIndex, retry });
+  if (!completed || state !== submittedSession || !submittedStage.isConnected || screen !== 'game') return;
+  render({ keepFeedback: true });
+  if (retry) effects.retry({ lastChance: state.attempts.length === MAX_ATTEMPTS - 1 });
+  else effects.reveal(state.rounds[state.index].score, previousTotal);
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
-function nextQuestion() {
-  if (state.phase !== 'reveal') return;
+async function nextQuestion() {
+  if (effects.isSceneBusy() || state.phase !== 'reveal') return;
+  const session = state;
+  const stage = document.querySelector('.art-reveal-stage');
   if (state.index === state.questionCount - 1) {
     const total = totalScore(state.rounds);
     state.phase = 'results';
@@ -443,7 +455,11 @@ function nextQuestion() {
     state.draft = '';
   }
   persist();
-  render();
+  const completed = await effects.exitReveal();
+  if (!completed || state !== session || !stage?.isConnected || screen !== 'game') return;
+  render({ focus: state.phase !== 'question' });
+  if (state.phase === 'question') presentQuestion();
+  else effects.announceResults({ total: totalScore(state.rounds), maxScore: MAX_TOTAL, newBest: !!state.newBest });
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
@@ -503,7 +519,7 @@ document.addEventListener('submit', event => {
 });
 
 document.addEventListener('input', event => {
-  if (event.target.id !== 'guess') return;
+  if (event.target.id !== 'guess' || guessBusy) return;
   const input = event.target;
   const digits = input.value.replace(/\D/g, '').slice(0, 12);
   input.value = digits ? number(Number(digits)) : '';
@@ -537,6 +553,7 @@ document.addEventListener('click', async event => {
   const button = event.target.closest('[data-action]');
   if (!button) return;
   const action = button.dataset.action;
+  if (button.disabled) return;
   if (action === 'home') { screen = 'home'; render(); window.scrollTo({ top: 0, behavior: 'instant' }); }
   if (action === 'resume' && state) { screen = 'game'; render(); }
   if (action === 'exit') { if (document.fullscreenElement) await document.exitFullscreen().catch(() => {}); openDialog('게임 종료', `<p>게임을 마치려면 현재 브라우저 탭이나 창을 닫아 주세요.</p>${state && state.phase !== 'results' ? '<p>진행 기록은 이 브라우저에 저장되어 있어요. 다음에 열면 이어하기로 계속할 수 있어요.</p>' : ''}`); }
@@ -563,9 +580,31 @@ document.addEventListener('click', async event => {
   if (action === 'share-system') shareSystem(shareResult(), notify, copyResults);
   if (action === 'share') await copyResults();
   if (action === 'download') downloadResults();
-  if (action === 'sound') { soundOn = !soundOn; button.setAttribute('aria-pressed', String(soundOn)); button.setAttribute('aria-label', soundOn ? '효과음 끄기' : '효과음 켜기'); button.innerHTML = `${soundOn ? '♫' : '♪'}<span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span>`; if (soundOn) tone('hint'); }
+  if (action === 'music') {
+    musicOn = !musicOn;
+    write('nara-price-music', musicOn);
+    button.setAttribute('aria-pressed', String(musicOn));
+    button.setAttribute('aria-label', musicOn ? '배경음악 끄기' : '배경음악 켜기');
+    button.innerHTML = `BGM <span class="sound-state">${musicOn ? 'ON' : 'OFF'}</span>`;
+    if (musicOn) effects.unlock(); else effects.syncMusic();
+  }
+  if (action === 'sound') { soundOn = !soundOn; write('nara-price-sound', soundOn); button.setAttribute('aria-pressed', String(soundOn)); button.setAttribute('aria-label', soundOn ? '효과음 끄기' : '효과음 켜기'); button.innerHTML = `효과음 <span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span>`; if (soundOn) { effects.press(button); effects.click(); } else effects.stopAudio(); }
   if (action === 'fullscreen') { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); } catch { notify('이 브라우저에서는 전체 화면 전환을 지원하지 않아요.'); } }
 });
+
+// Default to one click sound for every button, including menus and modal controls.
+// Keep the existing press motion on the art buttons; sound does not depend on it.
+document.addEventListener('click', event => {
+  const button = event.target.closest('button, summary, input[type="button"], input[type="submit"], input[type="reset"], [role="button"]');
+  if (!button || button.matches(':disabled, [aria-disabled="true"]') || button.closest('[inert]')) return;
+  if (button.matches('.art-title-action, .guess-submit, .art-quick button, .art-reveal-next, [data-action=replay]')) effects.press(button);
+  // Guess submission has answer/error audio; the sound toggle responds after enabling.
+  if (!button.matches('.guess-submit, [data-action="sound"]')) effects.click();
+}, true);
+
+// Browsers permit music after a real user gesture; never autoplay on page load.
+document.addEventListener('pointerdown', () => effects.unlock(), { once: true });
+document.addEventListener('keydown', () => effects.unlock(), { once: true });
 
 dialog.addEventListener('click', event => { if (event.target === dialog) { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closeDialog(); } });
 

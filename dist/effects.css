@@ -1,0 +1,29 @@
+/* Transient feedback only: supplied artwork and its layout stay intact. */
+:is(.fx-reacting, .fx-scene-busy) :is(button, input):disabled { opacity: 1; cursor: wait; }
+.fx-reacting .art-menu, .fx-scene-busy :is(.art-menu, .art-reveal-menu) { pointer-events: none; }
+.fx-reacting .guess-submit { color: #fff; }
+.fx-status {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.fx-score-fly {
+  position: fixed; z-index: 20; pointer-events: none; user-select: none;
+  font: 400 clamp(16px, 2.2vw, 40px)/1.2 DNFBitBitv2, sans-serif;
+  color: #344eff; text-shadow: 0 2px 0 white, 2px 0 0 white, -2px 0 0 white;
+  transform: translateX(-50%);
+}
+.fx-curtain { position: absolute; inset: 0; z-index: 30; overflow: hidden; pointer-events: none; }
+.fx-curtain-half {
+  position: absolute; top: 0; bottom: 0; width: 50.1%;
+  background-image: url('./assets/designer/curtain-closed.png');
+  background-size: 200% 100%; background-repeat: no-repeat;
+}
+.fx-curtain-left { left: 0; background-position: left center; }
+.fx-curtain-right { right: 0; background-position: right center; }
+.fx-result-honor { color: #943de0; }
+.fx-confetti { position: absolute; inset: 0; overflow: hidden; z-index: 4; pointer-events: none; }
+.fx-confetti i { position: absolute; top: 0; display: block; width: clamp(4px, .5cqw, 9px); height: clamp(6px, .8cqw, 14px); border-radius: 1px; }
+@media (prefers-reduced-motion: no-preference) {
+  :is(.art-title-action, .guess-submit, .art-quick button, .art-reveal-next, [data-action=replay]):enabled:active { scale: .96; }
+}
+@media (prefers-reduced-motion: reduce) { .fx-score-fly, .fx-confetti { display: none; } }

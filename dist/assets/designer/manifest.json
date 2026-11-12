@@ -185,5 +185,11 @@
       600
     ],
     "sourceSha256": "2401d1e4d7a31a17a3141a10b4c0b182b11ad07c7b240ccf8e39eaa22fca515b"
+  },
+  {
+    "file": "curtain-closed.png",
+    "source": "완전히 닫힌 보랏빛 무대 커튼.png",
+    "copyOriginal": true,
+    "sourceSha256": "1b53bc0791d962c000cb8555adf25b3f4731fcfa224b6d554ad7471765e07b99"
   }
 ]

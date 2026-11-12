@@ -93,9 +93,9 @@
   {
     "file": "완전히 닫힌 보랏빛 무대 커튼.png",
     "driveId": "1ONi04qkEPq4dy_pLdU8bYpNDXnPOCs5Y",
-    "role": "시안 대응 불명",
-    "applied": false,
-    "notes": "세 시안에 닫힌 커튼이 없음. 전환 연출로 추정할 수 있으나 임의 사용하지 않음."
+    "role": "새 게임 시작 커튼 연출",
+    "applied": true,
+    "notes": "원본을 curtain-closed.png로 그대로 복사. 두 CSS 영역에서 좌우 절반을 표시해 열며, 완료 후 제거한다. 이어하기에는 재생하지 않는다."
   },
   {
     "file": "투명 배경의 파란 라운드 패널.png",
