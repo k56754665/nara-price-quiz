@@ -14,8 +14,8 @@
   font-weight: 400;
   font-display: swap;
 }
-/* Shared desktop type roles. Compact stages lower text sizes independently of
-   the 44px hit targets; display numbers also fit their own available width. */
+/* Shared type roles. Main controls keep 44px targets; amount steps use compact
+   rows. Display numbers also fit their own available width. */
 .art-game, body.game-active, body.title-art {
   --art-font: DNFBitBitv2, var(--body-font);
   --type-title: clamp(24px, calc(var(--stage-width) * .025), 40px);
@@ -42,10 +42,10 @@
   --space-5: 24px;
   --space-6: 32px;
   --panel-padding: clamp(16px, 1.5cqw, 24px);
-  --control-padding-block: clamp(8px, 1cqw, 20px);
+  --control-padding-block: clamp(14px, 1.6cqw, 28px);
   --control-gap: clamp(4px, .6cqw, 12px);
   --control-row: clamp(44px, 4.6cqw, 88px);
-  --quick-row: clamp(32px, 2.5cqw, 44px);
+  --quick-row: 24px;
   --price-tail-height: clamp(6px, .6cqw, 12px);
   --line-title: 1.2;
   --line-body: 1.5;
@@ -124,13 +124,13 @@ body.question-art { background: #251039; overflow: clip; }
 .art-person-5 { left: 58.5%; top: calc(var(--scene-height) * .76); width: 17%; }
 .art-person-6 { left: 72%; top: calc(var(--scene-height) * .737); width: 17%; }
 .art-person-7 { left: 87.5%; top: calc(var(--scene-height) * .677); width: 18%; }
-/* Anchor the whole control group near the stage bottom. Status, bubble, errors
-   and lives remain in one flow, so extra error text grows upward without
-   clipping hearts or opening a large gap between them and the bubble. */
-.art-lower { --controls-inset: 24%; --feedback-inset: 1.5%; --feedback-gap: clamp(16px, 1.5cqw, 24px); position: absolute; inset: auto 0 clamp(12px, calc(var(--scene-height) * .05), 40px); height: auto; min-height: 0; margin: 0; padding: 0 var(--controls-inset); display: flex; flex-direction: column; gap: clamp(6px, .75cqw, 14px); z-index: 5; pointer-events: none; }
+/* Desktop controls and lives stay in one flow so validation grows upward.
+   Compact stages use the side gutters for status and lives, keeping both
+   amount rows clear of the product. */
+.art-lower { --controls-inset: 20%; --feedback-inset: 1.5%; --feedback-gap: clamp(16px, 1.5cqw, 24px); position: absolute; inset: auto 0 clamp(6px, calc(var(--scene-height) * .012), 16px); height: auto; min-height: 0; margin: 0; padding: 0 var(--controls-inset); display: flex; flex-direction: column; gap: clamp(6px, .75cqw, 14px); z-index: 5; pointer-events: none; }
 .art-lower > * { pointer-events: auto; }
 .art-controls { position: relative; width: 100%; z-index: 5; display: grid; gap: clamp(4px, .5cqw, 10px); margin-bottom: var(--price-tail-height); order: 0; }
-.art-price-bubble { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(88px, 24%); gap: var(--control-gap) clamp(16px, 1.5cqw, 28px); align-items: center; padding: var(--control-padding-block) var(--panel-padding); }
+.art-price-bubble { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(88px, 24%); gap: clamp(12px, 1.5cqw, 24px) clamp(16px, 1.5cqw, 28px); align-items: center; padding: var(--control-padding-block) var(--panel-padding); }
 .art-price-bubble > .art-bubble-body { height: 100%; }
 .art-price-bubble > .art-bubble-tail { left: 45%; right: auto; top: calc(100% - var(--bubble-tail-overlap)); bottom: auto; width: 10%; height: calc(var(--price-tail-height) + var(--bubble-tail-overlap)); transform: none; }
 .art-price-bubble > :is(.art-price-entry, .guess-submit, .art-guess-error, .art-quick) { z-index: 2; }
@@ -145,8 +145,11 @@ body.question-art { background: #251039; overflow: clip; }
 .art-price-entry input:focus-visible { outline: 0; box-shadow: 0 2px 0 #8a98ff; }
 .art-price-entry input[aria-invalid=true] { outline: 2px solid #d42828; }
 .art-price-entry .art-currency { flex-shrink: 0; align-self: center; font-size: var(--type-unit); line-height: 1; }
-.art-quick { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: var(--space-1); min-width: 0; }
-.art-quick button { min-height: var(--quick-row); padding: var(--space-1); color: #707ba8; font: 400 var(--type-control)/1.25 var(--art-font); white-space: nowrap; }
+.art-quick { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) 44px; align-items: stretch; gap: 2px clamp(4px, .5cqw, 10px); min-width: 0; }
+.art-quick button { width: 100%; height: var(--quick-row); min-height: var(--quick-row); padding: 0 8px; background: transparent; box-shadow: none; color: #707ba8; font: 400 var(--type-control)/1.25 var(--art-font); white-space: nowrap; }
+.art-quick .plus { color: #344eff; }
+.art-quick .minus { color: #b24b64; }
+.art-quick .art-clear { grid-column: 6; grid-row: 1 / span 2; height: auto; }
 .art-quick button:hover { color: #344eff; }
 .art-quick .art-clear { font-size: var(--type-icon); line-height: 1; }
 .art-lives { position: relative; width: 25.8333%; display: flex; gap: 1.2cqw; margin: 0 auto; z-index: 6; flex-shrink: 0; order: 2; }

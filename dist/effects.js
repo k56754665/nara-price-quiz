@@ -248,16 +248,17 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
     const group = particleLayer(button.closest('.art-stage'), 'amount');
     if (!group) return;
     lastAmountAt = now;
-    const rect = localRect(group, button), entry = localRect(group, group.layer.parentElement.querySelector('.art-price-entry'));
-    const size = Math.max(8, 12 * group.scale);
+    const entry = localRect(group, group.layer.parentElement.querySelector('.art-price-entry'));
     const text = document.createRange();
     text.selectNodeContents(button);
     const caption = localRect(group, text);
+    // Keep the burst in the gap above the plus row. A lower-edge fallback
+    // would cover the minus labels when amount controls are only 24px tall.
+    const size = Math.min(Math.max(8, 12 * group.scale), caption.top - entry.bottom - 6);
+    if (size < 4) { group.dispose(); return; }
     const minimumY = entry.bottom + size / 2 + 3, maximumY = caption.top - size / 2 - 3;
-    // Short controls may have no free space above the caption; use their lower edge.
-    const above = minimumY <= maximumY;
-    const y = above ? maximumY : Math.max(rect.bottom, caption.bottom) + size / 2 + 3;
-    const rise = Math.max(0, Math.min(Math.max(8, 12 * group.scale), y - (above ? minimumY : caption.bottom + size / 2 + 3)));
+    const y = maximumY;
+    const rise = Math.max(0, Math.min(Math.max(8, 12 * group.scale), y - minimumY));
     for (let i = 0; i < 3; i++) particle(group, {
       x: rect.left + rect.width / 2, y, size, color: '#344eff', duration: 160 + i * 10,
       frames: [{ translate: '0 0', scale: '.6', opacity: 0 }, { scale: '1', opacity: 1, offset: .25 }, { translate: `${(i - 1) * Math.max(8, 12 * group.scale)}px ${-rise}px`, scale: '.6', opacity: 0 }],

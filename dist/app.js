@@ -306,7 +306,7 @@ function question() {
         <div class="art-price-entry"><input id="guess" name="guess" type="text" inputmode="numeric" autocomplete="off" maxlength="15" value="${esc(state.draft || '')}" placeholder="0" style="--amount-chars:${Math.max(7, (state.draft || '').length)}" aria-describedby="guess-error art-attempt"><span class="art-currency">원</span></div>
         <button class="guess-submit" type="submit" aria-label="${last ? '마지막 추측! 정답 확인하기' : `${attempt}번째 추측 제출하기`}">${last ? '마지막 제출' : '추측 제출'}</button>
         <p class="art-guess-error" id="guess-error" role="alert"></p>
-        <div class="art-quick" role="group" aria-label="예상 가격 조절">${QUICK_STEPS.map(([amount, label]) => `<button type="button" data-action="add" data-amount="${amount}" aria-label="${label}원 더하기">+${label.replace(',', '')}</button>`).join('')}<button type="button" data-action="clear" class="art-clear" aria-label="예상 가격 지우기">↺</button></div>
+        <div class="art-quick" role="group" aria-label="예상 가격 조절">${quickAmountButtons()}<button type="button" data-action="clear" class="art-clear" aria-label="예상 가격 지우기">↺</button></div>
       </div>
       </div>
       <div class="art-lives" role="img" aria-label="남은 추측 기회 ${left} / ${MAX_ATTEMPTS}">${Array.from({ length: MAX_ATTEMPTS }, (_, i) => `<img src="${art('heart')}" alt="" class="${i >= left ? 'spent' : ''}">`).join('')}</div>
@@ -572,7 +572,7 @@ document.addEventListener('click', async event => {
   if (action === 'add') {
     const input = document.querySelector('#guess'); if (!input) return;
     const previous = parseGuess(input.value) ?? 0;
-    const next = Math.min(MAX_GUESS, previous + Number(button.dataset.amount));
+    const next = Math.max(0, Math.min(MAX_GUESS, previous + Number(button.dataset.amount)));
     input.value = next > 0 ? number(next) : '';
     input.dispatchEvent(new Event('input', { bubbles: true })); if (!usesTouchControls()) input.focus({ preventScroll: true });
     if (Number(button.dataset.amount) > 0 && next > previous) effects.amountAdded(button);

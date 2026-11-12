@@ -107,7 +107,8 @@ try {
           controlsInside: [input, submit, quick].every(contained),
           rowsSeparate: rect(quick).top >= Math.max(rect(input).bottom, rect(submit).bottom) - 1,
           amountFits: canvas.measureText(input.value).width <= input.clientWidth + 1,
-          livesGap: rect(lives).top - rect(bubble).bottom,
+          livesGap: rect(stage).width <= 900 ? rect(lives).left - rect(bubble).right : rect(lives).top - rect(bubble).bottom,
+          livesStatusSeparate: !intersects(rect(lives), rect(attempt)),
           hintGap: hint ? rect(bubble).left - rect(hint).right : null,
           hintInside: hint ? rect(hint).left >= rect(stage).left && rect(hint).bottom <= rect(stage).bottom + 1 && hint.scrollWidth <= hint.clientWidth + 1 : true,
         };
@@ -131,7 +132,7 @@ try {
     if (layout.question) {
       const q = layout.question;
       assert(q.titleInside && q.titlePhotoSeparate && q.controlsInside && q.rowsSeparate && q.amountFits, name + ': ' + JSON.stringify(q));
-      assert(q.livesGap >= 2 && q.livesGap <= 28, name + ': excessive/overlapping lives gap');
+      assert(q.livesGap >= 2 && q.livesGap <= 28 && q.livesStatusSeparate, name + ': hearts overlap controls/status or have excessive spacing');
       assert(q.hintInside && (q.hintGap === null || q.hintGap >= 11.9), name + ': hint overlaps controls or stage boundary: ' + JSON.stringify(q));
       assert(q.stageWidth <= 900 ? q.mode === 'compact' && q.status >= 10 && q.title >= 16 : q.mode === 'desktop' && q.title >= 24 && q.status >= 12 && q.submit >= 16, name + ': wrong typography mode');
       typography.push({ name, ...q });
@@ -155,7 +156,7 @@ try {
     assert(!metrics.overflow);
   };
   const targets = async selector => {
-    const bad = await page.locator(selector).evaluateAll(elements => elements.filter(e => { const b = e.getBoundingClientRect(); return b.width < 43.9 || b.height < 43.9; }).map(e => ({ text: e.textContent, w: e.offsetWidth, h: e.offsetHeight })));
+    const bad = await page.locator(selector).evaluateAll(elements => elements.filter(e => { const b = e.getBoundingClientRect(); const minimumHeight = e.matches('.art-quick [data-action=add]') ? 23.9 : 43.9; return b.width < 43.9 || b.height < minimumHeight; }).map(e => ({ text: e.textContent, w: e.offsetWidth, h: e.offsetHeight })));
     assert.deepEqual(bad, []);
   };
   const seed = async session => { await page.evaluate(({ key, session }) => localStorage.setItem(key, JSON.stringify(session)), { key, session }); await page.reload(); await page.locator('.art-title-stage').waitFor(); await resume(); };
@@ -185,13 +186,19 @@ try {
   assert.notEqual(await page.evaluate(() => document.activeElement.id), 'guess');
   await page.locator('.guess-submit').click(); assert.equal(await page.locator('#guess').getAttribute('aria-invalid'), 'true');
   await capture('input-error-1920');
-  for (const button of await page.locator('.art-quick [data-action=add]').all()) await button.tap();
+  for (const button of await page.locator('.art-quick .plus').all()) await button.tap();
   assert.notEqual(await page.evaluate(() => document.activeElement.id), 'guess');
   assert.equal((await saved()).draft, '111,110,000');
+  for (const button of await page.locator('.art-quick .minus').all()) await button.tap();
+  assert.equal((await saved()).draft, '');
+  await page.locator('.art-quick .minus').last().tap(); assert.equal((await saved()).draft, '');
+  await page.locator('#guess').fill('15,000'); await page.locator('.art-quick .minus').first().tap();
+  assert.equal((await saved()).draft, '5,000');
+  await page.reload(); await resume(); assert.equal(await page.locator('#guess').inputValue(), '5,000');
   await page.locator('[data-action=clear]').click(); assert.equal((await saved()).draft, '');
   await page.locator('#guess').fill('999999999999'); assert.equal((await saved()).draft, '999,999,999,999');
   await page.reload(); await resume(); assert.equal(await page.locator('#guess').inputValue(), '999,999,999,999');
-  record('빈 입력 오류·가격 가산 5종·지우기·최대 12자리 입력·새로고침 복원');
+  record('빈 입력 오류·가격 가감 5종·0원 하한·지우기·최대 12자리 입력·새로고침 복원');
   const game = await saved();
   for (let i = 0; i < 10; i++) {
     const a = game.questions[i].answer;
