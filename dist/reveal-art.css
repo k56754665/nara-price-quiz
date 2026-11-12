@@ -33,7 +33,7 @@ body.reveal-art { overflow: clip; background: #251039; }
 .art-reveal-prices .error-badge { margin: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--reveal-accent); font: 400 clamp(13px, .875cqw, 16px)/1.7 var(--reveal-body-font); word-break: keep-all; overflow-wrap: anywhere; }
 .art-reveal-footer { position: relative; z-index: 3; min-width: 0; width: 62%; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: clamp(16px, 1.25cqw, 24px); margin: 0 auto; }
 .art-reveal-info { min-width: 0; }
-.art-reveal-info .inline-knowledge, .art-reveal-total, .art-reveal-menu > summary { border: 1px solid transparent; border-image: var(--bubble-panel-image) var(--bubble-source-slice) fill / var(--bubble-corner) / 0 stretch; border-radius: var(--bubble-corner); background: transparent; }
+.art-reveal-info .inline-knowledge, .art-reveal-total-surface, .art-reveal-menu > summary { border: 1px solid transparent; border-image: var(--bubble-panel-image) var(--bubble-source-slice) fill / var(--bubble-corner) / 0 stretch; border-radius: var(--bubble-corner); background: transparent; }
 .art-reveal-info .inline-knowledge { display: block; margin: 0; padding: clamp(16px, 1.25cqw, 24px); }
 .art-reveal-info .knowledge-mark { display: none; }
 .art-reveal-info .knowledge-copy { min-width: 0; padding: 0; }
@@ -53,8 +53,13 @@ body.reveal-art { overflow: clip; background: #251039; }
 .art-reveal-menu > summary { min-height: 44px; display: grid; place-items: center; margin: 0; padding: 8px 16px; list-style: none; cursor: pointer; font-size: var(--type-body); color: #344eff; }
 .art-reveal-menu > summary::-webkit-details-marker { display: none; }
 .art-reveal-menu .art-menu-content { left: 0; right: auto; top: calc(100% + 8px); width: min(400px, 78cqw); max-height: calc(100dvh - 100px); overflow: auto; }
-.art-reveal-total { container-type: inline-size; position: absolute; right: 2cqw; top: 3cqw; width: 14.5cqw; display: grid; justify-items: center; gap: 8px; padding: 16px 12px; }
-.art-reveal-total > span { color: #737d9d; font: 400 clamp(13px, .9375cqw, 18px)/1.5 var(--reveal-body-font); }
+/* Paint the complete 9-slice card on a stable inner layer, then scale its
+   borderless outer group. Fractional animation scales never resize the slices. */
+.art-reveal-total { position: absolute; right: 2cqw; top: 3cqw; width: 14.5cqw; isolation: isolate; transform: translateZ(0); transform-origin: center; will-change: transform; }
+.art-reveal-total-surface { container-type: inline-size; position: relative; isolation: isolate; width: 100%; display: grid; justify-items: center; gap: 8px; padding: 16px 12px; transform: translateZ(0); backface-visibility: hidden; }
+.art-reveal-total-surface[data-flattened=true] { border-image: none; }
+.art-reveal-total-surface > :not(canvas) { position: relative; z-index: 1; }
+.art-reveal-total-surface > span { color: #737d9d; font: 400 clamp(13px, .9375cqw, 18px)/1.5 var(--reveal-body-font); }
 .art-reveal-total strong { color: #344eff; font: 400 min(48px, max(16px, calc(135cqw / var(--digits))))/1.15 var(--art-font); white-space: nowrap; }
 .art-reveal-total small { margin-left: 4px; font-size: 14px; }
 .art-reveal-nareumi, .art-reveal-dali { position: absolute; display: block; height: auto; pointer-events: none; user-select: none; z-index: 1; }

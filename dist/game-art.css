@@ -110,8 +110,8 @@ body.question-art { background: #251039; overflow: clip; }
   display: block; padding: 0; margin: 0; border: 0; border-radius: 0; background: none; color: #e60000;
 }
 .art-hint .art-bubble-tail { transform: none; left: 10%; right: auto; width: 25%; }
-.art-hint-word { position: absolute; z-index: 2; inset: 0 2% 16%; display: grid; place-items: center; font-size: var(--type-score); line-height: 1; }
-.art-hint.down .art-hint-word { font-size: var(--type-direction-compact); color: #3450ff; }
+.art-hint-word { position: absolute; z-index: 2; inset: 0 0 16%; padding-inline: var(--hint-padding-inline, 8px); display: grid; place-items: center; font-size: var(--type-score); line-height: 1; }
+.art-hint.down .art-hint-word { color: #3450ff; }
 .art-hint.neutral .art-hint-word { color: #606080; }
 .art-audience { z-index: 4; height: auto; }
 /* The center bust overlaps its neighbours on the supplied sheet. Clip only those
@@ -229,3 +229,7 @@ body.game-active:has(.reveal-heading) { background: #251039; overflow: clip; }
   box-shadow: none;
 }
 .art-bubble-body { min-width: calc(var(--bubble-corner) * 2); min-height: calc(var(--bubble-corner) * 2); }
+/* Animated bubbles reuse one painted 9-slice texture across their whole scale. */
+.art-bubble-texture { position: absolute; z-index: 0; left: -1px; top: -1px; width: calc(100% + 2px); height: calc(100% + 2px); pointer-events: none; }
+.art-hint > .art-bubble-body[data-flattened=true] { border-image: none; transform: translateZ(0); backface-visibility: hidden; }
+.art-hint { transform: translateZ(0); transform-origin: center; }

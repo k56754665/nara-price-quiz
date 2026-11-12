@@ -4,6 +4,66 @@ const app = document.querySelector('#app');
 const dialog = document.querySelector('#info-dialog');
 const guide = document.querySelector('#rotation-guide');
 const portrait = matchMedia('(orientation: portrait) and (max-width: 900px)');
+// Rasterize this animated 9-slice at its layout size before its outer group
+// scales. Chromium can otherwise reveal subpixel gaps between border-image tiles.
+const bubbleArt = new Image();
+bubbleArt.src = new URL('./assets/designer/bubble-box.png', import.meta.url).href;
+const bubbleSurfaces = new Set();
+const bubbleResize = new ResizeObserver(entries => { for (const entry of entries) paintBubbleSurface(entry.target); });
+const hintMeasure = document.createElement('canvas').getContext('2d');
+function fitHintLabel() {
+  const label = document.querySelector('.art-hint-word');
+  if (!label || !hintMeasure) return;
+  label.style.removeProperty('font-size');
+  const style = getComputedStyle(label), size = parseFloat(style.fontSize);
+  hintMeasure.font = `${style.fontWeight} ${size}px ${style.fontFamily}`;
+  const width = parseFloat(getComputedStyle(label.parentElement).width);
+  // Keep the existing UP! spacing as the reference for both directions.
+  const padding = Math.max(8, (width - hintMeasure.measureText('UP!').width) / 2);
+  const available = Math.max(1, width - padding * 2);
+  const textWidth = hintMeasure.measureText(label.textContent.trim()).width;
+  label.style.setProperty('--hint-padding-inline', `${padding}px`);
+  label.style.fontSize = `${size * Math.min(1, available / Math.max(1, textWidth))}px`;
+}
+function paintBubbleSurface(surface) {
+  if (!surface.isConnected || !bubbleArt.complete || !bubbleArt.naturalWidth) return;
+  const style = getComputedStyle(surface);
+  const ratio = devicePixelRatio || 1;
+  const width = Math.round(parseFloat(style.width) * ratio);
+  const height = Math.round(parseFloat(style.height) * ratio);
+  if (!width || !height) return;
+  let canvas = surface.querySelector('.art-bubble-texture');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.className = 'art-bubble-texture';
+    canvas.setAttribute('aria-hidden', 'true');
+    surface.prepend(canvas);
+  }
+  if (canvas.width === width && canvas.height === height && canvas.dataset.ratio === String(ratio) && surface.dataset.flattened) return;
+  canvas.width = width; canvas.height = height;
+  canvas.dataset.ratio = String(ratio);
+  const context = canvas.getContext('2d');
+  if (!context) return;
+  const sourceCorner = parseFloat(style.getPropertyValue('--bubble-source-slice')) || 200;
+  const corner = Math.min(Math.round((parseFloat(style.getPropertyValue('--bubble-corner')) || 20) * ratio), Math.floor(width / 2), Math.floor(height / 2));
+  const sx = [0, sourceCorner, bubbleArt.naturalWidth - sourceCorner, bubbleArt.naturalWidth];
+  const sy = [0, sourceCorner, bubbleArt.naturalHeight - sourceCorner, bubbleArt.naturalHeight];
+  const dx = [0, corner, width - corner, width], dy = [0, corner, height - corner, height];
+  context.imageSmoothingQuality = 'high';
+  for (let row = 0; row < 3; row++) for (let column = 0; column < 3; column++) {
+    context.drawImage(bubbleArt, sx[column], sy[row], sx[column + 1] - sx[column], sy[row + 1] - sy[row], dx[column], dy[row], dx[column + 1] - dx[column], dy[row + 1] - dy[row]);
+  }
+  surface.dataset.flattened = 'true';
+}
+function syncBubbleSurfaces() {
+  fitHintLabel();
+  for (const surface of bubbleSurfaces) if (!surface.isConnected) { bubbleResize.unobserve(surface); bubbleSurfaces.delete(surface); }
+  for (const surface of document.querySelectorAll('.art-reveal-total-surface, .art-hint > .art-bubble-body')) {
+    if (!bubbleSurfaces.has(surface)) { bubbleSurfaces.add(surface); bubbleResize.observe(surface); }
+    paintBubbleSurface(surface);
+  }
+}
+bubbleArt.decode().then(syncBubbleSurfaces).catch(() => {});
 let previousFocus;
 let restoreModal = false;
 function syncStageLayout() {
@@ -24,6 +84,7 @@ function updateViewport() {
   root.style.setProperty('--viewport-width', `${root.clientWidth}px`);
   root.style.setProperty('--viewport-height', `${window.innerHeight}px`);
   syncStageLayout();
+  syncBubbleSurfaces();
   const rotate = portrait.matches;
   if (rotate && !app.inert) {
     previousFocus = document.activeElement;
@@ -52,9 +113,11 @@ portrait.addEventListener('change', updateViewport);
 updateViewport();
 new MutationObserver(() => requestAnimationFrame(() => {
   syncStageLayout();
+  syncBubbleSurfaces();
   markScrollableKnowledge();
 })).observe(app, { childList: true });
-document.fonts.ready.then(markScrollableKnowledge);
+app.addEventListener('game-rendered', syncBubbleSurfaces);
+document.fonts.ready.then(() => { fitHintLabel(); markScrollableKnowledge(); });
 
 const popovers = '.art-popover, .art-reveal-menu';
 document.addEventListener('toggle', event => {

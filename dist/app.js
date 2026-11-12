@@ -211,6 +211,7 @@ function render({ focus = true, keepFeedback = false } = {}) {
   if (screen !== 'home' && state.phase === 'results') loadKakao();
   effects.idle();
   effects.syncMusic();
+  app.dispatchEvent(new Event('game-rendered'));
 }
 
 function musicControl() {
@@ -338,7 +339,7 @@ function reveal() {
     <img class="art-reveal-nareumi" src="./assets/designer/judge-nareumi.png" alt="" aria-hidden="true" draggable="false"><img class="art-reveal-dali" src="./assets/designer/judge-dali.png" alt="" aria-hidden="true" draggable="false">
     <div class="art-reveal-topline">
         <details class="art-reveal-menu"><summary>메뉴</summary><nav class="art-popover-content art-menu-content" aria-label="정답 화면 도구"><button type="button" data-action="home">처음 화면</button><button type="button" data-action="rules">점수 안내</button><button type="button" data-action="about">데이터 기준</button><button type="button" data-action="source" data-id="${q.id}">계약 정보·출처</button><button type="button" data-action="sound" aria-label="${soundOn ? '효과음 끄기' : '효과음 켜기'}" aria-pressed="${soundOn}">효과음 <span class="sound-state">${soundOn ? 'ON' : 'OFF'}</span></button>${musicControl()}<button type="button" data-action="fullscreen" aria-label="전체 화면 전환">전체 화면</button></nav></details>
-        <div class="art-reveal-total"><span>현재 스코어</span><strong style="--digits:${number(totalScore(state.rounds)).length + 1}">${number(totalScore(state.rounds))}<small>점</small></strong></div>
+        <div class="art-reveal-total"><div class="art-reveal-total-surface"><span>현재 스코어</span><strong style="--digits:${number(totalScore(state.rounds)).length + 1}">${number(totalScore(state.rounds))}<small>점</small></strong></div></div>
     </div>
     <div class="art-reveal-board ${matched ? 'is-correct' : 'is-missed'}">
       <header class="art-reveal-header"><div class="art-reveal-counter"><span>Round</span><strong>${state.index + 1}<small> / ${state.questionCount}</small></strong></div><p class="art-reveal-tag">${matched ? verdict.tag : `${MAX_ATTEMPTS}번 모두 틀렸어요`}</p><h1 id="screen-heading" tabindex="-1">${verdict.title}</h1><div class="art-reveal-earned"><span>획득 점수</span><strong>${matched ? '+' : ''}${number(round.score)}점</strong></div></header>

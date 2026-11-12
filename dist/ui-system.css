@@ -219,7 +219,6 @@ button:disabled { opacity: .55; filter: grayscale(.3); }
   .art-score-label { top: calc(var(--scene-height) * .11); font-size: 12px; }
   .art-score { top: calc(var(--scene-height) * .16); }
   .art-hint.retry-feedback { left: 11%; width: 10%; }
-  .art-hint.down .art-hint-word { font-size: min(20px, 2.4cqw); }
   .art-menu > summary { min-width: 56px; font-size: 14px; }
   .art-menu-content { gap: 6px; font-size: 14px; }
   .art-menu-content p { font-size: 12px; }
@@ -269,8 +268,9 @@ button:disabled { opacity: .55; filter: grayscale(.3); }
   .art-reveal-info .knowledge-source { font-size: 12px; margin-top: 4px; }
   .art-reveal-next { padding: 8px 12px; min-height: 48px; white-space: normal; font-size: 14px; gap: 4px; }
   .art-reveal-next > span { display: none; }
-  .art-reveal-total { right: 1%; top: 16%; width: 13.5%; padding: 8px 4px; gap: 4px; }
-  .art-reveal-total > span, .art-reveal-total small { font-size: 11px; }
+  .art-reveal-total { right: 1%; top: 16%; width: 13.5%; }
+  .art-reveal-total-surface { padding: 8px 4px; gap: 4px; }
+  .art-reveal-total-surface > span, .art-reveal-total small { font-size: 11px; }
   .art-reveal-total strong { font-size: min(24px, max(14px, calc(135cqw / var(--digits)))); }
   .art-reveal-menu { left: 1.5%; top: 2.5%; }
   .art-reveal-menu > summary { padding: 8px 12px; font-size: 14px; }
