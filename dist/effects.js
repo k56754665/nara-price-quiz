@@ -248,7 +248,7 @@ export function createGameEffects(soundEnabled, musicEnabled = soundEnabled, mus
     const group = particleLayer(button.closest('.art-stage'), 'amount');
     if (!group) return;
     lastAmountAt = now;
-    const entry = localRect(group, group.layer.parentElement.querySelector('.art-price-entry'));
+    const rect = localRect(group, button), entry = localRect(group, group.layer.parentElement.querySelector('.art-price-entry'));
     const text = document.createRange();
     text.selectNodeContents(button);
     const caption = localRect(group, text);
