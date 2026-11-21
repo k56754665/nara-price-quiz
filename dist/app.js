@@ -232,7 +232,10 @@ function home() {
   const hasResume = Boolean(state);
   const label = (text, tone) => `<span class="art-title-label ${tone}" data-label="${text}" aria-hidden="true">${text}</span>`;
   return `<section class="art-title-screen" aria-label="처음 화면"><div class="art-title-stage">
-    <h1 id="screen-heading" class="art-main-title" tabindex="-1"><span>맨날 보던 물건,</span><span>이게 얼마게?</span></h1>
+    <p class="art-title-tagline"><span>맨날 보던 물건,</span> <span>이게 얼마게?</span></p>
+    <h1 id="screen-heading" class="art-main-title" tabindex="-1"><img src="./assets/designer/title-logo.png" alt="나라장터 HOW MUCH?" width="1536" height="1024" fetchpriority="high" draggable="false"></h1>
+    <img class="art-title-mascot art-title-mascot-bird" src="./assets/designer/title-mascots.png" alt="" width="1774" height="887" draggable="false">
+    <img class="art-title-mascot art-title-mascot-squirrel" src="./assets/designer/title-mascots.png" alt="" width="1774" height="887" draggable="false">
     <img class="art-title-podium" src="./assets/designer/title-podium.png" alt="" aria-hidden="true" draggable="false">
     <form id="setup-form" aria-label="새 게임 시작">
       <button type="submit" class="art-title-action art-title-start" aria-label="${hasResume ? '새 게임 시작하기' : '게임 시작하기'}">${label('게임시작', 'title-blue')}</button>

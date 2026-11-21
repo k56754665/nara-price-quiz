@@ -1,6 +1,4 @@
-/* Supplied title composition, in the designer's 1920 x 1080 coordinates.
-   Artwork is unchanged. Text is live DNFBitBitv2, since button PNGs were not
-   supplied. Existing form/actions retain the game's start and resume logic. */
+/* Title artwork and controls share the fitted 16:9 stage. */
 body.title-art { background: #251039; overflow: clip; }
 .title-art :is(.site-header, .site-footer, .preview-banner) { display: none; }
 .title-art #main-content { width: 100%; max-width: none; margin: 0; padding: 0; }
@@ -13,14 +11,22 @@ body.title-art { background: #251039; overflow: clip; }
   background: url('./assets/designer/stage-background.png') center / 100% 100% no-repeat;
   font-family: var(--art-font);
 }
-.art-main-title { margin: 0; font: 400 3.541667cqw/1 var(--art-font); color: #a8aabb; letter-spacing: 0; }
-.art-main-title > span { position: absolute; top: 5.6%; white-space: nowrap; }
-.art-main-title > span:first-child { left: 21.8%; }
-.art-main-title > span:last-child { left: 55.1%; }
-.art-title-podium { position: absolute; left: 39.6875%; top: 38.3333%; width: 20.625%; height: auto; pointer-events: none; user-select: none; }
+.art-title-tagline { margin: 0; font: 400 3.541667cqw/1 var(--art-font); color: #a8aabb; }
+.art-title-tagline > span { position: absolute; top: 5.6%; white-space: nowrap; }
+.art-title-tagline > span:first-child { left: 21.8%; }
+.art-title-tagline > span:last-child { left: 55.1%; }
+.art-main-title { position: absolute; left: 24.7%; top: 10.7%; width: 51%; margin: 0; }
+.art-main-title > img { display: block; width: 100%; height: auto; }
+:is(.art-main-title, .art-title-mascot, .art-title-podium) { pointer-events: none; user-select: none; }
+.art-title-mascot { position: absolute; height: auto; }
+/* Split the shared 1774px sheet at x=912, between the two characters. */
+.art-title-mascot-bird { left: 20.5%; top: 23.6%; width: 17.3%; clip-path: inset(0 48.6% 0 0); }
+.art-title-mascot-squirrel { left: 65%; top: 52.3%; width: 13%; clip-path: inset(0 0 0 51.4%); }
+.art-title-podium { position: absolute; left: 39.6875%; top: 60.7%; width: 20.625%; height: auto; }
 .art-title-stage #setup-form { margin: 0; }
 .art-title-action {
-  position: absolute; z-index: 1; min-width: 44px; min-height: 44px;
+  position: absolute; z-index: 1; top: min(91%, calc(100% - 30px));
+  transform: translate(-50%, -50%); min-width: 44px; min-height: 44px;
   padding: 0; border: 0; border-radius: 0; background: none;
   font: 400 3.333333cqw/1 var(--art-font); letter-spacing: 0; white-space: nowrap;
   filter: drop-shadow(0 4px 2px #24203e70);
@@ -29,12 +35,12 @@ body.title-art { background: #251039; overflow: clip; }
 .art-title-label::after { content: attr(data-label); position: absolute; inset: 0; color: transparent; -webkit-text-stroke: 0; background: var(--title-gradient); background-clip: text; -webkit-background-clip: text; }
 .art-title-label.title-orange { --title-gradient: linear-gradient(#ffca8b, #ff7c25); }
 .art-title-label.title-red { --title-gradient: linear-gradient(#5b3dce 10%, #a71b72 65%, #d41434); }
-.art-title-start { left: 16.3%; top: 56.85%; }
-.art-title-exit { left: 70.9%; top: 56.85%; }
-.art-title-ranking { left: 50%; top: 65.75%; transform: translateX(-50%); }
+.art-title-start { left: 27%; }
+.art-title-ranking { left: 50%; }
+.art-title-exit { left: 73%; }
 .art-title-action:hover { filter: brightness(1.1) drop-shadow(0 4px 2px #24203e70); }
 .art-title-action:active { translate: 0 2px; }
-.art-title-action:focus-visible { outline: 3px solid #344eff; outline-offset: 12px; }
+.art-title-action:focus-visible { outline: 3px solid #879dff; outline-offset: 4px; }
 .art-title-action:disabled { cursor: default; opacity: .6; }
 .art-title-menu .art-title-resume { grid-column: 1 / -1; }
 .art-title-stage .art-title-menu { left: 16px; top: 16px; width: auto; }
