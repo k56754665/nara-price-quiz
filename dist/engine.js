@@ -27,13 +27,14 @@ export function scoreRound(attempts, answer) {
 }
 
 export function relativeError(guess, answer) {
-  return guess === null ? null : (guess - answer) / answer * 100;
+  if (guess === null || !Number.isFinite(guess) || !Number.isFinite(answer) || answer === 0) return null;
+  return (guess - answer) / answer * 100;
 }
 
 export function koreanAmount(value) {
-  if (!value) return "숫자를 입력하거나 금액 버튼을 눌러 주세요";
+  if (!value || typeof value !== "number" || !Number.isFinite(value) || value <= 0) return "숫자를 입력하거나 금액 버튼을 눌러 주세요";
   const units = [[100_000_000, "억"], [10_000, "만"], [1, ""]];
-  let rest = value;
+  let rest = Math.floor(value);
   return units.map(([size, label]) => {
     const count = Math.floor(rest / size);
     rest %= size;
